@@ -1,0 +1,14 @@
+[
+    {
+        "caption": "ThinkPHP manual: view list",
+        "command": "thinkphp"
+    },
+    {
+        "caption": "ThinkPHP manual: build book",
+        "command": "update_thinkphp_manual"
+    },
+    {
+        "caption": "ThinkPHP manual: search",
+        "command": "search_thinkphp_manual"
+    }
+]

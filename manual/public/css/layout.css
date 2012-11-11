@@ -1,0 +1,15 @@
+*{	padding:0; margin:0; }
+html {height:100%; max-height:100%; background:#fff; font-size:12px; overflow: hidden}
+body {height:100%; line-height: 1.6em; max-height:100%;overflow: hidden; padding:0; font-size: 14px; font-family:"微软雅黑"}
+#header {position:absolute;top:0; left:0; display:block; width:100%; height:55px;  z-index: 21;}
+#innerHeader{margin:0; height: 54px; background-color: #EFEFEF; border-bottom: 1px solid #E5E5E5}
+#sortList, #selector {position:absolute;left:0;width:200px;}
+#tools,#gird{position:absolute;left: 200px;	right: 0;}
+#sortList{top:55px;z-index: 19; background:#FFF}
+#selector,#gird{top:100px; bottom:35px;  z-index: 16;}
+#tools{top:55px;	z-index: 15;}
+#sortList .inner,#tools .inner{height: 38px; line-height: 38px; border-bottom: 1px solid #E5E5E5}
+#selector .inner,#gird .inner{height: 100%;overflow: auto; padding: 0}
+#gird .inner{ overflow-y:scroll}
+.inner{padding:3px;overflow:auto;}
+#footer {position:absolute;bottom:0; left:0; display:block; width:100%; height:35px; z-index: 21; background-color:#EFEFEF}

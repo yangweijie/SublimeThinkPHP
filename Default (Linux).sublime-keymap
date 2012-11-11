@@ -1,0 +1,8 @@
+[
+    {
+        "command": "example",
+        "keys": [
+            "ctrl+alt+m"
+        ]
+    }
+]

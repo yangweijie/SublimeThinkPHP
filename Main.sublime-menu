@@ -1,0 +1,13 @@
+[
+    {
+        "id": "view",
+        "children":
+        [
+            {
+                "caption": "ThinkPHP manual",
+                "id": "ThinkPHP manual",
+                "command": "thinkphp"
+            }
+        ]
+    }
+]
