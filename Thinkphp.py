@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sublime, sublime_plugin
-import  os,httplib,urllib,json,webbrowser,codecs,re
+import  os,httplib,urllib,urllib2,json,webbrowser,codecs
 
 def fs_reader(path):
 	return codecs.open(path, mode='r', encoding='utf8').read()
@@ -100,10 +100,6 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 		if arg == -1:
 			self.view.window().show_quick_panel(self.chapter, self.panel_done)
 		else:
-
-			# print self.tree[self.tree_key][arg]
-			# url = 'http://doc.thinkphp.cn/manual/' + self.tree[self.tree_key][arg]['name']
-			# open_tab(url)
 			self.see(self.tree[self.tree_key][arg]['id'],self.tree[self.tree_key][arg]['name'],self.sort_data[self.tree_key]+'\\')
 
 	def _init(self):
@@ -131,12 +127,37 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 		self.view.window().show_input_panel('search in thinkphp manual?', '', self.search_done, self.search_change, self.search_cancel)
 
 	def search_done(self,arg):
-		conn = httplib.HTTPConnection("doc.thinkphp.cn")
-		headers={"Content-Type":"text/html;charset=utf-8"}  
-		conn.request('POST','/api/search/',body='keywords='+arg,headers=headers)
-		result=conn.getresponse()
-		data = result.read()
-		data = json.loads(data)  
+		data = {'keywords' : arg}
+		f = urllib2.urlopen(url = 'http://doc.thinkphp.cn/api/search',data = urllib.urlencode(data))
+		data = f.read()
+		data = json.loads(data)
+		if data['data'] == []:
+			sublime.error_message('No Search result !')
+		else:
+			chapter = []
+			data = data['data']
+			self.search_list = data
+			for i in data:
+				chapter.insert(int(i['id']),i['title'])
+			self.view.window().show_quick_panel(chapter, self.manual_search_done)
+
+	def manual_search_done(self,arg):
+		if arg == -1:
+			pass
+		else:
+			choose = self.search_list[arg]
+			data = self._init()
+			for i in data:
+				if i['id'] == choose['id']:
+					self.see(choose['id'], choose['name'])
+				else:
+					state = i.get('_child', None)
+					if state:
+						for j in i['_child']:
+							if j['id'] == choose['id']:
+								if not os.path.isdir(packages_path + '\\manual\\'+i['name']):
+									os.mkdir(packages_path + '\\manual\\'+i['name'])
+								self.see(choose['id'], choose['name'], i['name']+'\\')
 
 	def search_change(self,arg):
 		pass 
