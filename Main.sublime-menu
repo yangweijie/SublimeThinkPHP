@@ -1,13 +1,73 @@
-[
-    {
-        "id": "view",
-        "children":
-        [
-            {
-                "caption": "ThinkPHP manual",
-                "id": "ThinkPHP manual",
-                "command": "thinkphp"
-            }
-        ]
-    }
+[	
+	{
+		"id": "tools",
+		"children":
+		[
+			{
+				"caption": "ThinkPHP manual",
+				"id": "ThinkPHP manual",
+				"command": "thinkphp"
+			},
+			{
+				"caption": "ThinkPHP manual: search",
+				"id": "ThinkPHP manual: search",
+				"command": "search_thinkphp_manual"
+			},
+			{
+				"caption": "ThinkPHP manual: build book",
+				"id": "ThinkPHP manual: build book",
+				"command": "update_thinkphp_manual"
+			}
+		]
+	},
+	{
+		"caption": "Preferences",
+		"mnemonic": "n",
+		"id": "preferences",
+		"children":
+		[
+			{
+				"caption": "Package Settings",
+				"mnemonic": "P",
+				"id": "package-settings",
+				"children":
+				[
+					{
+						"caption": "ThinkPHP",
+						"children":
+						[
+							{
+								"command": "open_file",
+								"args": {"file": "${packages}/Gist/ThinkPHP.sublime-settings"},
+								"caption": "Settings – Default"
+							},
+							{
+								"command": "open_file",
+								"args": {"file": "${packages}/User/ThinkPHP.sublime-settings"},
+								"caption": "Settings – User"
+							},
+							{
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/ThinkPHP/Default (Windows).sublime-keymap",
+									"platform": "Windows"
+								},
+								"caption": "Key Bindings – Default"
+							},
+							{
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/User/Default (Windows).sublime-keymap",
+									"platform": "Windows"
+								},
+								"caption": "Key Bindings – User"
+							},
+							{ "caption": "-" }
+						]
+					}
+				]
+			}
+		]
+	}
+	
 ]

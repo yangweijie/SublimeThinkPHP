@@ -38,10 +38,11 @@ def get_content(id,parent_dir=0):
 		return out_tpl(content)
 	else:
 		return out_tpl(content,1)
-
-packages_path = sublime.packages_path() + '\\thinkphp'
-tpl = fs_reader(os.path.join(packages_path + '\\manual\\public', 'book.tpl'))
-tpl2 = fs_reader(os.path.join(packages_path + '\\manual\\public', 'book_sub.tpl'))
+settings = sublime.load_settings('Thinkphp.sublime-settings')
+packages_path = sublime.packages_path() + '\\Thinkphp'
+manual_dir = settings.get('manual_dir')
+tpl = fs_reader(os.path.join(packages_path + '\\'+ manual_dir +'\\public', 'book.tpl'))
+tpl2 = fs_reader(os.path.join(packages_path + '\\'+ manual_dir +'\\public', 'book_sub.tpl'))
 
 class ThinkphpCommand(sublime_plugin.TextCommand):
 
@@ -86,8 +87,8 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 			if self.tree[arg] == None:
 				self.see(self.data[arg]['id'],self.data[arg]['name'])
 			else:
-				if not os.path.isdir(packages_path + '\\manual\\'+self.sort_data[arg]):
-					os.mkdir(packages_path + '\\manual\\'+self.sort_data[arg])
+				if not os.path.isdir(packages_path + '\\'+ manual_dir +'\\'+self.sort_data[arg]):
+					os.mkdir(packages_path + '\\'+ manual_dir +'\\'+self.sort_data[arg])
 				child =[]
 				k = 0
 				for i in self.tree[arg]:
@@ -117,8 +118,8 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 				self.build(j['id'], j['name'])
 			else:
 				parent_dir = j['name']
-				if not os.path.isdir(packages_path + '\\manual\\'+j['name']):
-					os.mkdir(packages_path + '\\manual\\'+j['name'])
+				if not os.path.isdir(packages_path + '\\'+ manual_dir +'\\'+j['name']):
+					os.mkdir(packages_path + '\\'+ manual_dir +'\\'+j['name'])
 				for t in j['_child']:
 					sublime.set_timeout(self.build(t['id'],t['name'],parent_dir+'\\'),100)
 		sublime.status_message('the manual has been generated')
@@ -155,8 +156,8 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 					if state:
 						for j in i['_child']:
 							if j['id'] == choose['id']:
-								if not os.path.isdir(packages_path + '\\manual\\'+i['name']):
-									os.mkdir(packages_path + '\\manual\\'+i['name'])
+								if not os.path.isdir(packages_path + '\\'+ manual_dir +'\\'+i['name']):
+									os.mkdir(packages_path + '\\'+ manual_dir +'\\'+i['name'])
 								self.see(choose['id'], choose['name'], i['name']+'\\')
 
 	def search_change(self,arg):
@@ -166,9 +167,17 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 		pass		
 
 class update_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
-    def run(self, edit):
-       self.update_manual()
+	def run(self, edit):
+	   self.update_manual()
+
+class search_word_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
+	def run(self, edit):
+		region = self.view.sel()[0]
+		if region.begin() != region.end():
+			self.search_done(self.view.substr(region))
+		else:
+			self.search_panel()
 
 class search_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
-    def run(self, edit):
-       self.search_panel()
+	def run(self, edit):
+		self.search_panel()

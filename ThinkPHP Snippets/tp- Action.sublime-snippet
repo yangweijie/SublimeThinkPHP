@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+Class ${1:Index}Action extends Action{
+	public function ${2:index}(){
+		${3:}
+	}
+}]]></content>
+	<tabTrigger>Action</tabTrigger>
+	<scope>source.php</scope>
+	<description>TP:: Action</description>
+</snippet>
