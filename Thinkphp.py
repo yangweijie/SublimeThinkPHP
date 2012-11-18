@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import sublime, sublime_plugin
-import  os,httplib,urllib,urllib2,json,webbrowser,codecs
+import os, httplib, urllib, urllib2, json, webbrowser, codecs
+
+settings = sublime.load_settings('Thinkphp.sublime-settings')
+packages_path = sublime.packages_path() + '/Thinkphp'
+manual_dir = settings.get('manual_dir')
 
 def fs_reader(path):
 	return codecs.open(path, mode='r', encoding='utf8').read()
@@ -15,7 +19,7 @@ def out_tpl(new,sub=''):
 		return tpl2.replace('{%s}',new)
 
 def get_tpl_fullpath(filename,parent_dir=''):
-	return packages_path + '\\manual\\' + parent_dir + filename+'.html'
+	return packages_path + '/' + manual_dir + '/' + parent_dir + filename + '.html'
 
 def write_tpl(filename,content,parent_dir=''):
 	if not os.path.isfile(get_tpl_fullpath(filename,parent_dir)):
@@ -33,16 +37,14 @@ def get_content(id,parent_dir=0):
 	data = data1['data']
 	content = ''
 	for i in data:
-		content= content + i['content']
+		content = content + i['content']
 	if parent_dir == 0:
 		return out_tpl(content)
 	else:
 		return out_tpl(content,1)
-settings = sublime.load_settings('Thinkphp.sublime-settings')
-packages_path = sublime.packages_path() + '\\Thinkphp'
-manual_dir = settings.get('manual_dir')
-tpl = fs_reader(os.path.join(packages_path + '\\'+ manual_dir +'\\public', 'book.tpl'))
-tpl2 = fs_reader(os.path.join(packages_path + '\\'+ manual_dir +'\\public', 'book_sub.tpl'))
+
+tpl = fs_reader(os.path.join(packages_path + '/'+ manual_dir +'/public', 'book.tpl'))
+tpl2 = fs_reader(os.path.join(packages_path + '/'+ manual_dir +'/public', 'book_sub.tpl'))
 
 class ThinkphpCommand(sublime_plugin.TextCommand):
 
@@ -56,6 +58,25 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 	def build(self,id,name,parent_dir=''):
 		content = get_content(id,parent_dir)
 		write_tpl(name,content,parent_dir)
+
+	def del_bom(self,dir):
+		file_count = 0
+		bom_files  = []
+		for dirpath, dirnames, filenames in os.walk(dir):
+			if(len(filenames)):
+				for filename in filenames:
+					file_count += 1
+					file = open(dirpath + "/" + filename, 'r+')
+					file_contents = file.read()
+	   
+					if(len(file_contents) > 3):
+						if(ord(file_contents[0]) == 239 and ord(file_contents[1]) == 187 and ord(file_contents[2]) == 191):
+							bom_files.append(dirpath + "/" + filename)
+							file.seek(0)
+							file.write(file_contents[3:])
+							print dirpath + "/" + filename, "BOM found. Deleted."
+					file.close()
+		print file_count, "file(s) found.", len(bom_files), "file(s) have a bom. Deleted."
 
 	def run(self, edit):
 		data = self._init()
@@ -87,8 +108,8 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 			if self.tree[arg] == None:
 				self.see(self.data[arg]['id'],self.data[arg]['name'])
 			else:
-				if not os.path.isdir(packages_path + '\\'+ manual_dir +'\\'+self.sort_data[arg]):
-					os.mkdir(packages_path + '\\'+ manual_dir +'\\'+self.sort_data[arg])
+				if not os.path.isdir(packages_path + '/'+ manual_dir +'/'+self.sort_data[arg]):
+					os.mkdir(packages_path + '/'+ manual_dir +'/'+self.sort_data[arg])
 				child =[]
 				k = 0
 				for i in self.tree[arg]:
@@ -101,7 +122,7 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 		if arg == -1:
 			self.view.window().show_quick_panel(self.chapter, self.panel_done)
 		else:
-			self.see(self.tree[self.tree_key][arg]['id'],self.tree[self.tree_key][arg]['name'],self.sort_data[self.tree_key]+'\\')
+			self.see(self.tree[self.tree_key][arg]['id'],self.tree[self.tree_key][arg]['name'],self.sort_data[self.tree_key]+'/')
 
 	def _init(self):
 		conn = httplib.HTTPConnection("doc.thinkphp.cn")
@@ -118,10 +139,10 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 				self.build(j['id'], j['name'])
 			else:
 				parent_dir = j['name']
-				if not os.path.isdir(packages_path + '\\'+ manual_dir +'\\'+j['name']):
-					os.mkdir(packages_path + '\\'+ manual_dir +'\\'+j['name'])
+				if not os.path.isdir(packages_path + '/'+ manual_dir +'/'+j['name']):
+					os.mkdir(packages_path + '/'+ manual_dir +'/'+j['name'])
 				for t in j['_child']:
-					sublime.set_timeout(self.build(t['id'],t['name'],parent_dir+'\\'),100)
+					sublime.set_timeout(self.build(t['id'],t['name'],parent_dir+'/'),100)
 		sublime.status_message('the manual has been generated')
 
 	def search_panel(self):
@@ -156,19 +177,27 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 					if state:
 						for j in i['_child']:
 							if j['id'] == choose['id']:
-								if not os.path.isdir(packages_path + '\\'+ manual_dir +'\\'+i['name']):
-									os.mkdir(packages_path + '\\'+ manual_dir +'\\'+i['name'])
-								self.see(choose['id'], choose['name'], i['name']+'\\')
+								if not os.path.isdir(packages_path + '/'+ manual_dir +'/'+i['name']):
+									os.mkdir(packages_path + '/'+ manual_dir +'/'+i['name'])
+								self.see(choose['id'], choose['name'], i['name']+'/')
 
 	def search_change(self,arg):
 		pass 
 
 	def search_cancel(self):
-		pass		
+		pass    
+
+class del_workspace_boms(ThinkphpCommand,sublime_plugin.TextCommand):
+	def run(self, edit):
+		dir = self.view.window().folders()
+		if dir == []:
+			sublime.error_message('Please open a folder')
+		else:
+			self.del_bom(dir[0])
 
 class update_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 	def run(self, edit):
-	   self.update_manual()
+		self.update_manual()
 
 class search_word_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 	def run(self, edit):

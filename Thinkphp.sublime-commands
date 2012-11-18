@@ -10,5 +10,8 @@
     {
         "caption": "ThinkPHP manual: search",
         "command": "search_thinkphp_manual"
+    },{
+        "caption": "del_workspace_boms",
+        "command": "del_workspace_boms"
     }
 ]
