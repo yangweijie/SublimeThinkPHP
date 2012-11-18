@@ -1,3 +1,4 @@
 {
-	"manual_dir":"manual"
+	"manual_dir":"manual",
+	"api_url":"http://www.thinkphp.cn/api"
 }

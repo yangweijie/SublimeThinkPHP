@@ -62,6 +62,7 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 	def del_bom(self,dir):
 		file_count = 0
 		bom_files  = []
+		self.view.window().run_command("show_panel", {"panel":"console", "toggle": None})
 		for dirpath, dirnames, filenames in os.walk(dir):
 			if(len(filenames)):
 				for filename in filenames:
@@ -123,6 +124,10 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 			self.view.window().show_quick_panel(self.chapter, self.panel_done)
 		else:
 			self.see(self.tree[self.tree_key][arg]['id'],self.tree[self.tree_key][arg]['name'],self.sort_data[self.tree_key]+'/')
+
+	def view_api(self):
+		url = settings.get('api_url')
+		open_tab(url)
 
 	def _init(self):
 		conn = httplib.HTTPConnection("doc.thinkphp.cn")
@@ -210,3 +215,10 @@ class search_word_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 class search_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 	def run(self, edit):
 		self.search_panel()
+
+class view_thinkphp_api_manual(ThinkphpCommand,sublime_plugin.TextCommand):
+	"""see the ThinkPHP api online"""
+	def run(self, arg):
+		self.view_api()
+		
+		
