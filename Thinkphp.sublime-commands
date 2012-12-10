@@ -1,5 +1,9 @@
 [	
 	{
+		"caption": "view table design",
+		"command": "show_cloums_by_word"
+	},
+	{
 		"caption": "ThinkPHP manual: view api",
 		"command": "view_thinkphp_api_manual"
 	},

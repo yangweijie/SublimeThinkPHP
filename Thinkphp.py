@@ -152,7 +152,7 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 
 	def search_panel(self):
 		self.view.window().show_input_panel('search in thinkphp manual?', '', self.search_done, self.search_change, self.search_cancel)
-
+	
 	def search_done(self,arg):
 		data = {'keywords' : arg}
 		f = urllib2.urlopen(url = 'http://doc.thinkphp.cn/api/search',data = urllib.urlencode(data))
@@ -190,7 +190,45 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 		pass 
 
 	def search_cancel(self):
-		pass    
+		pass  
+
+	def cloums(self,arg):
+		self.show_cloums(arg)
+
+	def cloums_panel(self):
+		self.view.window().show_input_panel('table you want show?', '', self.show_cloums, self.search_change, self.search_cancel)  
+
+	def show_cloums(self,arg):
+		table = arg
+		self.table = table
+		dir = self.view.window().folders()
+		if dir == []:
+			sublime.error_message('Please open a full ThinkPHP project')
+		else:
+			cfg_files  = []
+			for dirpath, dirnames, filenames in os.walk(dir[0]):
+				if(len(filenames)):
+					for filename in filenames:
+						if (filename == 'config.php'):
+							cfg_files.append([filename,dirpath + "/" + filename])
+			if(len(cfg_files)):
+				self.cfg_files = cfg_files
+				self.view.window().show_quick_panel(cfg_files, self.choose_conf)
+			else:
+				sublime.error_message('no config.php')
+
+	def choose_conf(self,arg):
+		config_file = self.cfg_files[arg][1]
+		command_text = "php '" + packages_path+"/command.php' 'show_colums_after_connected_from_file' '"+ config_file + "' '" + self.table + "'"
+		cloums = os.popen(command_text)
+		data = json.loads(cloums.read())
+		if(data['status'] == 0):
+			sublime.error_message(data['info'])
+		else:
+			cloums = []
+			for i in data['data']:
+				cloums.append([i['Field'],i['Type'],i['Comment']])
+			self.view.window().show_quick_panel(cloums, self.search_cancel)
 
 class del_workspace_boms(ThinkphpCommand,sublime_plugin.TextCommand):
 	def run(self, edit):
@@ -203,6 +241,14 @@ class del_workspace_boms(ThinkphpCommand,sublime_plugin.TextCommand):
 class update_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 	def run(self, edit):
 		self.update_manual()
+
+class show_cloums_by_word(ThinkphpCommand,sublime_plugin.TextCommand):
+	def run(self, edit):
+		region = self.view.sel()[0]
+		if region.begin() != region.end():
+			self.cloums(self.view.substr(region))
+		else:
+			self.cloums_panel()
 
 class search_word_thinkphp_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 	def run(self, edit):
@@ -220,5 +266,3 @@ class view_thinkphp_api_manual(ThinkphpCommand,sublime_plugin.TextCommand):
 	"""see the ThinkPHP api online"""
 	def run(self, arg):
 		self.view_api()
-		
-		

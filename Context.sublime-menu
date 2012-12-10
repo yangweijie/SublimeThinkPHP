@@ -1,3 +1,4 @@
 [
-    { "command": "search_word_thinkphp_manual", "caption": "Search ThinkPHP manual here" }
+    { "command": "search_word_thinkphp_manual", "caption": "Search ThinkPHP manual here" },
+    { "command": "show_cloums_by_word", "caption": "show_cloums" }
 ]
