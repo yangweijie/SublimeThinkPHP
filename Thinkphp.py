@@ -36,8 +36,9 @@ def get_content(id,parent_dir=0):
 	data1 = json.loads(data1)
 	data = data1['data']
 	content = ''
-	for i in data:
-		content = content + i['content']
+	if data != None:
+		for i in data:
+			content = content + i['content']
 	if parent_dir == 0:
 		return out_tpl(content)
 	else:
