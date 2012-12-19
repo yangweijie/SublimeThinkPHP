@@ -14,9 +14,9 @@ def fs_writer(path, raw):
 
 def out_tpl(new,sub=''):
 	if sub == '':
-		return tpl.replace('{%s}',new)
+		return tpl.replace('{%ROOT}', '.').replace('{%s}',new)
 	else:
-		return tpl2.replace('{%s}',new)
+		return tpl.replace('{%ROOT}', '..').replace('{%s}',new)
 
 def get_tpl_fullpath(filename,parent_dir=''):
 	return packages_path + '/' + manual_dir + '/' + parent_dir + filename + '.html'
@@ -28,7 +28,7 @@ def write_tpl(filename,content,parent_dir=''):
 def open_tab(url):
 	webbrowser.open_new_tab(url)
 
-def get_content(id,parent_dir=0):
+def get_content(id,parent_dir=''):
 	conn = httplib.HTTPConnection("doc.thinkphp.cn")
 	conn.request("GET", "/api/view/"+id)
 	r1 = conn.getresponse()
@@ -39,13 +39,14 @@ def get_content(id,parent_dir=0):
 	if data != None:
 		for i in data:
 			content = content + i['content']
-	if parent_dir == 0:
+	else:
+		print id+',';
+	if parent_dir == '':
 		return out_tpl(content)
 	else:
 		return out_tpl(content,1)
 
 tpl = fs_reader(os.path.join(packages_path + '/'+ manual_dir +'/public', 'book.tpl'))
-tpl2 = fs_reader(os.path.join(packages_path + '/'+ manual_dir +'/public', 'book_sub.tpl'))
 
 class ThinkphpCommand(sublime_plugin.TextCommand):
 
@@ -117,7 +118,6 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 				for i in self.tree[arg]:
 					child.insert(k,i['title'])
 					k +=1
-
 				self.view.window().show_quick_panel(child, self.child_done)
 
 	def child_done(self,arg):
@@ -140,15 +140,19 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 
 	def update_manual(self):
 		data = self._init()
+		i=0
 		for j in data:
 			if not j.get('_child', None):
 				self.build(j['id'], j['name'])
 			else:
-				parent_dir = j['name']
-				if not os.path.isdir(packages_path + '/'+ manual_dir +'/'+j['name']):
-					os.mkdir(packages_path + '/'+ manual_dir +'/'+j['name'])
+				parent_dir = str(i)+j['name']
+				if not os.path.isdir(packages_path + '/'+ manual_dir +'/'+parent_dir):
+					os.mkdir(packages_path + '/'+ manual_dir +'/'+parent_dir)
+				k = 1
 				for t in j['_child']:
-					sublime.set_timeout(self.build(t['id'],t['name'],parent_dir+'/'),100)
+					sublime.set_timeout(self.build(t['id'],str(i)+'.'+str(k)+'_'+t['name'],parent_dir+'/'),100)
+					k = k+1
+			i = i+1
 		sublime.status_message('the manual has been generated')
 
 	def search_panel(self):

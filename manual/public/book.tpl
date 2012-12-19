@@ -3,21 +3,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>ThinkPHP 手册</title>
-		<link rel="stylesheet" href="public/css/layout.css">
-		<link rel="stylesheet" href="public/css/book.css">
-		<link rel="stylesheet" href="public/css/prettify.css">
-		<script type="text/javascript" src="public/js/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="public/js/prettify.js"></script>
+		<link rel="stylesheet" href="{%ROOT}/public/css/book.css">
+		<link rel="stylesheet" href="{%ROOT}/public/css/prettify.css">
+		<script type="text/javascript" src="{%ROOT}/public/js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="{%ROOT}/public/js/prettify.js"></script>
 		<script type="text/javascript">
 			$(function(){	
 				//表格隔行变色
 				$('table').TableColor();
 				
 				//代码高亮
-				$('pre.code').each(function(){
-					var self = $(this).addClass('prettycode').removeClass('code');
-					self.html(prettyPrintOne(self.html(), self.attr('lang'), true));
-				});
+				prettyPrint();
 				
 			});
 

@@ -1,92 +1,47 @@
+.pln{color:#000}
+@media screen{
+	.str{color:#080}
+	.kwd{color:#008}
+	.com{color:#800}
+	.typ{color:#606}
+	.lit{color:#066}
+	.pun,.opn,.clo{color:#660}
+	.tag{color:#008}
+	.atn{color:#606}
+	.atv{color:#080}
+	.dec,.var{color:#606}
+	.fun{color:red}
+}
+@media print,projection{
+	.str{color:#060}
+	.kwd{color:#006;font-weight:bold}
+	.com{color:#600;font-style:italic}
+	.typ{color:#404;font-weight:bold}
+	.lit{color:#044}
+	.pun,.opn,.clo{color:#440}
+	.tag{color:#006;font-weight:bold}
+	.atn{color:#404}.atv{color:#060}
+}
 
-.pln {
-    color: #000000;
+ol.linenums{margin: 0 0 0 40px;color:#2BA5D8;white-space: normal; list-style: outside decimal}
+li.L0,li.L1,li.L2,li.L3,li.L4,li.L5,li.L6,li.L7,li.L8,li.L9{
+	border-left:1px solid #D1D7DC;
+	padding:0 5px;
+	line-height:23px;
+	background-color:#FAFAFA;
+	text-indent: 0;
 }
-.str {
-    color: #008800;
-}
-.kwd {
-    color: #000088;
-}
-.com {
-    color: #880000;
-}
-.typ {
-    color: #660066;
-}
-.lit {
-    color: #006666;
-}
-.pun, .opn, .clo {
-    color: #666600;
-}
-.tag {
-    color: #000088;
-}
-.atn {
-    color: #660066;
-}
-.atv {
-    color: #008800;
-}
-.dec, .var {
-    color: #660066;
-}
-.fun {
-    color: red;
-}
-.str {
-    color: #006600;
-}
-.kwd {
-    color: #000066;
-    font-weight: bold;
-}
-.com {
-    color: #660000;
-    font-style: italic;
-}
-.typ {
-    color: #440044;
-    font-weight: bold;
-}
-.lit {
-    color: #004444;
-}
-.pun, .opn, .clo {
-    color: #444400;
-}
-.tag {
-    color: #000066;
-    font-weight: bold;
-}
-.atn {
-    color: #440044;
-}
-.atv {
-    color: #006600;
-}
-ol.linenums {
-    color: #2BA5D8;
-    list-style: decimal outside none;
-    margin: 0 0 0 40px;
-    white-space: normal;
-}
-li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9 {
-    background-color: #FAFAFA;
-    border-left: 1px solid #D1D7DC;
-    line-height: 23px;
-    padding: 0 5px;
-    text-indent: 0;
-}
+
 code.prettyprint {
-    border: 1px solid #D1D7DC;
-    display: block;
-    font-family: "Consolas",微软雅黑;
-    font-size: 14px;
-    margin: 10px 0;
-    padding: 2px;
-    position: relative;
-    white-space: normal;
-    word-wrap: break-word;
+	position: relative;
+	border: 0;
+	border: 1px solid #D1D7DC;
+	margin-left: 0;
+	padding: 2px;
+	font-size: 14px;
+	display: block;
+	font-family: "Consolas",\5FAE\8F6F\96C5\9ED1;
+	margin: 10px 0;
+	white-space: normal;
+	word-wrap: break-word;
 }
