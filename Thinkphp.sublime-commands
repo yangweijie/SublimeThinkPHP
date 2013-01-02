@@ -16,6 +16,10 @@
 		"command": "update_thinkphp_manual"
 	},
 	{
+		"caption": "ThinkPHP manual: build book with php",
+		"command": "update_thinkphp_manual_with_php"
+	},
+	{
 		"caption": "ThinkPHP manual: search",
 		"command": "search_thinkphp_manual"
 	},

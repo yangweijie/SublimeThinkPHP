@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 	<head>
-		<meta charset="UTF-8">
-		<title>ThinkPHP 手册</title>
+		<meta charset="GB2312">
+		<title>{%title}</title>
 		<link rel="stylesheet" href="{%ROOT}/public/css/book.css">
 		<link rel="stylesheet" href="{%ROOT}/public/css/prettify.css">
 		<script type="text/javascript" src="{%ROOT}/public/js/jquery-1.7.1.min.js"></script>

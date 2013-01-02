@@ -50,6 +50,58 @@ function show_colums($argv){
 	mysql_close();
 }
 
+function update_manual($argv){
+	$start = time();
+	$manual_path = $argv[0];
+	$api_url = "http://{$argv[1]}/api";
+	$chapter_url_root = "{$api_url}/view/";
+	$tpl = file_get_contents("{$manual_path}/public/book.tpl");
+	$init = json_decode(make_request($api_url),1);
+	$init = $init['data'];
+  foreach ($init as $i => $value) {
+  	if(!$value['_child']){
+  		build_chapter($manual_path,$chapter_url_root,$value['id'],$i.'.'.$value['title'],$value['title'],'');
+  	}else{
+  		$parent_dir = $i.'.'.$value['title'];
+  		substr(PHP_OS,0,3) == 'WIN'? $parent_dir = iconv('UTF-8', 'GB2312', $parent_dir):'';
+  		if(!is_dir("$manual_path/$parent_dir"))
+  			$flag = mkdir("$manual_path/$parent_dir");
+  		foreach ($value['_child'] as $j => $child) {
+  			build_chapter($manual_path,$chapter_url_root,$child['id'],"{$i}.{$j} {$child['title']}",$child['title'],$parent_dir);
+  		}
+  	}
+  }
+  $time = time()-$start;
+  success("the manual has been generated,it takes {$time} s");
+}
+
+function build_chapter($manual_path,$chapter_url_root,$id,$name,$title,$parent_dir){
+	$content = get_content($manual_path,"{$chapter_url_root}{$id}",$title,$parent_dir);
+	write_tpl($manual_path,$name,$content,$parent_dir);
+}
+
+function get_content($manual_path,$url,$title,$parent_dir){
+	$data = json_decode(make_request($url),1);
+	$data = $data['data'];
+	$content = '';
+	foreach ($data as $key => $value) {
+		$content.= $value['content'];
+	}
+	$replace = $parent_dir? '..':'.';
+	$tpl = file_get_contents("{$manual_path}/public/book.tpl");
+	$tpl = str_replace('{%ROOT}', $replace, $tpl);
+	$tpl = str_replace('{%title}', iconv('UTF-8', 'GB2312', $title), $tpl);
+	$content = str_replace('{%s}', iconv('UTF-8', 'GB2312', $content), $tpl);
+	return $content;
+}
+
+function write_tpl($manual_path,$filename,$content,$parent_dir){
+	$filename = $parent_dir?"{$manual_path}/{$parent_dir}/{$filename}.html" : "{$manual_path}/{$filename}.html";
+	if(substr(PHP_OS,0,3) == 'WIN')	$filename = iconv('UTF-8', 'GB2312', $filename);
+	file_put_contents($filename, $content);
+}
+
+//----------------------下面是通用函数-------------------------
 function error($msg,$data=''){
 	exit(json_encode(array('status'=>0,'info'=>$msg,'data'=>$data)));
 }
@@ -80,4 +132,32 @@ function parse_name($name, $type=0) {
     return strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
   }
 }
+
+function make_request($url, $param = array(), $httpMethod = 'GET') {
+  $oCurl = curl_init();
+  if (stripos($url, "https://") !== FALSE) {
+    curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, FALSE);
+  }
+
+  if ($httpMethod == 'GET') {
+    curl_setopt($oCurl, CURLOPT_URL, $url . "?" . http_build_query($param));
+    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+  } else {
+    curl_setopt($oCurl, CURLOPT_URL, $url);
+    curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($oCurl, CURLOPT_POST, 1);
+    curl_setopt($oCurl, CURLOPT_POSTFIELDS, http_build_query($param));
+  }
+
+  $sContent = curl_exec($oCurl);
+  $aStatus = curl_getinfo($oCurl);
+  curl_close($oCurl);
+  if (intval($aStatus["http_code"]) == 200) {
+    return $sContent;
+  } else {
+    return FALSE;
+  }
+}
+
 ?>
