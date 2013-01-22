@@ -1,6 +1,0 @@
-<snippet>
-	<content><![CDATA[\$this->success('${1:info}');$0]]></content>
-	<tabTrigger>$this-></tabTrigger>
-	<scope>source.php</scope>
-	<description>TP:: Action->success</description>
-</snippet>

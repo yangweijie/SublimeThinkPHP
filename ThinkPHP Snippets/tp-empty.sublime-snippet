@@ -1,6 +1,0 @@
-<snippet>
-	<content><![CDATA[<empty name="${1:name}">${2:name为空}<else /> ${3:name不为空}</empty>$0]]></content>
-	<tabTrigger>emp</tabTrigger>
-	<scope>text.html</scope>
-	<description>TP:: empty</description>
-</snippet>

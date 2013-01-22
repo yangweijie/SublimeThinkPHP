@@ -1,6 +1,0 @@
-<snippet>
-	<content><![CDATA[<include file="${1:Public:header}" />$0]]></content>
-	<tabTrigger>inc</tabTrigger>
-	<scope>text.html</scope>
-	<description>TP:: include</description>
-</snippet>

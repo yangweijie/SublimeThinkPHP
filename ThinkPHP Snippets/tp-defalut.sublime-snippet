@@ -1,6 +1,0 @@
-<snippet>
-	<content><![CDATA[\{${1:\$name}|default="${2:***}"\}$0]]></content>
-	<tabTrigger>|def</tabTrigger>
-	<scope>text.html</scope>
-	<description>TP:: var|default</description>
-</snippet>

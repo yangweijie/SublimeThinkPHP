@@ -1,6 +1,0 @@
-<snippet>
-	<content><![CDATA[<php>${1:echo 'Hello,world!';}</php>$0]]></content>
-	<tabTrigger>php</tabTrigger>
-	<scope>text.html</scope>
-	<description>TP:: php</description>
-</snippet>
