@@ -57,7 +57,7 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 		# write_tpl(name,content,parent_dir)
 		self.build(id,name,parent_dir)
 		path = get_tpl_fullpath(name,parent_dir)
-		url = 'file://'+urllib.quote(path.encode('utf8'))
+		url = 'file:///'+urllib.quote(path.encode('utf8'))
 		open_tab(url)
 
 	def build(self,id,name,parent_dir=''):
