@@ -167,6 +167,7 @@
 		{ "trigger": "_ad", "contents": "protected function _after_delete(\\$data,\\$options) {\n   ${1:}\n}$0" },
 		{ "trigger": "_af", "contents": "protected function _after_find(&\\$result,\\$options) {\n  ${1:}\n}$0" },
 		{ "trigger": "_ai", "contents": "protected function _after_insert(\\$data,\\$options) {\n   ${1:}\n}$0" },
+		{ "trigger": "_as", "contents": "protected function _after_select(&\\$result,\\$options){\n	${1:}\n}$0" },
 		{ "trigger": "_au", "contents": "protected function _after_update(\\$data,\\$options) {\n   ${1:}\n}$0" },
 		{ "trigger": "_bi", "contents": "protected function _before_insert(&\\$data,\\$options) {\n ${1:}\n}$0" },
 		{ "trigger": "_bu", "contents": "protected function _before_update(&\\$data,\\$options) {\n ${1:}\n}$0" },
