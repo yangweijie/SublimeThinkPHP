@@ -38,7 +38,15 @@
 						"command": "update_thinkphp_manual_with_php"
 					},
 					{ "caption": "-" },
-					{ "command": "open_dir", "args": {"dir": "$packages/Thinkphp/ThinkPHP Snippets"}, "caption": "Browse Snippets…", "mnemonic": "B" },
+					{ "command": "open_file", 
+						"args": {"file": "${packages}/Thinkphp/php.sublime-completions"},
+						"caption": "Browse Complation - php", "mnemonic": "B" 
+					},
+					{
+						"command": "open_file",
+						"args": {"file": "${packages}/Thinkphp/tpl.sublime-completions"},
+						"caption": "Browse Complation - tpl"
+					},
 					{
 						"command": "open_file",
 						"args": {"file": "${packages}/Thinkphp/ThinkPHP.sublime-settings"},

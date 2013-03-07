@@ -74,7 +74,7 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 					file_count += 1
 					file = open(dirpath + "/" + filename, 'r+')
 					file_contents = file.read()
-	   
+		 
 					if(len(file_contents) > 3):
 						if(ord(file_contents[0]) == 239 and ord(file_contents[1]) == 187 and ord(file_contents[2]) == 191):
 							bom_files.append(dirpath + "/" + filename)
@@ -313,6 +313,17 @@ class updateManualWithPhp(threading.Thread):
 			sublime.message_dialog(data['info'])
 		else:
 			sublime.error_message(data['info'])
+
+class ThinkphpEvent(sublime_plugin.EventListener):
+	"""diy your event"""
+	def on_pre_save(self, view):
+		u_tab_size = settings.get('user_tab_size',4)
+		view.run_command("set_setting",{"setting": "tab_size", "value": u_tab_size})
+		u_translate_tabs_to_spaces = settings.get('user_translate_tabs_to_spaces')
+		if u_translate_tabs_to_spaces:
+			view.run_command("expand_tabs",{"set_translate_tabs": 1})
+		else:
+			view.run_command("unexpand_tabs",{"set_translate_tabs": 0})
 
 class ThreadProgress():
 	"""

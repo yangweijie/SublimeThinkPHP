@@ -8,7 +8,8 @@ Sublime中的一个THinkphp框架的工具包，主要包括访问在线手册�
 *  生成全部ThinkPHP官网手册的页面
 *  访问官网框架在线api
 *  辅助删除编辑器中打开目录所有文件的bom头
-*  通过ThinkPHP snippet提供代码补全功能
+*  通过sublime-completions提供代码完成功能
+*	
 手册目录
 ![ThinkPHP manual](http://ww2.sinaimg.cn/large/50075709tw1dytu1g1xa1j.jpg)
 改进后的菜单更集中
@@ -17,7 +18,8 @@ Sublime中的一个THinkphp框架的工具包，主要包括访问在线手册�
 删除bom头
 ![ThinkPHP 打开目录的删除bom头命令结果](http://ww4.sinaimg.cn/large/50075709tw1dyzlvbi4daj.jpg)
 Snippet提示
-![ThinkPHP-snippet](http://bbs.thinkphp.cn/data/attachment/forum/201207/27/0942179zll1qlqs9dsn3tt.png)
+![sublime-completions](http://bbs.thinkphp.cn/data/attachment/forum/201207/27/0942179zll1qlqs9dsn3tt.png)
+![视频: 用Sublime text2的Thinkphp插件 像zencoding)一样快速开发TP](http://v.youku.com/v_show/id_XNTA1NjE2MTM2.html)
 
 ##有问题反馈
 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
@@ -30,8 +32,8 @@ Snippet提示
 ##关于作者
 
 ```javascript
-  var code-tech = {
-    nickName  : "杨维杰",
-    site : "http://code-tech.diandian.com"
-  }
+	var code-tech = {
+		nickName  : "杨维杰",
+		site : "http://code-tech.diandian.com"
+	}
 ```
