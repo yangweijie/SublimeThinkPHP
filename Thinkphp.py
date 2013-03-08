@@ -317,13 +317,14 @@ class updateManualWithPhp(threading.Thread):
 class ThinkphpEvent(sublime_plugin.EventListener):
 	"""diy your event"""
 	def on_pre_save(self, view):
-		u_tab_size = settings.get('user_tab_size',4)
-		view.run_command("set_setting",{"setting": "tab_size", "value": u_tab_size})
-		u_translate_tabs_to_spaces = settings.get('user_translate_tabs_to_spaces')
-		if u_translate_tabs_to_spaces:
-			view.run_command("expand_tabs",{"set_translate_tabs": 1})
-		else:
-			view.run_command("unexpand_tabs",{"set_translate_tabs": 0})
+		if settings.get('pre_save_indent'):
+			u_tab_size = settings.get('user_tab_size',4)
+			view.run_command("set_setting",{"setting": "tab_size", "value": u_tab_size})
+			u_translate_tabs_to_spaces = settings.get('user_translate_tabs_to_spaces')
+			if u_translate_tabs_to_spaces:
+				view.run_command("expand_tabs",{"set_translate_tabs": 1})
+			else:
+				view.run_command("unexpand_tabs",{"set_translate_tabs": 0})
 
 class ThreadProgress():
 	"""
