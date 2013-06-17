@@ -12,7 +12,7 @@ if($argc == 1){
 		error('wrong command name');
 	}else{
 		$command($argv);
-	}	
+	}
 }
 
 function show_colums_after_connected_from_file($argv){
@@ -29,15 +29,15 @@ function show_colums_after_connected_from_file($argv){
 }
 
 function show_colums($argv){
-	$argv[2] ==''? $argv[2]="''":$argv;
+	$argv[2] ==''? $argv[2]="''" : $argv;
 	$conn = mysql_connect($argv[0],$argv[1],"$argv[2]");
 	if(!$conn && (strpos('localhost', $argv[0])!= -1)){
 		$conn = mysql_connect(str_replace('localhost', '127.0.0.1', $argv[0]),$argv[1],$argv[2]);
 	}
 	if(!$conn) error('can\'t connect database');
 	$db = mysql_select_db($argv[3],$conn);
-	mysql_set_charset('UTF8', $conn ); 
-	
+	mysql_set_charset('UTF8', $conn );
+
 	$result = mysql_query("SHOW FULL COLUMNS FROM {$argv[4]}");
 	if(!$result){
 		error(mysql_error());
@@ -101,6 +101,42 @@ function write_tpl($manual_path,$filename,$content,$parent_dir){
 	file_put_contents($filename, $content);
 }
 
+function find_php_defination($argv){
+	$word = $argv[0];
+	$path = realpath(dirname(__FILE__));
+	$path .= DIRECTORY_SEPARATOR.'phpruntime'.DIRECTORY_SEPARATOR;
+	chdir($path);
+	$list = glob('*.php');
+	$to_search = "function {$word} (";
+	foreach ($list as $key => $value) {
+		$content = file_get_contents($path.$value);
+		$pos_search = strpos($content, $to_search);
+		// error('',$pos_search);
+		if($pos_search !== false){
+			$comment = get_comment($pos_search, $content);
+			if($comment){
+				// ver_dump($comment);
+				$comment = str_replace(PHP_EOL, '\n', $comment);
+				// $comment = str_replace('/**', '	/**', $comment);
+				// $comment = nl2br($comment);
+				success('found it!', $comment);
+				break;
+			}
+		}
+	}
+	error('didn\'t find it');
+}
+
+function get_comment($pos,$content){
+	$content_length = strlen($content);
+	// var_dump($content_length);die;
+	$end_pos = strripos($content, '*/', $pos-$content_length);
+	// var_dump($end_pos);
+	$start_pos = strripos($content, '/**', $end_pos-$content_length);
+	// var_dump($start_pos);die;
+	return substr($content, $start_pos, $end_pos-$start_pos+2);
+}
+
 //----------------------下面是通用函数-------------------------
 function error($msg,$data=''){
 	exit(json_encode(array('status'=>0,'info'=>$msg,'data'=>$data)));
@@ -159,5 +195,3 @@ function make_request($url, $param = array(), $httpMethod = 'GET') {
     return FALSE;
   }
 }
-
-?>

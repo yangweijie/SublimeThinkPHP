@@ -1,7 +1,4 @@
 {
 	"manual_dir":"manual",//手册保存目录
-	"api_url":"http://www.thinkphp.cn/api",//手册api地址
-	"pre_save_indent":0,
-	"user_tab_size":2,//用户自定义的tab对应空格数
-	"user_translate_tabs_to_spaces":0//保存时是否自动转换tab到空格
+	"api_url":"http://www.thinkphp.cn/api"//手册api地址
 }
