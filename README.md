@@ -21,8 +21,8 @@ Snippet提示
 ![sublime-completions](http://bbs.thinkphp.cn/data/attachment/forum/201207/27/0942179zll1qlqs9dsn3tt.png)
 
 ![视频: 用Sublime text2的Thinkphp插件 像zencoding)一样快速开发TP](http://v.youku.com/v_show/id_XNTA1NjE2MTM2.html)
-
-![查看函数说明文档](http://ww3.sinaimg.cn/mw1024/50075709jw1e5r7cp53hcj20n60brq57.jpg)
+查看函数说明文档
+![查看函数说明文档](http://ww3.sinaimg.cn/mw1024/50075709jw1e5r7cp53hcj20n60brq57.jpg "查看函数说明文档")
 
 ##有问题反馈
 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
