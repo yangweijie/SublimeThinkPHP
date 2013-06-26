@@ -1,4 +1,28 @@
 {
-	"manual_dir":"manual",//手册保存目录
-	"api_url":"http://www.thinkphp.cn/api"//手册api地址
+	"manual_dir":"manual",
+	"api_url":"http://www.thinkphp.cn/api",
+	"current_database" :"" ,
+	"database" : {
+		"0":{
+			"list_title":"add_database"
+		},
+		"1":{
+			"list_title":"fujian",
+			"DB_HOST":"192.168.1.200",
+			"DB_USER": "fujian",
+            "DB_PWD": "fujian",
+            "DB_NAME": "fujian",
+            "DB_PREFIX": "sister_",
+            "DB_PORT": "3306"
+		},
+		"2":{
+			"list_title":"local",
+	        "DB_HOST": "localhost",
+	        "DB_USER": "root",
+	        "DB_PWD": "",
+	        "DB_NAME": "mysql",
+	        "DB_PREFIX": ""
+	    }
+
+	}
 }

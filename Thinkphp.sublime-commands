@@ -1,4 +1,4 @@
-[	
+[
 	{
 		"caption": "view table design",
 		"command": "show_cloums_by_word"
@@ -14,10 +14,6 @@
 	{
 		"caption": "ThinkPHP manual: build book",
 		"command": "update_thinkphp_manual"
-	},
-	{
-		"caption": "ThinkPHP manual: build book with php",
-		"command": "update_thinkphp_manual_with_php"
 	},
 	{
 		"caption": "ThinkPHP manual: search",

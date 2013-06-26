@@ -1,12 +1,12 @@
-[	
+[
 	{
 		"id": "tools",
 		"children":
-		[	
+		[
 			{
 				"caption": "ThinkPHP",
 				"children":
-				[	
+				[
 					{
 						"caption": "ThinkPHP delete opened folders' bom",
 						"id": "ThinkPHP del_bom",
@@ -32,15 +32,17 @@
 						"id": "ThinkPHP manual: build book",
 						"command": "update_thinkphp_manual"
 					},
+					{ "caption": "-" },
 					{
-						"caption": "ThinkPHP manual: build book with php",
-						"id": "ThinkPHP manual: build book with php",
-						"command": "update_thinkphp_manual_with_php"
+						"caption": "ThinkPHP choose database",
+						"id": "ThinkPHP choose database",
+						"command": "query_database",
+						"args": {"cmd" :"list_database"}
 					},
 					{ "caption": "-" },
-					{ "command": "open_file", 
+					{ "command": "open_file",
 						"args": {"file": "${packages}/Thinkphp/php.sublime-completions"},
-						"caption": "Browse Complation - php", "mnemonic": "B" 
+						"caption": "Browse Complation - php", "mnemonic": "B"
 					},
 					{
 						"command": "open_file",

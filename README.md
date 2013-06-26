@@ -23,6 +23,17 @@ Snippet提示
 ![视频: 用Sublime text2的Thinkphp插件 像zencoding)一样快速开发TP](http://v.youku.com/v_show/id_XNTA1NjE2MTM2.html)
 查看函数说明文档
 ![查看函数说明文档](http://ww3.sinaimg.cn/mw1024/50075709jw1e5r7cp53hcj20n60brq57.jpg "查看函数说明文档")
+mysql编辑器内简单查询
+![效果图](http://ww2.sinaimg.cn/mw1024/50075709jw1e61cpyt7esj20vc0nbq7p.jpg "效果图")
+1.在tools->ThinkPHP->ThinkPHP choose database来添加数据库和选择当前数据库
+![选择数据库](http://ww2.sinaimg.cn/mw1024/50075709jw1e61cpzgtwpj20e304tmxg.jpg "选择数据库")
+
+添加数据库选择"add database",后如下图：
+![添加数据库](http://ww2.sinaimg.cn/mw1024/50075709jw1e61cpzwnbqj20j10hv0ul.jpg)
+
+注意database里 0 的那个键不要删除，剪切板里会有要添加的模板，自己要么先删除只剩0，保存后。下次选添加进来，粘贴会有1的模板，自己替换下即可。以后会扩展支持sqlserver。
+
+2.替换出来的查询页面里的"here is the sql to be queryed" 为要查询的sql,保存后就切换tab后就能显示结果了。这是bug。应为查询结果是用php写文件的。
 
 ##有问题反馈
 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流

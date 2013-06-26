@@ -209,8 +209,8 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
             for dirpath, dirnames, filenames in os.walk(dir[0]):
                 if(len(filenames)):
                     for filename in filenames:
-                        if (filename == 'config.php'):
-                            cfg_files.append([filename, dirpath + "/" + filename])
+                        if filename == 'config.php' and dirpath.find('ThinkPHP') == -1:
+                            cfg_files.append([filename, dirpath + os.sep + filename])
             if(len(cfg_files)):
                 self.cfg_files = cfg_files
                 self.view.window().show_quick_panel(cfg_files, self.choose_conf)
@@ -219,7 +219,8 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
 
     def choose_conf(self, arg):
         config_file = self.cfg_files[arg][1]
-        command_text = "php '" + packages_path+"/command.php' 'show_colums_after_connected_from_file' '" + config_file + "' '" + self.table + "'"
+        command_text = 'php "' + packages_path + os.sep + 'command.php" "show_colums_after_connected_from_file" "' + config_file + '" ' + self.table + '"'
+        print command_text
         cloums = os.popen(command_text)
         data = json.loads(cloums.read())
         if(data['status'] == 0):
@@ -288,19 +289,106 @@ class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
             sublime.status_message('must be a word')
 
 
+class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
+    def run(self, edit, cmd):
+        if cmd == 'list_database':
+            database = []
+            db_list = settings.get('database')
+            for i in db_list:
+                database.insert(int(i), db_list[i]['list_title'])
+            self.database = database
+            # print database
+            self.view.window().show_quick_panel(database, self.choose_database)
+
+    def choose_database(self, arg):
+        if arg == -1:
+            pass
+        else:
+            db_num = len(settings.get('database'))
+            if arg == 0:
+                setting_file = packages_path + os.sep + 'Thinkphp.sublime-settings'
+                new_key = '%d' % db_num
+                tpl = '"' + new_key + '":' + """{
+            "list_title":"test",
+            "DB_HOST": "localhost",
+            "DB_USER": "xxx",
+            "DB_PWD": "xxx",
+            "DB_NAME": "xx",
+            "DB_PREFIX": ""
+        }
+"""
+                sublime.set_clipboard(tpl)
+                self.view.window().open_file(setting_file)
+            else:
+                fs_writer(packages_path + os.sep + 'current_database', arg)
+                window = sublime.active_window()
+                views = window.views()
+                view = None
+                for _view in views:
+                    if _view.name() == 'thinkphp_database_queryer':
+                        view = _view
+                        break
+
+                if not view:
+                    tpl = """+------------------------thinkphp_database_queryer-----------------------+
+
+##########################################################################
+
+here is the sql to be queryed
+
+##########################################################################
+
+here will show the result
+"""
+                    query_window = packages_path + os.sep + 'thinkphp_database_queryer'
+                    fs_writer(query_window, tpl)
+                    self.view.window().open_file(query_window)
+
+
+class Thinkphp(sublime_plugin.EventListener):
+    def on_post_save(self, view):
+        content = view.substr(sublime.Region(0, view.size()))
+        print content
+        title = "thinkphp_database_queryer"
+        if content.find(title) and (content.find('# -*- coding: utf-8 -*-') == -1):
+            #get the db_config to connect database
+            current_database = packages_path + os.sep + 'current_database'
+            arg = fs_reader(current_database)
+            database = settings.get('database')
+            db = database[arg]
+            print db
+            seperator = """##########################################################################"""
+            query = content.split(seperator)
+            if len(query) == 3:
+                sql = query[1]
+                if sql == '':
+                    sublime.status_message('Pls input correct sql')
+                else:
+                    command_text = 'php "' + packages_path + os.sep + 'command.php" "query"'
+                    thread = queryWithPhp(command_text)
+                    thread.start()
+                    ThreadProgress(thread, 'Is querying', 'Database query complated!')
+            else:
+                sublime.status_message('Error format queryer, pls close it the retry query')
+
+
+class queryWithPhp(threading.Thread):
+    def __init__(self, command_text):
+        self.command_text = command_text
+        threading.Thread.__init__(self)
+
+    def run(self):
+        cloums = os.popen(self.command_text)
+        # print cloums.read()
+        data = cloums.read()
+        if data:
+            sublime.error_message(data)
+
+
 class update_thinkphp_manual(ThinkphpCommand, sublime_plugin.TextCommand):
     def run(self, edit):
         manual_path = packages_path + os.sep + manual_dir + os.sep
         thread = updateManual(manual_path)
-        thread.start()
-        ThreadProgress(thread, 'Is making ThinkPHP manual', 'ThinkPHP manual generated!')
-
-
-class update_thinkphp_manual_with_php(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        # self.update_manual_with_php()
-        command_text = "php -d 'extension=php_curl.dll' '" + packages_path + os.sep + "command.php' 'update_manual' '" + packages_path + os.sep + manual_dir + "' '" + api_root_url + "'"
-        thread = updateManualWithPhp(command_text)
         thread.start()
         ThreadProgress(thread, 'Is making ThinkPHP manual', 'ThinkPHP manual generated!')
 
@@ -365,21 +453,6 @@ class updateManual(threading.Thread):
     def build(self, id, name, parent_dir=''):
         content = get_content(id, name, parent_dir)
         write_tpl(name, content, parent_dir)
-
-
-class updateManualWithPhp(threading.Thread):
-    def __init__(self, command_text):
-        self.command_text = command_text
-        threading.Thread.__init__(self)
-
-    def run(self):
-        cloums = os.popen(self.command_text)
-        # print cloums.read()
-        data = json.loads(cloums.read())
-        if data['status'] == 0:
-            sublime.message_dialog(data['info'])
-        else:
-            sublime.error_message(data['info'])
 
 
 class ThreadProgress():
