@@ -133,6 +133,7 @@ function query($argv = ''){
         $output = 'no results!';
     $output = str_replace($arr_content[2], PHP_EOL.PHP_EOL.$output, $content);
     file_put_contents($table_queryer_file, $output);
+    // exit($output);
     exit;
 }
 

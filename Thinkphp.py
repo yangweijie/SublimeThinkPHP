@@ -348,15 +348,9 @@ here will show the result
 class Thinkphp(sublime_plugin.EventListener):
     def on_post_save(self, view):
         content = view.substr(sublime.Region(0, view.size()))
-        print content
+        print view.file_name()
         title = "thinkphp_database_queryer"
-        if content.find(title) and (content.find('# -*- coding: utf-8 -*-') == -1):
-            #get the db_config to connect database
-            current_database = packages_path + os.sep + 'current_database'
-            arg = fs_reader(current_database)
-            database = settings.get('database')
-            db = database[arg]
-            print db
+        if view.file_name().find(title):
             seperator = """##########################################################################"""
             query = content.split(seperator)
             if len(query) == 3:
@@ -383,6 +377,8 @@ class queryWithPhp(threading.Thread):
         data = cloums.read()
         if data:
             sublime.error_message(data)
+        else:
+            sublime.error_message('query complated!')
 
 
 class update_thinkphp_manual(ThinkphpCommand, sublime_plugin.TextCommand):
