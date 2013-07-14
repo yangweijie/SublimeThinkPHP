@@ -1,5 +1,4 @@
 [
-    { "command": "search_word_thinkphp_manual", "caption": "Search ThinkPHP manual here" },
-    { "command": "show_cloums_by_word", "caption": "show_cloums" },
-    { "command": "goto_php_documentent", "caption": "goto_php_document" }
+    { "command": "query_database", "caption": "show_cloums" ,"args": {"cmd" :"show_cloum"}},
+    { "command": "goto_php_document", "caption": "goto_php_document" }
 ]

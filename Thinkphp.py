@@ -1,304 +1,118 @@
 # -*- coding: utf-8 -*-
 import sublime, sublime_plugin
-import os, httplib, urllib, urllib2, json, webbrowser, threading, codecs
+import os, json, threading, codecs, subprocess, webbrowser
+from subprocess import PIPE
 
-settings = sublime.load_settings('Thinkphp.sublime-settings')
-api_root_url = 'doc.thinkphp.cn'
 packages_path = sublime.packages_path() + os.sep + 'Thinkphp'
-manual_dir = settings.get('manual_dir')
-
+query_window = packages_path + os.sep + 'ThinkPHP-CLI.html'
+query_table = packages_path + os.sep + 'ThinkPHP-Queryer'
+seperator = '\n###################################################\n\n'
+settings = sublime.load_settings('Thinkphp.sublime-settings')
 
 def fs_reader(path):
-    return codecs.open(path, mode='r', encoding='utf-8').read()
-
+    return codecs.open(path, mode='r', encoding='utf8').read()
 
 def fs_writer(path, raw):
-    codecs.open(path, mode='w', encoding='gbk', errors='ignore').write(raw)
-
-
-def out_tpl(new, name, sub=''):
-    if sub == '':
-        return tpl.replace('{%ROOT}', '.').replace('{%title}', name).replace('{%s}', new)
-    else:
-        return tpl.replace('{%ROOT}', '..').replace('{%title}', name).replace('{%s}', new)
-
-
-def get_tpl_fullpath(filename, parent_dir=''):
-    return packages_path + os.sep + manual_dir + os.sep + parent_dir + filename + '.html'
-
-
-def write_tpl(filename, content, parent_dir=''):
-    # if not os.path.isfile(get_tpl_fullpath(filename,parent_dir)):
-    fs_writer(get_tpl_fullpath(filename, parent_dir), content)
-
+    codecs.open(path, mode='w', encoding='utf8', errors='ignore').write(raw)
 
 def open_tab(url):
     webbrowser.open_new_tab(url)
 
-
-def get_content(id, name, parent_dir=''):
-    conn = httplib.HTTPConnection(api_root_url)
-    conn.request("GET", "/api/view/"+id)
-    r1 = conn.getresponse()
-    data1 = r1.read()
-    data1 = json.loads(data1)
-    data = data1['data']
-    content = ''
-    if data is not None:
-        for i in data:
-            content = content + i['content']
-    else:
-        print id + ','
-    if parent_dir == '':
-        return out_tpl(content, name)
-    else:
-        return out_tpl(content, name, 1)
-
-tpl = fs_reader(os.path.join(packages_path + os.sep + manual_dir + os.sep+'public', 'book.tpl'))
-
-
 class ThinkphpCommand(sublime_plugin.TextCommand):
-
-    def see(self, id, name, parent_dir=''):
-        #url = 'http://doc.thinkphp.cn/manual/' + self.data[arg]['name']
-        # content = get_content(id,name,parent_dir)
-        # write_tpl(name,content,parent_dir)
-        self.build(id, name, parent_dir)
-        path = get_tpl_fullpath(name, parent_dir)
-        url = 'file:///'+urllib.quote(path.encode('utf8'))
-        open_tab(url)
-
-    def build(self, id, name, parent_dir=''):
-        content = get_content(id, name, parent_dir)
-        write_tpl(name, content, parent_dir)
-
-    def del_bom(self, dir):
-        file_count = 0
-        bom_files = []
-        self.view.window().run_command("show_panel", {"panel": "console", "toggle": None})
-        for dirpath, dirnames, filenames in os.walk(dir):
-            if(len(filenames)):
-                for filename in filenames:
-                    file_count += 1
-                    file = open(dirpath + "/" + filename, 'r+')
-                    file_contents = file.read()
-
-                    if(len(file_contents) > 3):
-                        if(ord(file_contents[0]) == 239 and ord(file_contents[1]) == 187 and ord(file_contents[2]) == 191):
-                            bom_files.append(dirpath + "/" + filename)
-                            file.seek(0)
-                            file.write(file_contents[3:])
-                            print dirpath + "/" + filename, "BOM found. Deleted."
-                    file.close()
-        print file_count, "file(s) found.", len(bom_files), "file(s) have a bom. Deleted."
-
     def run(self, edit):
-        data = self._init()
-        self.data = data
-        chapter = []
-        tree = []
-        sort_data = []
-        k = 0
-        for i in data:
-            chapter.insert(int(i['id']), i['title'])
-            sort_data.insert(k, i['title'])
-            state = i.get('_child', None)
-            if state:
-                tree.insert(k, i['_child'])
-            else:
-                tree.insert(k, None)
-            k = k+1
-        # print chapter
-        self.chapter = chapter
-        self.sort_data = sort_data
-        self.tree = tree
-        self.view.window().show_quick_panel(chapter, self.panel_done)
-
-    def panel_done(self, arg):
-        if arg == -1:
-            pass
-        else:
-            self.tree_key = arg
-            if self.tree[arg] is None:
-                self.see(self.data[arg]['id'], str(arg)+'.'+self.data[arg]['title'])
-            else:
-                parent_dir = packages_path+os.sep+manual_dir+os.sep+str(arg)+'.'+self.sort_data[arg]
-                if not os.path.isdir(parent_dir):
-                    os.mkdir(parent_dir)
-                child = []
-                k = 0
-                for i in self.tree[arg]:
-                    child.insert(k, i['title'])
-                    k += 1
-                self.view.window().show_quick_panel(child, self.child_done)
-
-    def child_done(self, arg):
-        if arg == -1:
-            self.view.window().show_quick_panel(self.chapter, self.panel_done)
-        else:
-            self.see(self.tree[self.tree_key][arg]['id'], str(self.tree_key)+'.'+str(arg)+' '+self.tree[self.tree_key][arg]['title'], str(self.tree_key)+'.'+self.sort_data[self.tree_key]+os.sep)
+        window = sublime.active_window()
+        views = window.views()
+        view = None
+        for _view in views:
+            if _view.name() == 'ThinkPHP-CLI.html':
+                view = _view
+                break
+        if not view:
+            tpl = seperator + 'result to be display.'
+            fs_writer(query_window, tpl)
+        self.view.window().open_file(query_window)
 
     def view_api(self):
         url = settings.get('api_url')
         open_tab(url)
 
-    def _init(self):
-        conn = httplib.HTTPConnection(api_root_url)
-        conn.request("GET", "/api")
-        r1 = conn.getresponse()
-        data1 = r1.read()
-        data1 = json.loads(data1)
-        return data1['data']
-
-    def search_panel(self):
-        self.view.window().show_input_panel('search in thinkphp manual?', '', self.search_done, self.search_change, self.search_cancel)
-
-    def search_done(self, arg):
-        data = {'keywords': arg}
-        f = urllib2.urlopen(url='http://' + api_root_url + '/api/search', data=urllib.urlencode(data))
-        data = f.read()
-        data = json.loads(data)
-        if data['data'] == []:
-            sublime.error_message('No Search result !')
-        else:
-            chapter = []
-            data = data['data']
-            self.search_list = data
-            for i in data:
-                chapter.insert(int(i['id']), i['title'])
-            self.view.window().show_quick_panel(chapter, self.manual_search_done)
-
-    def manual_search_done(self, arg):
-        if arg == -1:
-            pass
-        else:
-            choose = self.search_list[arg]
-            data = self._init()
-            for i in data:
-                if i['id'] == choose['id']:
-                    self.see(choose['id'], choose['title'], '_search'+os.sep)
-                else:
-                    state = i.get('_child', None)
-                    if state:
-                        for j in i['_child']:
-                            if j['id'] == choose['id']:
-                                if not os.path.isdir(packages_path + os.sep + manual_dir + os.sep+i['title']):
-                                    os.mkdir(packages_path + os.sep + manual_dir + os.sep + i['title'])
-                                self.see(choose['id'], choose['title'], '_search'+os.sep)
-
-    def search_change(self, arg):
-        pass
-
-    def search_cancel(self):
-        pass
-
-    def cloums(self, arg):
-        self.show_cloums(arg)
-
-    def cloums_panel(self):
-        self.view.window().show_input_panel('table you want show?', '', self.show_cloums, self.search_change, self.search_cancel)
-
-    def show_cloums(self, arg):
-        table = arg
-        self.table = table
-        dir = self.view.window().folders()
-        if dir == []:
-            sublime.error_message('Please open a full ThinkPHP project')
-        else:
-            cfg_files = []
-            for dirpath, dirnames, filenames in os.walk(dir[0]):
-                if(len(filenames)):
-                    for filename in filenames:
-                        if filename == 'config.php' and dirpath.find('ThinkPHP') == -1:
-                            cfg_files.append([filename, dirpath + os.sep + filename])
-            if(len(cfg_files)):
-                self.cfg_files = cfg_files
-                self.view.window().show_quick_panel(cfg_files, self.choose_conf)
-            else:
-                sublime.error_message('no config.php')
-
-    def choose_conf(self, arg):
-        config_file = self.cfg_files[arg][1]
-        command_text = 'php "' + packages_path + os.sep + 'command.php" "show_colums_after_connected_from_file" "' + config_file + '" ' + self.table + '"'
-        print command_text
-        cloums = os.popen(command_text)
-        data = json.loads(cloums.read())
-        if(data['status'] == 0):
-            sublime.error_message(data['info'])
-        else:
-            cloums = []
-            for i in data['data']:
-                cloums.append([i['Field'], i['Type'], i['Comment']])
-            self.view.window().show_quick_panel(cloums, self.search_cancel)
-
-
-class del_workspace_boms(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        dir = self.view.window().folders()
+class Thinkphp(sublime_plugin.EventListener):
+    def on_post_save(self, view):
+        dir = view.window().folders()
         if dir == []:
             sublime.error_message('Please open a folder')
         else:
-            self.del_bom(dir[0])
-
-
-class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        region = self.view.sel()[0]
-        # pos = self.view.rowcol(region)
-        # print pos
-        if region.begin() != region.end():
-            function = self.view.substr(region)
-            command_text = 'php "' + packages_path + os.sep + 'command.php" "find_php_defination" "' + function + '"'
-            # print command_text
-            cloums = os.popen(command_text)
-            # print cloums
-            # print cloums.read()
-            data = json.loads(cloums.read())
-            # print data find
-            if data['status'] == 0:
-                sublime.status_message(data['info'])
+            content = view.substr(sublime.Region(0, view.size()))
+            title = "ThinkPHP-CLI.html"
+            if view.file_name().find(title) != -1:
+                global seperator
+                query = content.split(seperator)
+                cmd = query[0]
+                command_text = ['php', dir[0] + os.sep + 'index.php', cmd]
+                thread = cli(command_text,view,dir[0])
+                thread.start()
+                ThreadProgress(thread, 'Is excuting', 'cli excuted')
             else:
-                # self.view.window().run_command("show_panel", {"panel": "console", "toggle": None})
-                # fs_writer(packages_path + os.sep + 'temp.html', data['data'])
-                window = sublime.active_window()
-                views = window.views()
-                view = None
-                for _view in views:
-                    if _view.name() == ('function "%s" defination(php)') % function:
-                        view = _view
-                        break
-
-                if not view:
-                    view = window.new_file()
-                    view.set_name(('function "%s" defination(php)') % function)
-                    view.set_scratch(True)
-
-                def write(string):
-                    edit = view.begin_edit()
-                    if view.size() == 0:
-                        view.insert(edit, view.size(), string)
-                        view.end_edit(edit)
-
-                write(data['data'])
-                # command_text = '"' + packages_path + os.sep + 'toolkit.exe" tpl="' + packages_path + os.sep + 'temp.html"'
-                # print command_text
-                # cloums = os.popen(command_text)
-                # cloums.read()
-                # self.view.window().show_quick_panel([data['data']], self.search_cancel)
-        else:
-            sublime.status_message('must be a word')
+                title2 = "ThinkPHP-Queryer"
+                if view.file_name().find(title2) != -1:
+                    seperator = """##########################################################################"""
+                    query = content.split(seperator)
+                    if len(query) == 2:
+                        sql = query[0]
+                        if sql == '':
+                            sublime.status_message('Pls input correct sql')
+                        else:
+                            command_text = 'php "' + packages_path + os.sep + 'command.php" "query"'
+                            thread = queryWithPhp(command_text)
+                            thread.start()
+                            ThreadProgress(thread, 'Is querying', 'Database query complated!')
+                    else:
+                        sublime.status_message('Error format queryer, pls close it the retry query')
 
 
 class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
     def run(self, edit, cmd):
-        if cmd == 'list_database':
-            database = []
-            db_list = settings.get('database')
-            for i in db_list:
-                database.insert(int(i), db_list[i]['list_title'])
-            self.database = database
-            # print database
-            self.view.window().show_quick_panel(database, self.choose_database)
+        self.cmd = cmd
+        if cmd == 'change_database':
+            self.list_database()
+        else:
+            current_database = fs_reader(packages_path + os.sep + 'current_database')
+            if current_database < '1':
+                self.list_database()
+            else:
+                if cmd == 'show_cloum':
+                    self.show_cloum()
+                else:
+                    self.show_query_database()
+
+
+    def show_cloum(self):
+        region = self.view.sel()[0]
+        if region.begin() != region.end():
+            table = self.view.substr(region)
+            command_text = 'php "' + packages_path + os.sep + 'command.php" "show_colums" "' + table + '"'
+            cloums = os.popen(command_text)
+            data = json.loads(cloums.read())
+            if(data['status'] == 0):
+                sublime.error_message(data['info'])
+            else:
+                cloums = []
+                for i in data['data']:
+                    cloums.append([i['Field'], i['Type'], i['Comment']])
+                self.view.window().show_quick_panel(cloums, self.cancel)
+        else:
+            sublime.error_message('Pls choose your table')
+
+    def cancel(self,arg):
+        pass
+
+    def list_database(self):
+        database = []
+        db_list = settings.get('database')
+        for i in db_list:
+            database.insert(int(i), db_list[i]['list_title'])
+        self.database = database
+        self.view.window().show_quick_panel(database, self.choose_database)
 
     def choose_database(self, arg):
         if arg == -1:
@@ -320,51 +134,84 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
                 sublime.set_clipboard(tpl)
                 self.view.window().open_file(setting_file)
             else:
-                fs_writer(packages_path + os.sep + 'current_database', arg)
+                fs_writer(packages_path + os.sep + 'current_database', str(arg))
+                if self.cmd == 'show_cloum':
+                    self.show_cloum()
+
+    def show_query_database(self):
+        window = sublime.active_window()
+        views = window.views()
+        view = None
+        for _view in views:
+            if _view.name() == 'ThinkPHP-Queryer':
+                view = _view
+                break
+
+        if not view:
+            tpl = """
+
+##########################################################################
+
+result to be display.
+"""
+            fs_writer(query_table, tpl)
+            self.view.window().open_file(query_table)
+
+class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
+    def run(self, edit):
+        region = self.view.sel()[0]
+        if region.begin() != region.end():
+            function = self.view.substr(region)
+            command_text = 'php "' + packages_path + os.sep + 'command.php" "find_php_defination" "' + function + '"'
+            cloums = os.popen(command_text)
+            data = json.loads(cloums.read())
+            if data['status'] == 0:
+                sublime.status_message(data['info'])
+            else:
                 window = sublime.active_window()
                 views = window.views()
                 view = None
                 for _view in views:
-                    if _view.name() == 'thinkphp_database_queryer':
+                    if _view.name() == ('function "%s" defination(php)') % function:
                         view = _view
                         break
 
                 if not view:
-                    tpl = """+------------------------thinkphp_database_queryer-----------------------+
+                    view = window.new_file()
+                    view.set_name(('function "%s" defination(php)') % function)
+                    view.set_scratch(True)
 
-##########################################################################
+                def write(string):
+                    edit = view.begin_edit()
+                    if view.size() == 0:
+                        view.insert(edit, view.size(), string)
+                        view.end_edit(edit)
 
-here is the sql to be queryed
+                write(data['data'])
+        else:
+            sublime.status_message('must be a word')
 
-##########################################################################
+class view_thinkphp_api_manual(ThinkphpCommand, sublime_plugin.TextCommand):
+    """see the ThinkPHP api online"""
+    def run(self, arg):
+        self.view_api()
 
-here will show the result
-"""
-                    query_window = packages_path + os.sep + 'thinkphp_database_queryer'
-                    fs_writer(query_window, tpl)
-                    self.view.window().open_file(query_window)
+class cli(threading.Thread):
+    def __init__(self, command_text, view,cwd):
+        self.command_text = command_text
+        self.view = view
+        self.cwd  = cwd
+        threading.Thread.__init__(self)
 
-
-class Thinkphp(sublime_plugin.EventListener):
-    def on_post_save(self, view):
-        content = view.substr(sublime.Region(0, view.size()))
-        print view.file_name()
-        title = "thinkphp_database_queryer"
-        if view.file_name().find(title):
-            seperator = """##########################################################################"""
-            query = content.split(seperator)
-            if len(query) == 3:
-                sql = query[1]
-                if sql == '':
-                    sublime.status_message('Pls input correct sql')
-                else:
-                    command_text = 'php "' + packages_path + os.sep + 'command.php" "query"'
-                    thread = queryWithPhp(command_text)
-                    thread.start()
-                    ThreadProgress(thread, 'Is querying', 'Database query complated!')
-            else:
-                sublime.status_message('Error format queryer, pls close it the retry query')
-
+    def run(self):
+        proce = subprocess.Popen(self.command_text, stdout=PIPE, shell=True, cwd=self.cwd)
+        data,error = proce.communicate()
+        if data != b'':
+            content = self.command_text[2] + seperator + data.decode('utf-8')
+            fs_writer(query_window, content)
+        else:
+            if sublime.version() < '3000':
+                sublime.error_message('cli executed!')
 
 class queryWithPhp(threading.Thread):
     def __init__(self, command_text):
@@ -373,83 +220,12 @@ class queryWithPhp(threading.Thread):
 
     def run(self):
         cloums = os.popen(self.command_text)
-        # print cloums.read()
         data = cloums.read()
         if data:
             sublime.error_message(data)
         else:
-            sublime.error_message('query complated!')
-
-
-class update_thinkphp_manual(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        manual_path = packages_path + os.sep + manual_dir + os.sep
-        thread = updateManual(manual_path)
-        thread.start()
-        ThreadProgress(thread, 'Is making ThinkPHP manual', 'ThinkPHP manual generated!')
-
-
-class show_cloums_by_word(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        region = self.view.sel()[0]
-        if region.begin() != region.end():
-            self.cloums(self.view.substr(region))
-        else:
-            self.cloums_panel()
-
-
-class search_word_thinkphp_manual(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        region = self.view.sel()[0]
-        if region.begin() != region.end():
-            self.search_done(self.view.substr(region))
-        else:
-            self.search_panel()
-
-
-class search_thinkphp_manual(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        self.search_panel()
-
-
-class view_thinkphp_api_manual(ThinkphpCommand, sublime_plugin.TextCommand):
-    """see the ThinkPHP api online"""
-    def run(self, arg):
-        self.view_api()
-
-
-class updateManual(threading.Thread):
-    def __init__(self, manual_path):
-        self.manual_path = manual_path
-        threading.Thread.__init__(self)
-        conn = httplib.HTTPConnection(api_root_url)
-        conn.request("GET", "/api")
-        r1 = conn.getresponse()
-        data1 = r1.read()
-        data1 = json.loads(data1)
-        self.data = data1['data']
-
-    def run(self):
-        data = self.data
-        i = 0
-        for j in data:
-            if not j.get('_child', None):
-                self.build(j['id'], str(i)+'.'+j['title'])
-            else:
-                parent_dir = str(i)+'.'+j['title']
-                if not os.path.isdir(self.manual_path+parent_dir):
-                    os.mkdir(self.manual_path+parent_dir)
-                k = 1
-                for t in j['_child']:
-                    sublime.set_timeout(self.build(t['id'], str(i)+'.'+str(k)+' '+t['title'], parent_dir + os.sep), 1)
-                    k = k+1
-            i = i+1
-        sublime.message_dialog('The manual generated!')
-
-    def build(self, id, name, parent_dir=''):
-        content = get_content(id, name, parent_dir)
-        write_tpl(name, content, parent_dir)
-
+            if sublime.version() < '3000':
+                sublime.error_message('query complated!')
 
 class ThreadProgress():
     """

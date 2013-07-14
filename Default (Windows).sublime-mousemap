@@ -1,3 +1,4 @@
 [
-	{ "button": "button1", "modifiers": ["ctrl"], "command": "goto_php_document" }
+	{ "button": "button1", "modifiers": ["ctrl"], "command": "goto_definition" },
+	{ "button": "button1", "modifiers": ["alt"], "command": "goto_php_document" }
 ]

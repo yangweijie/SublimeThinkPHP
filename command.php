@@ -15,29 +15,36 @@ if($argc == 1){
     }
 }
 
-function show_colums_after_connected_from_file($argv){
-    $config = include $argv[0];
-    $table = $argv[1];
+//连接数据库
+function connect_db(){
+    $settings = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'Thinkphp.sublime-settings');
+    $settings = json_decode($settings, true);
+    $current_database = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'current_database');
+    $config = $settings['database'][$current_database];
+    if(!$config)
+        exit('current_database config dosen\'t exsist');
     $argv = array(
         0=>$config['DB_HOST'].':'.$config['DB_PORT'],
         1=>$config['DB_USER'],
         2=>$config['DB_PWD'],
         3=>$config['DB_NAME'],
-        4=>$config['DB_PREFIX'].parse_name($table)
+        4=>$config['DB_PREFIX']
     );
-    show_colums($argv);
-}
-
-function show_colums($argv){
     $conn = mysql_connect($argv[0],$argv[1],$argv[2]);
     if(!$conn && (strpos('localhost', $argv[0])!= -1)){
         $conn = mysql_connect(str_replace('localhost', '127.0.0.1', $argv[0]),$argv[1],$argv[2]);
     }
-    if(!$conn) error('can\'t connect database');
-    $db = mysql_select_db($argv[3],$conn);
-    mysql_set_charset('UTF8', $conn );
+    if(!$conn)
+        exit('can\'t connect database');
+    mysql_select_db($argv[3],$conn);
+    mysql_set_charset('UTF8', $conn);
+    return $argv;
+}
 
-    $result = mysql_query("SHOW FULL COLUMNS FROM {$argv[4]}");
+function show_colums($argv){
+    $config = connect_db();
+    $table = $config[4].parse_name($argv[0]);
+    $result = mysql_query("SHOW FULL COLUMNS FROM {$table}");
     if(!$result){
         error(mysql_error());
     }else{
@@ -59,14 +66,10 @@ function find_php_defination($argv){
     foreach ($list as $key => $value) {
         $content = file_get_contents($path.$value);
         $pos_search = strpos($content, $to_search);
-        // error('',$pos_search);
         if($pos_search !== false){
             $comment = get_comment($pos_search, $content);
             if($comment){
-                // ver_dump($comment);
-                $comment = str_replace(PHP_EOL, '\n', $comment);
-                // $comment = str_replace('/**', '  /**', $comment);
-                // $comment = nl2br($comment);
+                // $comment = str_replace(PHP_EOL, '\n', $comment);
                 success('found it!', $comment);
                 break;
             }
@@ -77,39 +80,19 @@ function find_php_defination($argv){
 
 function get_comment($pos,$content){
     $content_length = strlen($content);
-    $end_pos = strripos($content, '*/', $pos-$content_length);
-    $start_pos = strripos($content, '/**', $end_pos-$content_length);
-    return substr($content, $start_pos, $end_pos-$start_pos+2);
+    $end_pos = strripos($content, '*/', $pos - $content_length);
+    $start_pos = strripos($content, '/**', $end_pos - $content_length);
+    return substr($content, $start_pos, $end_pos - $start_pos + 2);
 }
 
 function query($argv = ''){
     error_reporting(7);
-    $table_queryer_file = __DIR__.DIRECTORY_SEPARATOR.'thinkphp_database_queryer';
-    $settings = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'Thinkphp.sublime-settings');
-    $settings = json_decode($settings, true);
-    $current_database = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'current_database');
-    $config = $settings['database'][$current_database];
-    if(!$config)
-        exit('current_database config dosen\'t exsist');
-    $argv = array(
-        0=>$config['DB_HOST'].':'.$config['DB_PORT'],
-        1=>$config['DB_USER'],
-        2=>$config['DB_PWD'],
-        3=>$config['DB_NAME'],
-    );
-
+    $table_queryer_file = __DIR__.DIRECTORY_SEPARATOR.'ThinkPHP-Queryer';
     $content = file_get_contents($table_queryer_file);
     $sep = '##########################################################################';
     $arr_content = split($sep, $content);
-    $sql = trim($arr_content[1]);
-    $conn = mysql_connect($argv[0],$argv[1],$argv[2]);
-    if(!$conn && (strpos('localhost', $argv[0])!= -1)){
-        var_dump($argv);
-        $conn = mysql_connect(str_replace('localhost', '127.0.0.1', $argv[0]),$argv[1],$argv[2]);
-    }
-    if(!$conn) error('can\'t connect database');
-    $db = mysql_select_db($argv[3],$conn);
-    mysql_set_charset('UTF8', $conn);
+    $sql = trim($arr_content[0]);
+    connect_db($argv);
     $result = mysql_query($sql);
     $rows = array();
     if($result){
@@ -126,12 +109,13 @@ function query($argv = ''){
             'header'=>$header? $header : array(),
             'rows'=>$rows
         );
-
-    $table = new table($in);
-    $output = $table->render(0);
-     if($output == false)
+    if($rows){
+        $table = new table($in);
+        $output = $table->render(0);
+    }
+    if(!$output)
         $output = 'no results!';
-    $output = str_replace($arr_content[2], PHP_EOL.PHP_EOL.$output, $content);
+    $output = str_replace($arr_content[1], PHP_EOL.PHP_EOL.$output, $content);
     file_put_contents($table_queryer_file, $output);
     // exit($output);
     exit;

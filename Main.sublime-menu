@@ -4,86 +4,41 @@
 		"children":
 		[
 			{
-				"caption": "ThinkPHP",
-				"children":
-				[
-					{
-						"caption": "ThinkPHP delete opened folders' bom",
-						"id": "ThinkPHP del_bom",
-						"command": "del_workspace_boms"
-					},
-					{
-						"caption": "ThinkPHP manual",
-						"id": "ThinkPHP manual",
-						"command": "thinkphp"
-					},
-					{
-						"caption": "ThinkPHP manual: api",
-						"id": "ThinkPHP api manual",
-						"command": "view_thinkphp_api_manual"
-					},
-					{
-						"caption": "ThinkPHP manual: search",
-						"id": "ThinkPHP manual: search",
-						"command": "search_thinkphp_manual"
-					},
-					{
-						"caption": "ThinkPHP manual: build book",
-						"id": "ThinkPHP manual: build book",
-						"command": "update_thinkphp_manual"
-					},
-					{ "caption": "-" },
-					{
-						"caption": "ThinkPHP choose database",
-						"id": "ThinkPHP choose database",
-						"command": "query_database",
-						"args": {"cmd" :"list_database"}
-					},
-					{ "caption": "-" },
-					{ "command": "open_file",
-						"args": {"file": "${packages}/Thinkphp/php.sublime-completions"},
-						"caption": "Browse Complation - php", "mnemonic": "B"
-					},
-					{
-						"command": "open_file",
-						"args": {"file": "${packages}/Thinkphp/tpl.sublime-completions"},
-						"caption": "Browse Complation - tpl"
-					},
-					{
-						"command": "open_file",
-						"args": {"file": "${packages}/Thinkphp/ThinkPHP.sublime-settings"},
-						"caption": "Settings – Default"
-					},
-					{
-						"command": "open_file",
-						"args": {"file": "${packages}/User/ThinkPHP.sublime-settings"},
-						"caption": "Settings – User"
-					},
-					{
-						"command": "open_file",
-						"args": {
-							"file": "${packages}/ThinkPHP/Default (Windows).sublime-keymap",
-							"platform": "Windows"
-						},
-						"caption": "Key Bindings – Default"
-					},
-					{
-						"command": "open_file",
-						"args": {
-							"file": "${packages}/ThinkPHP/Default (OSX).sublime-keymap",
-							"platform": "OSX"
-						},
-						"caption": "Key Bindings – Default"
-					},
-					{
-						"command": "open_file",
-						"args": {
-							"file": "${packages}/ThinkPHP/Default (Linux).sublime-keymap",
-							"platform": "Linux"
-						},
-						"caption": "Key Bindings – Default"
-					}
-				]
+				"caption": "ThinkPHP manual: api",
+				"id": "ThinkPHP api manual",
+				"command": "view_thinkphp_api_manual"
+			},
+			{
+				"caption": "ThinkPHP change database",
+				"id": "ThinkPHP change database",
+				"command": "query_database",
+				"args": {"cmd" :"change_database"}
+			},
+			{
+				"caption": "ThinkPHP database queryer",
+				"id": "ThinkPHP database queryer",
+				"command": "query_database",
+				"args": {"cmd" :"query"}
+			},
+			{
+				"caption": "ThinkPHP-CLI",
+				"id": "ThinkPHP executer",
+				"command": "thinkphp"
+			},
+			{ "caption": "-" },
+			{
+				"command": "open_file",
+				"args": {"file": "${packages}/Thinkphp/ThinkPHP.sublime-settings"},
+				"caption": "Settings – Default"
+			},
+			{ "command": "open_file",
+				"args": {"file": "${packages}/Thinkphp/php.sublime-completions"},
+				"caption": "Browse Complation - php", "mnemonic": "B"
+			},
+			{
+				"command": "open_file",
+				"args": {"file": "${packages}/Thinkphp/tpl.sublime-completions"},
+				"caption": "Browse Complation - tpl"
 			}
 		]
 	}

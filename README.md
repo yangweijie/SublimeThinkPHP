@@ -1,24 +1,17 @@
 ##Thinkphp是什么?
-Sublime中的一个THinkphp框架的工具包，主要包括访问在线手册，生成本地手册页面，搜索官网手册和thinkphp snippet
+Sublime中的一个THinkphp框架的工具包，主要包括thinkphp snippet、访问框架在线api、以及一些编程辅助功能。目前重构的插件去除了手册相关功能，同时支持Sublime text2和3版本。
 
 ##Thinkphp有哪些功能？
 
-*  在编辑器中获取最新手册列表，然后选择后打开本采集的离线手册页面
-*  在编辑器中输入关键词或选中词后右键搜索
-*  生成全部ThinkPHP官网手册的页面
 *  访问官网框架在线api
-*  辅助删除编辑器中打开目录所有文件的bom头
+*  辅助删除编辑器中打开目录所有文件的bom头(后期补上，移植到3的时候报错解决不了，等我想办法解决)
 *  通过sublime-completions提供代码完成功能
-*  ctrl点击或者选中函数名后右键显示函数说明文档（英文） 
+*  ctrl点击或者选中函数名后右键显示函数说明文档（英文）
 手册目录
-![ThinkPHP manual](http://ww2.sinaimg.cn/large/50075709tw1dytu1g1xa1j.jpg)
-改进后的菜单更集中
-![ThinkPHP manual menu](http://ww4.sinaimg.cn/large/50075709tw1dyzlv2uk6oj.jpg)
-![ThinkPHP api manual](http://ww3.sinaimg.cn/large/50075709tw1dyzlvmdds7j.jpg)
-删除bom头
-![ThinkPHP 打开目录的删除bom头命令结果](http://ww4.sinaimg.cn/large/50075709tw1dyzlvbi4daj.jpg)
+![ThinkPHP manual](http://www.thinkphp.cn/Uploads/editor/2013-07-14/51e25dad0bc2b.jpg)
+改进后的菜单少了一层，更快捷
 Snippet提示
-![sublime-completions](http://bbs.thinkphp.cn/data/attachment/forum/201207/27/0942179zll1qlqs9dsn3tt.png)
+![sublime-completions](http://www.thinkphp.cn/Uploads/editor/2013-07-14/51e25e9621c58.png)
 
 ![视频: 用Sublime text2的Thinkphp插件 像zencoding)一样快速开发TP](http://v.youku.com/v_show/id_XNTA1NjE2MTM2.html)
 查看函数说明文档
@@ -33,7 +26,19 @@ mysql编辑器内简单查询
 
 注意database里 0 的那个键不要删除，剪切板里会有要添加的模板，自己要么先删除只剩0，保存后。下次选添加进来，粘贴会有1的模板，自己替换下即可。以后会扩展支持sqlserver。
 
-2.替换出来的查询页面里的"here is the sql to be queryed" 为要查询的sql,保存后就切换tab后就能显示结果了。这是bug。因为查询结果是用php写文件的。
+现在查看数据表字段注释和数据库查询统一用配置里的去访问数据库，因此有个“change database”菜单和“database queryer”菜单，查询表字段支持tp的命名方式，比如原表名think_user，在配置文件里配了前缀后我们在php文件里写D('User') 这样User选中后右键直接show_cloums就行了，为了方便大家记忆去除从输入框填写的步骤，简化为一个操作
+效果如下:
+
+![效果图](http://www.thinkphp.cn/Uploads/editor/2012-12-10/50c56b7fd4e97.png)
+
+最后还支持了命令行访问网页cli模式方便大家调试action中操作，不需要开浏览器。
+选择菜单中的ThinkPHP-CLI 弹出的文件中 输入你想访问的url 记住打开的项目更目录要有入口文件，并且php在path环境变量中有设置。
+保存就可显示结果:
+
+![效果图](http://www.thinkphp.cn/Uploads/editor/2013-07-14/51e2689cce54a.png)
+
+这样方便大家调试数据而不必切换浏览器，或者调试接口的时候用
+
 
 ##有问题反馈
 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流

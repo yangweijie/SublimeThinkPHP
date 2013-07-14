@@ -1,4 +1,0 @@
-[
-	{ "keys": ["ctrl+alt+m"], "command": "thinkphp" },
-	{ "keys": ["ctrl+alt+u"], "command": "update_thinkphp_manual" }
-]

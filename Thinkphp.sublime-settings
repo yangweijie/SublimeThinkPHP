@@ -1,7 +1,5 @@
 {
-	"manual_dir":"manual",
-	"api_url":"http://www.thinkphp.cn/api",
-	"current_database" :"" ,
+	"api_url" : "http://www.thinkphp.cn/api",
 	"database" : {
 		"0":{
 			"list_title":"add_database"
@@ -10,19 +8,18 @@
 			"list_title":"fujian",
 			"DB_HOST":"192.168.1.200",
 			"DB_USER": "fujian",
-            "DB_PWD": "fujian",
-            "DB_NAME": "fujian",
-            "DB_PREFIX": "sister_",
-            "DB_PORT": "3306"
+			"DB_PWD": "fujian",
+			"DB_NAME": "fujian",
+			"DB_PREFIX": "sister_",
+			"DB_PORT": "3306"
 		},
 		"2":{
 			"list_title":"local",
-	        "DB_HOST": "localhost",
-	        "DB_USER": "root",
-	        "DB_PWD": "",
-	        "DB_NAME": "mysql",
-	        "DB_PREFIX": ""
-	    }
-
+			"DB_HOST": "localhost",
+			"DB_USER": "root",
+			"DB_PWD": "",
+			"DB_NAME": "mysql",
+			"DB_PREFIX": ""
+		}
 	}
 }
