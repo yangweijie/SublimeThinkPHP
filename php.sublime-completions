@@ -256,10 +256,10 @@
 		{ "trigger": "trueTableName", "contents": "protected \\$trueTableName$0" },
 		{ "trigger": "ts", "contents": "\\$this->$0" },
 		{ "trigger": "ubb()", "contents": "ubb(${1:\\$text})$0" },
-		{ "trigger": "val", "contents": "protected \\$_validate = array(\n	array('verify','require','验证码必须！'), //默认情况下用正则进行验证\n	array('name','','帐号名称已经存在！',0,'unique',1), // 在新增的时候验证name字段是否唯一\n	array('value',array(1,2,3),'值的范围不正确！',2,'in'), // 当值不为空的时候判断是否在一个范围内\n	array('repassword','password','确认密码不正确',0,'confirm'), // 验证确认密码是否和密码一致\n	array('password','checkPwd','密码格式不正确',0,'function'), // 自定义函数验证密码格式\n)\n$0" },
+		{ "trigger": "val", "contents": "protected \\$_validate = array(\n	array('verify','require','验证码必须！'), //默认情况下用正则进行验证\n	array('name','','帐号名称已经存在！',0,'unique',1), // 在新增的时候验证name字段是否唯一\n	array('value',array(1,2,3),'值的范围不正确！',2,'in'), // 当值不为空的时候判断是否在一个范围内\n	array('repassword','password','确认密码不正确',0,'confirm'), // 验证确认密码是否和密码一致\n	array('password','checkPwd','密码格式不正确',0,'function'), // 自定义函数验证密码格式\n);\n$0" },
 		{ "trigger": "where()", "contents": "where('${1:}')$0" },
 		{ "trigger": "W", "contents": "W(${1:\\$name},${2:array()}${3:,\\$return})$0" },
-		{ "trigger": "m_auto", "contents": "protected \\$_auto = array (\n	array('status','1'),  // 新增的时候把status字段设置为1\n	array('password','md5',1,'function') , // 对password字段在新增的时候使md5函数处理\n	array('name','getName',1,'callback'), // 对name字段在新增的时候回调getName方法\n	array('create_time','time',2,'function'), // 对create_time字段在更新的时候写入当前时间戳\n)$0" },
+		{ "trigger": "m_auto", "contents": "protected \\$_auto = array (\n	array('status','1'),  // 新增的时候把status字段设置为1\n	array('password','md5',1,'function') , // 对password字段在新增的时候使md5函数处理\n	array('name','getName',1,'callback'), // 对name字段在新增的时候回调getName方法\n	array('create_time','time',2,'function'), // 对create_time字段在更新的时候写入当前时间戳\n);$0" },
 		{ "trigger": "Action", "contents": "\nClass ${1:Index}Action extends Action{\n  public function ${2:index}(){\n     ${3:}\n }\n}" }
 	]
 }

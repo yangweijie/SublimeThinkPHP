@@ -25,6 +25,11 @@
 				"id": "ThinkPHP executer",
 				"command": "thinkphp"
 			},
+			{
+				"caption": "del workspace 's bom",
+				"id": "del workspace 's bom",
+				"command": "del_workspace_boms"
+			},
 			{ "caption": "-" },
 			{
 				"command": "open_file",

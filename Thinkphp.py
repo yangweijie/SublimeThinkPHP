@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sublime, sublime_plugin
-import os, json, threading, codecs, subprocess, webbrowser
+import os, json, threading, codecs, re, subprocess, webbrowser
 from subprocess import PIPE
 
 packages_path = sublime.packages_path() + os.sep + 'Thinkphp'
@@ -8,6 +8,12 @@ query_window = packages_path + os.sep + 'ThinkPHP-CLI.html'
 query_table = packages_path + os.sep + 'ThinkPHP-Queryer'
 seperator = '\n###################################################\n\n'
 settings = sublime.load_settings('Thinkphp.sublime-settings')
+
+def is_version2():
+    if sublime.version() < '3000':
+        return True
+    else:
+        return False
 
 def fs_reader(path):
     return codecs.open(path, mode='r', encoding='utf8').read()
@@ -17,6 +23,20 @@ def fs_writer(path, raw):
 
 def open_tab(url):
     webbrowser.open_new_tab(url)
+
+def show_outpanel(self, name, string, readonly = True):
+    self.output_view = self.window.get_output_panel(name)
+    if is_version2():
+        edit = self.output_view.begin_edit()
+        self.output_view.insert(edit, 0, string)
+        self.output_view.end_edit(edit)
+    else:
+        self.output_view.run_command('append', {'characters': string, 'force': True, 'scroll_to_end': True})
+    if readonly:
+        self.output_view.set_read_only(True)
+    show_panel_on_build = sublime.load_settings("Preferences.sublime-settings").get("show_panel_on_build", True)
+    if show_panel_on_build:
+        self.window.run_command("show_panel", {"panel": "output." + name})
 
 class ThinkphpCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -36,39 +56,42 @@ class ThinkphpCommand(sublime_plugin.TextCommand):
         url = settings.get('api_url')
         open_tab(url)
 
+
 class Thinkphp(sublime_plugin.EventListener):
+    def on_load(self, view):
+        if view.file_name().find('ThinkPHP-Queryer') != -1:
+            view.set_syntax_file('Packages/SQL/SQL.tmLanguage')
+            view.run_command('select_all')
+
+
     def on_post_save(self, view):
         dir = view.window().folders()
+        title = "ThinkPHP-CLI.html"
+        title2 = "ThinkPHP-Queryer"
+        content = view.substr(sublime.Region(0, view.size()))
+        global seperator
         if dir == []:
-            sublime.error_message('Please open a folder')
-        else:
-            content = view.substr(sublime.Region(0, view.size()))
-            title = "ThinkPHP-CLI.html"
             if view.file_name().find(title) != -1:
-                global seperator
+                sublime.status_message('Please open a folder')
+        else:
+            if view.file_name().find(title) != -1:
                 query = content.split(seperator)
                 cmd = query[0]
                 command_text = ['php', dir[0] + os.sep + 'index.php', cmd]
                 thread = cli(command_text,view,dir[0])
                 thread.start()
                 ThreadProgress(thread, 'Is excuting', 'cli excuted')
-            else:
-                title2 = "ThinkPHP-Queryer"
-                if view.file_name().find(title2) != -1:
-                    seperator = """##########################################################################"""
-                    query = content.split(seperator)
-                    if len(query) == 2:
-                        sql = query[0]
-                        if sql == '':
-                            sublime.status_message('Pls input correct sql')
-                        else:
-                            command_text = 'php "' + packages_path + os.sep + 'command.php" "query"'
-                            thread = queryWithPhp(command_text)
-                            thread.start()
-                            ThreadProgress(thread, 'Is querying', 'Database query complated!')
-                    else:
-                        sublime.status_message('Error format queryer, pls close it the retry query')
 
+        if view.file_name().find(title2) != -1:
+            sql = content
+            if sql == '':
+                sublime.status_message('Pls input correct sql')
+            else:
+                command_text = 'php "' + packages_path + os.sep + 'command.php" "query"'
+                cloums = os.popen(command_text)
+                data = cloums.read()
+                self.window = view.window()
+                show_outpanel(self, 'ThinkPHP-Queryer', data , True)
 
 class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
     def run(self, edit, cmd):
@@ -84,7 +107,6 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
                     self.show_cloum()
                 else:
                     self.show_query_database()
-
 
     def show_cloum(self):
         region = self.view.sel()[0]
@@ -148,14 +170,10 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
                 break
 
         if not view:
-            tpl = """
-
-##########################################################################
-
-result to be display.
-"""
+            tpl = """here to input sql"""
             fs_writer(query_table, tpl)
             self.view.window().open_file(query_table)
+
 
 class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
     def run(self, edit):
@@ -168,28 +186,24 @@ class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
             if data['status'] == 0:
                 sublime.status_message(data['info'])
             else:
-                window = sublime.active_window()
-                views = window.views()
-                view = None
-                for _view in views:
-                    if _view.name() == ('function "%s" defination(php)') % function:
-                        view = _view
-                        break
-
-                if not view:
-                    view = window.new_file()
-                    view.set_name(('function "%s" defination(php)') % function)
-                    view.set_scratch(True)
-
-                def write(string):
-                    edit = view.begin_edit()
-                    if view.size() == 0:
-                        view.insert(edit, view.size(), string)
-                        view.end_edit(edit)
-
-                write(data['data'])
+                if is_version2():
+                    self.window = self.view.window()
+                    show_outpanel(self, 'php function docmentor', data['data'])
+                else:
+                    content = data['data']
+                    content = content[4:]
+                    content = content[:-4]
+                    content = content.replace('*', '')
+                    re_h = re.compile('</?\w+[^>]*>')
+                    content = re_h.sub('',content)
+                    fun_def_item = content.split('\n')
+                    self.item = fun_def_item
+                    self.view.show_popup_menu(fun_def_item, self.choose)
         else:
             sublime.status_message('must be a word')
+    def choose(self, flag):
+        if flag != -1:
+            sublime.set_clipboard(self.item[flag])
 
 class view_thinkphp_api_manual(ThinkphpCommand, sublime_plugin.TextCommand):
     """see the ThinkPHP api online"""
@@ -210,22 +224,21 @@ class cli(threading.Thread):
             content = self.command_text[2] + seperator + data.decode('utf-8')
             fs_writer(query_window, content)
         else:
-            if sublime.version() < '3000':
+            if is_version2():
                 sublime.error_message('cli executed!')
 
 class queryWithPhp(threading.Thread):
-    def __init__(self, command_text):
+    def __init__(self, command_text, window):
         self.command_text = command_text
+        self.window = window
         threading.Thread.__init__(self)
 
     def run(self):
         cloums = os.popen(self.command_text)
         data = cloums.read()
-        if data:
-            sublime.error_message(data)
-        else:
-            if sublime.version() < '3000':
-                sublime.error_message('query complated!')
+        if data is None:
+            data = 'no results!'
+        show_outpanel(self, 'ThinkPHP-Queryer', data)
 
 class ThreadProgress():
     """

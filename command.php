@@ -17,6 +17,7 @@ if($argc == 1){
 
 //连接数据库
 function connect_db(){
+    error_reporting(0);
     $settings = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'Thinkphp.sublime-settings');
     $settings = json_decode($settings, true);
     $current_database = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'current_database');
@@ -69,7 +70,6 @@ function find_php_defination($argv){
         if($pos_search !== false){
             $comment = get_comment($pos_search, $content);
             if($comment){
-                // $comment = str_replace(PHP_EOL, '\n', $comment);
                 success('found it!', $comment);
                 break;
             }
@@ -115,10 +115,7 @@ function query($argv = ''){
     }
     if(!$output)
         $output = 'no results!';
-    $output = str_replace($arr_content[1], PHP_EOL.PHP_EOL.$output, $content);
-    file_put_contents($table_queryer_file, $output);
-    // exit($output);
-    exit;
+    exit($output);
 }
 
 //----------------------下面是通用函数-------------------------
