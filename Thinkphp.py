@@ -9,12 +9,6 @@ query_table = packages_path + os.sep + 'ThinkPHP-Queryer'
 seperator = '\n###################################################\n\n'
 settings = sublime.load_settings('Thinkphp.sublime-settings')
 
-def is_version2():
-    if sublime.version() < '3000':
-        return True
-    else:
-        return False
-
 def fs_reader(path):
     return codecs.open(path, mode='r', encoding='utf8').read()
 
@@ -26,12 +20,7 @@ def open_tab(url):
 
 def show_outpanel(self, name, string, readonly = True):
     self.output_view = self.window.get_output_panel(name)
-    if is_version2():
-        edit = self.output_view.begin_edit()
-        self.output_view.insert(edit, 0, string)
-        self.output_view.end_edit(edit)
-    else:
-        self.output_view.run_command('append', {'characters': string, 'force': True, 'scroll_to_end': True})
+    self.output_view.run_command('append', {'characters': string, 'force': True, 'scroll_to_end': True})
     if readonly:
         self.output_view.set_read_only(True)
     show_panel_on_build = sublime.load_settings("Preferences.sublime-settings").get("show_panel_on_build", True)
@@ -186,19 +175,15 @@ class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
             if data['status'] == 0:
                 sublime.status_message(data['info'])
             else:
-                if is_version2():
-                    self.window = self.view.window()
-                    show_outpanel(self, 'php function docmentor', data['data'])
-                else:
-                    content = data['data']
-                    content = content[4:]
-                    content = content[:-4]
-                    content = content.replace('*', '')
-                    re_h = re.compile('</?\w+[^>]*>')
-                    content = re_h.sub('',content)
-                    fun_def_item = content.split('\n')
-                    self.item = fun_def_item
-                    self.view.show_popup_menu(fun_def_item, self.choose)
+                content = data['data']
+                content = content[4:]
+                content = content[:-4]
+                content = content.replace('*', '')
+                re_h = re.compile('</?\w+[^>]*>')
+                content = re_h.sub('',content)
+                fun_def_item = content.split('\n')
+                self.item = fun_def_item
+                self.view.show_popup_menu(fun_def_item, self.choose)
         else:
             sublime.status_message('must be a word')
     def choose(self, flag):
@@ -223,9 +208,6 @@ class cli(threading.Thread):
         if data != b'':
             content = self.command_text[2] + seperator + data.decode('utf-8')
             fs_writer(query_window, content)
-        else:
-            if is_version2():
-                sublime.error_message('cli executed!')
 
 class queryWithPhp(threading.Thread):
     def __init__(self, command_text, window):
