@@ -20,6 +20,7 @@ def open_tab(url):
 
 def show_outpanel(self, name, string, readonly = True):
     self.output_view = self.window.get_output_panel(name)
+    self.output_view.set_read_only(False)
     edit = self.output_view.begin_edit()
     self.output_view.insert(edit, 0, string)
     self.output_view.end_edit(edit)
