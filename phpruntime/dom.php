@@ -994,7 +994,7 @@ class DOMDocument extends DOMNode  {
 	 * The value can also be set later with DOMElement::$nodeValue.
 	 * </p>
 	 * @return DOMElement a new instance of class <b>DOMElement</b> or <b>FALSE</b>
-	 * if an error occured.
+	 * if an error occurred.
 	 */
 	public function createElement ($name, $value = null) {}
 
@@ -1002,7 +1002,7 @@ class DOMDocument extends DOMNode  {
 	 * (PHP 5)<br/>
 	 * Create new document fragment
 	 * @link http://php.net/manual/en/domdocument.createdocumentfragment.php
-	 * @return DOMDocumentFragment The new <b>DOMDocumentFragment</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMDocumentFragment The new <b>DOMDocumentFragment</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createDocumentFragment () {}
 
@@ -1013,7 +1013,7 @@ class DOMDocument extends DOMNode  {
 	 * @param string $content <p>
 	 * The content of the text.
 	 * </p>
-	 * @return DOMText The new <b>DOMText</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMText The new <b>DOMText</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createTextNode ($content) {}
 
@@ -1024,7 +1024,7 @@ class DOMDocument extends DOMNode  {
 	 * @param string $data <p>
 	 * The content of the comment.
 	 * </p>
-	 * @return DOMComment The new <b>DOMComment</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMComment The new <b>DOMComment</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createComment ($data) {}
 
@@ -1035,7 +1035,7 @@ class DOMDocument extends DOMNode  {
 	 * @param string $data <p>
 	 * The content of the cdata.
 	 * </p>
-	 * @return DOMCDATASection The new <b>DOMCDATASection</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMCDATASection The new <b>DOMCDATASection</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createCDATASection ($data) {}
 
@@ -1049,7 +1049,7 @@ class DOMDocument extends DOMNode  {
 	 * @param string $data [optional] <p>
 	 * The content of the processing instruction.
 	 * </p>
-	 * @return DOMProcessingInstruction The new <b>DOMProcessingInstruction</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMProcessingInstruction The new <b>DOMProcessingInstruction</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createProcessingInstruction ($target, $data = null) {}
 
@@ -1060,7 +1060,7 @@ class DOMDocument extends DOMNode  {
 	 * @param string $name <p>
 	 * The name of the attribute.
 	 * </p>
-	 * @return DOMAttr The new <b>DOMAttr</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMAttr The new <b>DOMAttr</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createAttribute ($name) {}
 
@@ -1074,7 +1074,7 @@ class DOMDocument extends DOMNode  {
 	 * ; characters.
 	 * </p>
 	 * @return DOMEntityReference The new <b>DOMEntityReference</b> or <b>FALSE</b> if an error
-	 * occured.
+	 * occurred.
 	 */
 	public function createEntityReference ($name) {}
 
@@ -1123,7 +1123,7 @@ class DOMDocument extends DOMNode  {
 	 * The value of the element. By default, an empty element will be created.
 	 * You can also set the value later with DOMElement::$nodeValue.
 	 * </p>
-	 * @return DOMElement The new <b>DOMElement</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMElement The new <b>DOMElement</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createElementNS ($namespaceURI, $qualifiedName, $value = null) {}
 
@@ -1137,7 +1137,7 @@ class DOMDocument extends DOMNode  {
 	 * @param string $qualifiedName <p>
 	 * The tag name and prefix of the attribute, as prefix:tagname.
 	 * </p>
-	 * @return DOMAttr The new <b>DOMAttr</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMAttr The new <b>DOMAttr</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function createAttributeNS ($namespaceURI, $qualifiedName) {}
 
@@ -1293,10 +1293,14 @@ class DOMDocument extends DOMNode  {
 	 * @param string $source <p>
 	 * The HTML string.
 	 * </p>
+	 * @param int $options [optional] <p>
+	 * Since PHP 5.4.0 and Libxml 2.6.0, you may also use the
+	 * <i>options</i> parameter to specify additional Libxml parameters.
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure. If called statically, returns a
 	 * <b>DOMDocument</b> or <b>FALSE</b> on failure.
 	 */
-	public function loadHTML ($source) {}
+	public function loadHTML ($source, $options = 0) {}
 
 	/**
 	 * (PHP 5)<br/>
@@ -1305,10 +1309,14 @@ class DOMDocument extends DOMNode  {
 	 * @param string $filename <p>
 	 * The path to the HTML file.
 	 * </p>
+	 * @param int $options [optional] <p>
+	 * Since PHP 5.4.0 and Libxml 2.6.0, you may also use the
+	 * <i>options</i> parameter to specify additional Libxml parameters.
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure. If called statically, returns a
 	 * <b>DOMDocument</b> or <b>FALSE</b> on failure.
 	 */
-	public function loadHTMLFile ($filename) {}
+	public function loadHTMLFile ($filename, $options = 0) {}
 
 	/**
 	 * (PHP 5)<br/>
@@ -1339,9 +1347,12 @@ class DOMDocument extends DOMNode  {
 	 * @param string $filename <p>
 	 * The path to the schema.
 	 * </p>
+	 * @param int $flags [optional] <p>
+	 * A bitmask of Libxml schema validation flags. Currently the only supported value is LIBXML_SCHEMA_CREATE. Available since PHP 5.5.2 and Libxml 2.6.14.
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
-	public function schemaValidate ($filename) {}
+	public function schemaValidate ($filename, $flags = null) {}
 
 	/**
 	 * (PHP 5)<br/>
@@ -1350,9 +1361,12 @@ class DOMDocument extends DOMNode  {
 	 * @param string $source <p>
 	 * A string containing the schema.
 	 * </p>
+	 * @param int $flags [optional] <p>
+	 * A bitmask of Libxml schema validation flags. Currently the only supported value is LIBXML_SCHEMA_CREATE. Available since PHP 5.5.2 and Libxml 2.6.14.
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
-	public function schemaValidateSource ($source) {}
+	public function schemaValidateSource ($source, $flags = null) {}
 
 	/**
 	 * (PHP 5)<br/>
@@ -2408,7 +2422,7 @@ class DOMElement extends DOMNode  {
 	 * @param string $value <p>
 	 * The value of the attribute.
 	 * </p>
-	 * @return DOMAttr The new <b>DOMAttr</b> or <b>FALSE</b> if an error occured.
+	 * @return DOMAttr The new <b>DOMAttr</b> or <b>FALSE</b> if an error occurred.
 	 */
 	public function setAttribute ($name, $value) {}
 
@@ -3608,9 +3622,9 @@ class DOMDomError  {
 class DOMErrorHandler  {
 
 	/**
-	 * @param DOMError $error
+	 * @param DOMDomError $error
 	 */
-	public function handleError (DOMError $error) {}
+	public function handleError (DOMDomError $error) {}
 
 }
 
@@ -4297,12 +4311,12 @@ class DOMDocumentType extends DOMNode  {
  */
 class DOMNotation extends DOMNode  {
 	/**
-	 * <p style="margin-top:0;">Prop description</p>
+	 * <p></p>
 	 * @var string
 	 */
 	public $publicId;
 	/**
-	 * <p style="margin-top:0;">Prop description</p>
+	 * <p></p>
 	 * @var string
 	 */
 	public $systemId;
@@ -5110,12 +5124,12 @@ class DOMEntityReference extends DOMNode  {
  */
 class DOMProcessingInstruction extends DOMNode  {
 	/**
-	 * <p style="margin-top:0;">Prop description</p>
+	 * <p></p>
 	 * @var string
 	 */
 	public $target;
 	/**
-	 * <p style="margin-top:0;">Prop description</p>
+	 * <p></p>
 	 * @var string
 	 */
 	public $data;
@@ -5395,7 +5409,7 @@ class DOMStringExtend  {
  */
 class DOMXPath  {
 	/**
-	 * <p style="margin-top:0;">Prop description</p>
+	 * <p></p>
 	 * @var DOMDocument
 	 */
 	public $document;

@@ -409,7 +409,7 @@ class Collator  {
 	public function getErrorMessage () {}
 
 	/**
-	 * (No version information available, might only be in SVN)<br/>
+	 * (PHP 5 &gt;= 5.3.11, PECL intl &gt;= 1.0.3)<br/>
 	 * Get sorting key for a string
 	 * @link http://php.net/manual/en/collator.getsortkey.php
 	 * @param string $str <p>
@@ -1465,9 +1465,14 @@ class Locale  {
 	public static function lookup (array $langtag, $locale, $canonicalize = false, $default = null) {}
 
 	/**
-	 * @param $arg1
+	 * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
+	 * Canonicalize the locale string
+	 * @link http://php.net/manual/en/locale.canonicalize.php
+	 * @param string $locale <p>
+	 * </p>
+	 * @return string
 	 */
-	public static function canonicalize ($arg1) {}
+	public static function canonicalize ($locale) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
@@ -1684,37 +1689,55 @@ class IntlDateFormatter  {
 	 * Create a date formatter
 	 * @link http://php.net/manual/en/intldateformatter.create.php
 	 * @param string $locale <p>
-	 * Locale to use when formatting or parsing.
+	 * Locale to use when formatting or parsing or <b>NULL</b> to use the value
+	 * specified in the ini setting intl.default_locale.
 	 * </p>
 	 * @param int $datetype <p>
-	 * Date type to use (<b>none</b>,
-	 * <b>short</b>, <b>medium</b>,
-	 * <b>long</b>, <b>full</b>).
-	 * This is one of the
-	 * IntlDateFormatter constants.
+	 * Date type to use (<b>none</b>, <b>short</b>,
+	 * <b>medium</b>, <b>long</b>,
+	 * <b>full</b>). This is one of the IntlDateFormatter
+	 * constants. It can also be <b>NULL</b>, in which case ICUʼs default
+	 * date type will be used.
 	 * </p>
 	 * @param int $timetype <p>
-	 * Time type to use (<b>none</b>,
-	 * <b>short</b>, <b>medium</b>,
-	 * <b>long</b>, <b>full</b>).
-	 * This is one of the
-	 * IntlDateFormatter constants.
+	 * Time type to use (<b>none</b>, <b>short</b>,
+	 * <b>medium</b>, <b>long</b>,
+	 * <b>full</b>). This is one of the IntlDateFormatter
+	 * constants. It can also be <b>NULL</b>, in which case ICUʼs default
+	 * time type will be used.
 	 * </p>
-	 * @param string $timezone [optional] <p>
-	 * Time zone ID, default is system default.
+	 * @param mixed $timezone [optional] <p>
+	 * Time zone ID. The default (and the one used if <b>NULL</b> is given) is the
+	 * one returned by <b>date_default_timezone_get</b> or, if
+	 * applicable, that of the <b>IntlCalendar</b> object passed
+	 * for the <i>calendar</i> parameter. This ID must be a
+	 * valid identifier on ICUʼs database or an ID representing an
+	 * explicit offset, such as GMT-05:30.
 	 * </p>
-	 * @param int $calendar [optional] <p>
-	 * Calendar to use for formatting or parsing; default is Gregorian.
-	 * This is one of the
-	 * IntlDateFormatter calendar constants.
+	 * <p>
+	 * This can also be an <b>IntlTimeZone</b> or a
+	 * <b>DateTimeZone</b> object.
+	 * </p>
+	 * @param mixed $calendar [optional] <p>
+	 * Calendar to use for formatting or parsing. The default value is <b>NULL</b>,
+	 * which corresponds to <b>IntlDateFormatter::GREGORIAN</b>.
+	 * This can either be one of the
+	 * IntlDateFormatter
+	 * calendar constants or an <b>IntlCalendar</b>. Any
+	 * <b>IntlCalendar</b> object passed will be clone; it will
+	 * not be changed by the <b>IntlDateFormatter</b>. This will
+	 * determine the calendar type used (gregorian, islamic, persian, etc.) and,
+	 * if <b>NULL</b> is given for the <i>timezone</i> parameter,
+	 * also the timezone used.
 	 * </p>
 	 * @param string $pattern [optional] <p>
 	 * Optional pattern to use when formatting or parsing.
 	 * Possible patterns are documented at http://userguide.icu-project.org/formatparse/datetime.
 	 * </p>
-	 * @return IntlDateFormatter
+	 * @return IntlDateFormatter The created <b>IntlDateFormatter</b> or <b>FALSE</b> in case of
+	 * failure.
 	 */
-	public static function create ($locale, $datetype, $timetype, $timezone = null, $calendar = null, $pattern = null) {}
+	public static function create ($locale, $datetype, $timetype, $timezone = NULL, $calendar = NULL, $pattern = '') {}
 
 	/**
 	 * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
@@ -1734,19 +1757,34 @@ class IntlDateFormatter  {
 
 	/**
 	 * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
-	 * Get the calendar used for the IntlDateFormatter
+	 * Get the calendar type used for the IntlDateFormatter
 	 * @link http://php.net/manual/en/intldateformatter.getcalendar.php
-	 * @return int The calendar being used by the formatter.
+	 * @return int The calendar
+	 * type being used by the formatter. Either
+	 * <b>IntlDateFormatter::TRADITIONAL</b> or
+	 * <b>IntlDateFormatter::GREGORIAN</b>.
 	 */
 	public function getCalendar () {}
 
 	/**
 	 * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
-	 * sets the calendar used to the appropriate calendar, which must be
+	 * Sets the calendar type used by the formatter
 	 * @link http://php.net/manual/en/intldateformatter.setcalendar.php
-	 * @param int $which <p>
-	 * The calendar to use.
-	 * Default is <b>IntlDateFormatter::GREGORIAN</b>.
+	 * @param mixed $which <p>
+	 * This can either be: the calendar
+	 * type to use (default is
+	 * <b>IntlDateFormatter::GREGORIAN</b>, which is also used if
+	 * <b>NULL</b> is specified) or an
+	 * <b>IntlCalendar</b> object.
+	 * </p>
+	 * <p>
+	 * Any <b>IntlCalendar</b> object passed in will be cloned;
+	 * no modifications will be made to the argument object.
+	 * </p>
+	 * <p>
+	 * The timezone of the formatter will only be kept if an
+	 * <b>IntlCalendar</b> object is not passed, otherwise the
+	 * new timezone will be that of the passed object.
 	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
@@ -1826,10 +1864,20 @@ class IntlDateFormatter  {
 	 * Format the date/time value as a string
 	 * @link http://php.net/manual/en/intldateformatter.format.php
 	 * @param mixed $value <p>
-	 * Value to format. This may be a <b>DateTime</b> object,
-	 * an integer representing a Unix timestamp value (seconds
-	 * since epoch, UTC) or an array in the format output by
+	 * Value to format. This may be a <b>DateTime</b> object, an
+	 * <b>IntlCalendar</b> object, a numeric type
+	 * representing a (possibly fractional) number of seconds since epoch or an
+	 * array in the format output by
 	 * <b>localtime</b>.
+	 * </p>
+	 * <p>
+	 * If a <b>DateTime</b> or an
+	 * <b>IntlCalendar</b> object is passed, its timezone is not
+	 * considered. The object will be formatted using the formaterʼs configured
+	 * timezone. If one wants to use the timezone of the object to be formatted,
+	 * <b>IntlDateFormatter::setTimeZone</b> must be called before
+	 * with the objectʼs timezone. Alternatively, the static function
+	 * <b>IntlDateFormatter::formatObject</b> may be used instead.
 	 * </p>
 	 * @return string The formatted string or, if an error occurred, <b>FALSE</b>.
 	 */
@@ -1849,7 +1897,7 @@ class IntlDateFormatter  {
 	 * This variable will contain the end position if the parse fails.
 	 * If $parse_pos > strlen($value), the parse fails immediately.
 	 * </p>
-	 * @return int timestamp parsed value
+	 * @return int timestamp parsed value, or <b>FALSE</b> if value can't be parsed.
 	 */
 	public function parse ($value, &$position = null) {}
 
@@ -2312,7 +2360,7 @@ function collator_get_error_code (Collator $object) {}
 function collator_get_error_message (Collator $object) {}
 
 /**
- * (No version information available, might only be in SVN)<br/>
+ * (PHP 5 &gt;= 5.3.11, PECL intl &gt;= 1.0.3)<br/>
  * Get sorting key for a string
  * @link http://php.net/manual/en/collator.getsortkey.php
  * @param string $str <p>
@@ -2781,9 +2829,14 @@ function locale_get_all_variants ($locale) {}
 function locale_filter_matches ($langtag, $locale, $canonicalize = false) {}
 
 /**
- * @param $arg1
+ * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
+ * Canonicalize the locale string
+ * @link http://php.net/manual/en/locale.canonicalize.php
+ * @param string $locale <p>
+ * </p>
+ * @return string
  */
-function locale_canonicalize ($arg1) {}
+function locale_canonicalize ($locale) {}
 
 /**
  * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
@@ -2938,37 +2991,55 @@ function msgfmt_get_error_message ($coll) {}
  * Create a date formatter
  * @link http://php.net/manual/en/intldateformatter.create.php
  * @param string $locale <p>
- * Locale to use when formatting or parsing.
+ * Locale to use when formatting or parsing or <b>NULL</b> to use the value
+ * specified in the ini setting intl.default_locale.
  * </p>
  * @param int $datetype <p>
- * Date type to use (<b>none</b>,
- * <b>short</b>, <b>medium</b>,
- * <b>long</b>, <b>full</b>).
- * This is one of the
- * IntlDateFormatter constants.
+ * Date type to use (<b>none</b>, <b>short</b>,
+ * <b>medium</b>, <b>long</b>,
+ * <b>full</b>). This is one of the IntlDateFormatter
+ * constants. It can also be <b>NULL</b>, in which case ICUʼs default
+ * date type will be used.
  * </p>
  * @param int $timetype <p>
- * Time type to use (<b>none</b>,
- * <b>short</b>, <b>medium</b>,
- * <b>long</b>, <b>full</b>).
- * This is one of the
- * IntlDateFormatter constants.
+ * Time type to use (<b>none</b>, <b>short</b>,
+ * <b>medium</b>, <b>long</b>,
+ * <b>full</b>). This is one of the IntlDateFormatter
+ * constants. It can also be <b>NULL</b>, in which case ICUʼs default
+ * time type will be used.
  * </p>
- * @param string $timezone [optional] <p>
- * Time zone ID, default is system default.
+ * @param mixed $timezone [optional] <p>
+ * Time zone ID. The default (and the one used if <b>NULL</b> is given) is the
+ * one returned by <b>date_default_timezone_get</b> or, if
+ * applicable, that of the <b>IntlCalendar</b> object passed
+ * for the <i>calendar</i> parameter. This ID must be a
+ * valid identifier on ICUʼs database or an ID representing an
+ * explicit offset, such as GMT-05:30.
  * </p>
- * @param int $calendar [optional] <p>
- * Calendar to use for formatting or parsing; default is Gregorian.
- * This is one of the
- * IntlDateFormatter calendar constants.
+ * <p>
+ * This can also be an <b>IntlTimeZone</b> or a
+ * <b>DateTimeZone</b> object.
+ * </p>
+ * @param mixed $calendar [optional] <p>
+ * Calendar to use for formatting or parsing. The default value is <b>NULL</b>,
+ * which corresponds to <b>IntlDateFormatter::GREGORIAN</b>.
+ * This can either be one of the
+ * IntlDateFormatter
+ * calendar constants or an <b>IntlCalendar</b>. Any
+ * <b>IntlCalendar</b> object passed will be clone; it will
+ * not be changed by the <b>IntlDateFormatter</b>. This will
+ * determine the calendar type used (gregorian, islamic, persian, etc.) and,
+ * if <b>NULL</b> is given for the <i>timezone</i> parameter,
+ * also the timezone used.
  * </p>
  * @param string $pattern [optional] <p>
  * Optional pattern to use when formatting or parsing.
  * Possible patterns are documented at http://userguide.icu-project.org/formatparse/datetime.
  * </p>
- * @return IntlDateFormatter
+ * @return IntlDateFormatter The created <b>IntlDateFormatter</b> or <b>FALSE</b> in case of
+ * failure.
  */
-function datefmt_create ($locale, $datetype, $timetype, $timezone = null, $calendar = null, $pattern = null) {}
+function datefmt_create ($locale, $datetype, $timetype, $timezone = NULL, $calendar = NULL, $pattern = '') {}
 
 /**
  * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
@@ -2990,20 +3061,35 @@ function datefmt_get_timetype ($mf) {}
 
 /**
  * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
- * Get the calendar used for the IntlDateFormatter
+ * Get the calendar type used for the IntlDateFormatter
  * @link http://php.net/manual/en/intldateformatter.getcalendar.php
  * @param $mf
- * @return int The calendar being used by the formatter.
+ * @return int The calendar
+ * type being used by the formatter. Either
+ * <b>IntlDateFormatter::TRADITIONAL</b> or
+ * <b>IntlDateFormatter::GREGORIAN</b>.
  */
 function datefmt_get_calendar ($mf) {}
 
 /**
  * (PHP 5 &gt;= 5.3.0, PECL intl &gt;= 1.0.0)<br/>
- * sets the calendar used to the appropriate calendar, which must be
+ * Sets the calendar type used by the formatter
  * @link http://php.net/manual/en/intldateformatter.setcalendar.php
- * @param int $which <p>
- * The calendar to use.
- * Default is <b>IntlDateFormatter::GREGORIAN</b>.
+ * @param mixed $which <p>
+ * This can either be: the calendar
+ * type to use (default is
+ * <b>IntlDateFormatter::GREGORIAN</b>, which is also used if
+ * <b>NULL</b> is specified) or an
+ * <b>IntlCalendar</b> object.
+ * </p>
+ * <p>
+ * Any <b>IntlCalendar</b> object passed in will be cloned;
+ * no modifications will be made to the argument object.
+ * </p>
+ * <p>
+ * The timezone of the formatter will only be kept if an
+ * <b>IntlCalendar</b> object is not passed, otherwise the
+ * new timezone will be that of the passed object.
  * </p>
  * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
  */
@@ -3086,10 +3172,20 @@ function datefmt_set_lenient ($lenient) {}
  * Format the date/time value as a string
  * @link http://php.net/manual/en/intldateformatter.format.php
  * @param mixed $value <p>
- * Value to format. This may be a <b>DateTime</b> object,
- * an integer representing a Unix timestamp value (seconds
- * since epoch, UTC) or an array in the format output by
+ * Value to format. This may be a <b>DateTime</b> object, an
+ * <b>IntlCalendar</b> object, a numeric type
+ * representing a (possibly fractional) number of seconds since epoch or an
+ * array in the format output by
  * <b>localtime</b>.
+ * </p>
+ * <p>
+ * If a <b>DateTime</b> or an
+ * <b>IntlCalendar</b> object is passed, its timezone is not
+ * considered. The object will be formatted using the formaterʼs configured
+ * timezone. If one wants to use the timezone of the object to be formatted,
+ * <b>IntlDateFormatter::setTimeZone</b> must be called before
+ * with the objectʼs timezone. Alternatively, the static function
+ * <b>IntlDateFormatter::formatObject</b> may be used instead.
  * </p>
  * @return string The formatted string or, if an error occurred, <b>FALSE</b>.
  */
@@ -3109,7 +3205,7 @@ function datefmt_format ($value) {}
  * This variable will contain the end position if the parse fails.
  * If $parse_pos > strlen($value), the parse fails immediately.
  * </p>
- * @return int timestamp parsed value
+ * @return int timestamp parsed value, or <b>FALSE</b> if value can't be parsed.
  */
 function datefmt_parse ($value, &$position = null) {}
 

@@ -93,7 +93,7 @@ function hash_hmac_file ($algo, $filename, $key, $raw_output = false) {}
  * Initialize an incremental hashing context
  * @link http://php.net/manual/en/function.hash-init.php
  * @param string $algo <p>
- * Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)
+ * Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..). For a list of supported algorithms see <b>hash_algos</b>.
  * </p>
  * @param int $options [optional] <p>
  * Optional settings for hash generation, currently supports only one option:

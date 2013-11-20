@@ -148,23 +148,29 @@ function pcntl_wait (&$status, $options = 0) {}
  * @param int $signo <p>
  * The signal number.
  * </p>
- * @param callable $handler <p>
- * The signal handler which may be the name of a user created function,
- * or method, or either of the two global constants
- * <b>SIG_IGN</b> or <b>SIG_DFL</b>.
+ * @param callable|int $handler <p>
+ * The signal handler. This may be either a callable, which
+ * will be invoked to handle the signal, or either of the two global
+ * constants <b>SIG_IGN</b> or <b>SIG_DFL</b>,
+ * which will ignore the signal or restore the default signal handler
+ * respectively.
  * </p>
  * <p>
- * Note that when you set a handler to an object method, that object's
- * reference count is increased which makes it persist until you either
- * change the handler to something else, or your script ends.
+ * If a callable is given, it must implement the following
+ * signature:
  * </p>
+ * <p>
+ * void<b>handler</b>
+ * <b>int<i>signo</i></b>
+ * <i>signo</i>
+ * The signal being handled.
  * @param bool $restart_syscalls [optional] <p>
  * Specifies whether system call restarting should be used when this
  * signal arrives.
  * </p>
  * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
  */
-function pcntl_signal ($signo, callable $handler, $restart_syscalls = true) {}
+function pcntl_signal ($signo, $handler, $restart_syscalls = true) {}
 
 /**
  * (PHP 5 &gt;= 5.3.0)<br/>
@@ -281,12 +287,28 @@ function pcntl_exec ($path, array $args = null, array $envs = null) {}
  */
 function pcntl_alarm ($seconds) {}
 
+/**
+ * (PHP 5 &gt;= 5.3.4)<br/>
+ * Retrieve the error number set by the last pcntl function which failed
+ * @link http://php.net/manual/en/function.pcntl-get-last-error.php
+ * @return int error code.
+ */
 function pcntl_get_last_error () {}
 
+/**
+ * (PHP 5 &gt;= 5.3.4)<br/>
+ * Alias of <b>pcntl_strerror</b>
+ * @link http://php.net/manual/en/function.pcntl-errno.php
+ */
 function pcntl_errno () {}
 
 /**
- * @param $errno
+ * (PHP 5 &gt;= 5.3.4)<br/>
+ * Retrieve the system error message associated with the given errno
+ * @link http://php.net/manual/en/function.pcntl-strerror.php
+ * @param int $errno <p>
+ * </p>
+ * @return string error description on success or <b>FALSE</b> on failure.
  */
 function pcntl_strerror ($errno) {}
 

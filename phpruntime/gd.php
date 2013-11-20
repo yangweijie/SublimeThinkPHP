@@ -70,6 +70,11 @@
  * <td>boolean value. <b>TRUE</b>
  * if XBM support is included.</td>
  * </tr>
+ * <tr valign="top">
+ * <td>WebP Support</td>
+ * <td>boolean value. <b>TRUE</b>
+ * if WebP support is included.</td>
+ * </tr>
  * </table>
  * </p>
  * <p>
@@ -761,7 +766,7 @@ function imagerotate ($image, $angle, $bgd_color, $ignore_transparent = 0) {}
 function imagesettile ($image, $tile) {}
 
 /**
- * (PHP 4 &gt;= 4.0.6, PHP 5)<br/>
+ * (PHP 5 &gt;= 5.5.0)<br/>
  * Set the brush image for line drawing
  * @link http://php.net/manual/en/function.imagesetbrush.php
  * @param resource $image
@@ -1494,8 +1499,7 @@ function imagettfbbox ($size, $angle, $fontfile, $text) {}
  * <p>
  * Named entities, such as &#38;#38;copy;, are not supported. Consider using
  * <b>html_entity_decode</b>
- * to decode these named entities into UTF-8 strings (html_entity_decode()
- * supports this as of PHP 5.0.0).
+ * to decode these named entities into UTF-8 strings.
  * </p>
  * <p>
  * If a character is used in the string which is not supported by the

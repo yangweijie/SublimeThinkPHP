@@ -1,6 +1,6 @@
 <?php
 
-// Start of readline v.5.4.6-1ubuntu1.1
+// Start of readline v.5.4.9-4ubuntu2.2
 
 /**
  * (PHP 4, PHP 5)<br/>
@@ -130,5 +130,5 @@ function readline_redisplay () {}
 
 define ('READLINE_LIB', "libedit");
 
-// End of readline v.5.4.6-1ubuntu1.1
+// End of readline v.5.4.9-4ubuntu2.2
 ?>

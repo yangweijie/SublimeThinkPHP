@@ -139,24 +139,81 @@ final class mysqli_driver  {
  * @link http://php.net/manual/en/class.mysqli.php
  */
 class mysqli  {
+	/**
+	 * @var int
+	 */
 	public $affected_rows;
+	/**
+	 * @var string
+	 */
 	public $client_info;
+	/**
+	 * @var int
+	 */
 	public $client_version;
+	/**
+	 * @var string
+	 */
 	public $connect_errno;
+	/**
+	 * @var string
+	 */
 	public $connect_error;
+	/**
+	 * @var int
+	 */
 	public $errno;
-	public $error;
+	/**
+	 * @var array
+	 */
 	public $error_list;
+	/**
+	 * @var string
+	 */
+	public $error;
+	/**
+	 * @var int
+	 */
 	public $field_count;
+	/**
+	 * @var int
+	 */
+	public $client_version;
+	/**
+	 * @var string
+	 */
 	public $host_info;
-	public $info;
-	public $insert_id;
-	public $server_info;
-	public $server_version;
-	public $stat;
-	public $sqlstate;
+	/**
+	 * @var string
+	 */
 	public $protocol_version;
+	/**
+	 * @var string
+	 */
+	public $server_info;
+	/**
+	 * @var int
+	 */
+	public $server_version;
+	/**
+	 * @var string
+	 */
+	public $info;
+	/**
+	 * @var mixed
+	 */
+	public $insert_id;
+	/**
+	 * @var string
+	 */
+	public $sqlstate;
+	/**
+	 * @var int
+	 */
 	public $thread_id;
+	/**
+	 * @var int
+	 */
 	public $warning_count;
 
 
@@ -213,9 +270,15 @@ class mysqli  {
 	 * (PHP 5)<br/>
 	 * Commits the current transaction
 	 * @link http://php.net/manual/en/mysqli.commit.php
+	 * @param int $flags [optional] <p>
+	 * A bitmask of <b>MYSQLI_TRANS_COR_*</b> constants.
+	 * </p>
+	 * @param string $name [optional] <p>
+	 * If provided then COMMIT/*name* / is executed.
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
-	public function commit () {}
+	public function commit ($flags = null, $name = null) {}
 
 	/**
 	 * @param $host [optional]
@@ -356,7 +419,8 @@ class mysqli  {
 	 * (PHP 5)<br/>
 	 * Check if there are any more query results from a multi query
 	 * @link http://php.net/manual/en/mysqli.more-results.php
-	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
+	 * @return bool <b>TRUE</b> if one or more result sets are available from a previous call to
+	 * <b>mysqli_multi_query</b>, otherwise <b>FALSE</b>.
 	 */
 	public function more_results () {}
 
@@ -617,9 +681,15 @@ class mysqli  {
 	 * (PHP 5)<br/>
 	 * Rolls back current transaction
 	 * @link http://php.net/manual/en/mysqli.rollback.php
+	 * @param int $flags [optional] <p>
+	 * A bitmask of <b>MYSQLI_TRANS_COR_*</b> constants.
+	 * </p>
+	 * @param string $name [optional] <p>
+	 * If provided then ROLLBACK/*name* / is executed.
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
-	public function rollback () {}
+	public function rollback ($flags = null, $name = null) {}
 
 	/**
 	 * (PHP 5)<br/>
@@ -644,6 +714,9 @@ class mysqli  {
 	public function set_charset ($charset) {}
 
 	/**
+	 * (PHP 5)<br/>
+	 * Alias of <b>mysqli_options</b>
+	 * @link http://php.net/manual/en/function.mysqli-set-opt.php
 	 * @param $option
 	 * @param $value
 	 */
@@ -1361,13 +1434,13 @@ class mysqli_stmt  {
  * @param mysqli $link
  * @return int An integer greater than zero indicates the number of rows affected or
  * retrieved.
- * Zero indicates that no records where updated for an UPDATE statement, no
+ * Zero indicates that no records were updated for an UPDATE statement, no
  * rows matched the WHERE clause in the query or that no
  * query has yet been executed. -1 indicates that the query returned an
  * error.
  * </p>
  * <p>
- * If the number of affected rows is greater than maximal int value, the
+ * If the number of affected rows is greater than the maximum integer value(<b> PHP_INT_MAX </b>), the
  * number of affected rows will be returned as a string.
  */
 function mysqli_affected_rows (mysqli $link) {}
@@ -1430,9 +1503,15 @@ function mysqli_close (mysqli $link) {}
  * Commits the current transaction
  * @link http://php.net/manual/en/mysqli.commit.php
  * @param mysqli $link
+ * @param int $flags [optional] <p>
+ * A bitmask of <b>MYSQLI_TRANS_COR_*</b> constants.
+ * </p>
+ * @param string $name [optional] <p>
+ * If provided then COMMIT/*name* / is executed.
+ * </p>
  * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
  */
-function mysqli_commit (mysqli $link) {}
+function mysqli_commit (mysqli $link, $flags = null, $name = null) {}
 
 /**
  * (PHP 5)<br/>
@@ -2033,7 +2112,8 @@ function mysqli_set_local_infile_handler (mysqli $link, callable $read_func) {}
  * Check if there are any more query results from a multi query
  * @link http://php.net/manual/en/mysqli.more-results.php
  * @param mysqli $link
- * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
+ * @return bool <b>TRUE</b> if one or more result sets are available from a previous call to
+ * <b>mysqli_multi_query</b>, otherwise <b>FALSE</b>.
  */
 function mysqli_more_results (mysqli $link) {}
 
@@ -2189,41 +2269,9 @@ function mysqli_prepare (mysqli $link, $query) {}
 
 /**
  * (PHP 5)<br/>
- * Enables or disables internal report functions
+ * Alias of of mysqli_driver->report_mode
  * @link http://php.net/manual/en/function.mysqli-report.php
- * @param int $flags <p>
- * <table>
- * Supported flags
- * <tr valign="top">
- * <td>Name</td>
- * <td>Description</td>
- * </tr>
- * <tr valign="top">
- * <td><b>MYSQLI_REPORT_OFF</b></td>
- * <td>Turns reporting off</td>
- * </tr>
- * <tr valign="top">
- * <td><b>MYSQLI_REPORT_ERROR</b></td>
- * <td>Report errors from mysqli function calls</td>
- * </tr>
- * <tr valign="top">
- * <td><b>MYSQLI_REPORT_STRICT</b></td>
- * <td>
- * Throw <b>mysqli_sql_exception</b> for errors
- * instead of warnings
- * </td>
- * </tr>
- * <tr valign="top">
- * <td><b>MYSQLI_REPORT_INDEX</b></td>
- * <td>Report if no index or bad index was used in a query</td>
- * </tr>
- * <tr valign="top">
- * <td><b>MYSQLI_REPORT_ALL</b></td>
- * <td>Set all options (report all)</td>
- * </tr>
- * </table>
- * </p>
- * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
+ * @param $flags
  */
 function mysqli_report ($flags) {}
 
@@ -2376,9 +2424,15 @@ function mysqli_real_query (mysqli $link, $query) {}
  * Rolls back current transaction
  * @link http://php.net/manual/en/mysqli.rollback.php
  * @param mysqli $link
+ * @param int $flags [optional] <p>
+ * A bitmask of <b>MYSQLI_TRANS_COR_*</b> constants.
+ * </p>
+ * @param string $name [optional] <p>
+ * If provided then ROLLBACK/*name* / is executed.
+ * </p>
  * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
  */
-function mysqli_rollback (mysqli $link) {}
+function mysqli_rollback (mysqli $link, $flags = null, $name = null) {}
 
 /**
  * (PHP 5)<br/>
@@ -3182,6 +3236,13 @@ define ('MYSQLI_GROUP_FLAG', 32768);
  * @link http://php.net/manual/en/mysqli.constants.php
  */
 define ('MYSQLI_ENUM_FLAG', 256);
+
+/**
+ * <p>
+ * Field is defined as BINARY. Available since PHP 5.3.0.
+ * </p>
+ * @link http://php.net/manual/en/mysqli.constants.php
+ */
 define ('MYSQLI_BINARY_FLAG', 128);
 define ('MYSQLI_NO_DEFAULT_VALUE_FLAG', 4096);
 

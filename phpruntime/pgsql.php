@@ -1751,8 +1751,8 @@ function pg_clientencoding ($connection) {}
  */
 function pg_setclientencoding ($connection, $encoding) {}
 
-define ('PGSQL_LIBPQ_VERSION', "9.1.6");
-define ('PGSQL_LIBPQ_VERSION_STR', "PostgreSQL 9.1.6 on x86_64-unknown-linux-gnu, compiled by gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2, 64-bit");
+define ('PGSQL_LIBPQ_VERSION', "9.1.9");
+define ('PGSQL_LIBPQ_VERSION_STR', "PostgreSQL 9.1.9 on x86_64-unknown-linux-gnu, compiled by gcc (Ubuntu/Linaro 4.7.2-22ubuntu5) 4.7.2, 64-bit");
 
 /**
  * Passed to <b>pg_connect</b> to force the creation of a new connection,

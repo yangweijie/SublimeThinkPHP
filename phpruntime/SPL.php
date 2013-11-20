@@ -1454,10 +1454,11 @@ class RecursiveIteratorIterator implements Iterator, Traversable, OuterIterator 
 	 * (PHP 5)<br/>
 	 * The current active sub iterator
 	 * @link http://php.net/manual/en/recursiveiteratoriterator.getsubiterator.php
-	 * @param $level [optional]
+	 * @param int $level [optional] <p>
+	 * </p>
 	 * @return RecursiveIterator The current active sub iterator.
 	 */
-	public function getSubIterator ($level) {}
+	public function getSubIterator ($level = null) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.1.0)<br/>
@@ -3528,10 +3529,11 @@ class RecursiveTreeIterator extends RecursiveIteratorIterator implements OuterIt
 	 * (PHP 5)<br/>
 	 * The current active sub iterator
 	 * @link http://php.net/manual/en/recursiveiteratoriterator.getsubiterator.php
-	 * @param $level [optional]
+	 * @param int $level [optional] <p>
+	 * </p>
 	 * @return RecursiveIterator The current active sub iterator.
 	 */
-	public function getSubIterator ($level) {}
+	public function getSubIterator ($level = null) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.1.0)<br/>
@@ -3598,7 +3600,7 @@ class ArrayObject implements IteratorAggregate, Traversable, ArrayAccess, Serial
 	 * @param mixed $index <p>
 	 * The index with the value.
 	 * </p>
-	 * @return mixed The value at the specified index or <b>FALSE</b>.
+	 * @return mixed The value at the specified index or <b>NULL</b>.
 	 */
 	public function offsetGet ($index) {}
 
@@ -3848,8 +3850,8 @@ class ArrayIterator implements Iterator, Traversable, ArrayAccess, SeekableItera
 	 * The array or object to be iterated on.
 	 * </p>
 	 * @param int $flags [optional] <p>
-	 * Flags to control the behaviour of the <b>ArrayObject</b> object.
-	 * See <b>ArrayObject::setFlags</b>.
+	 * Flags to control the behaviour of the <b>ArrayIterator</b> object.
+	 * See <b>ArrayIterator::setFlags</b>.
 	 * </p>
 	 */
 	public function __construct ($array = 'array()', $flags = 0) {}
@@ -4113,8 +4115,8 @@ class RecursiveArrayIterator extends ArrayIterator implements Countable, Seriali
 	 * The array or object to be iterated on.
 	 * </p>
 	 * @param int $flags [optional] <p>
-	 * Flags to control the behaviour of the <b>ArrayObject</b> object.
-	 * See <b>ArrayObject::setFlags</b>.
+	 * Flags to control the behaviour of the <b>ArrayIterator</b> object.
+	 * See <b>ArrayIterator::setFlags</b>.
 	 * </p>
 	 */
 	public function __construct ($array = 'array()', $flags = 0) {}
@@ -6513,6 +6515,7 @@ class SplFileObject extends SplFileInfo implements RecursiveIterator, Traversabl
 	 * (PHP 5 &gt;= 5.1.0)<br/>
 	 * Alias of <b>SplFileObject::current</b>
 	 * @link http://php.net/manual/en/splfileobject.tostring.php
+	 * @return void
 	 */
 	public function __toString () {}
 
@@ -7142,6 +7145,7 @@ class SplTempFileObject extends SplFileObject implements SeekableIterator, Itera
 	 * (PHP 5 &gt;= 5.1.0)<br/>
 	 * Alias of <b>SplFileObject::current</b>
 	 * @link http://php.net/manual/en/splfileobject.tostring.php
+	 * @return void
 	 */
 	public function __toString () {}
 
@@ -8419,7 +8423,7 @@ class SplMaxHeap extends SplHeap implements Countable, Traversable, Iterator {
 
 /**
  * The SplPriorityQueue class provides the main functionalities of an
- * prioritized queue, implemented using a heap.
+ * prioritized queue, implemented using a max heap.
  * @link http://php.net/manual/en/class.splpriorityqueue.php
  */
 class SplPriorityQueue implements Iterator, Traversable, Countable {
@@ -9109,8 +9113,8 @@ class MultipleIterator implements Iterator, Traversable {
 	 * (PHP 5 &gt;= 5.3.0)<br/>
 	 * Gets the registered iterator instances
 	 * @link http://php.net/manual/en/multipleiterator.current.php
-	 * @return array An array of all registered iterator instances,
-	 * or <b>FALSE</b> if no sub iterator is attached.
+	 * @return array An array containing the current values of each attached iterator,
+	 * or <b>FALSE</b> if no iterators are attached.
 	 */
 	public function current () {}
 
@@ -9283,6 +9287,15 @@ function spl_object_hash ($obj) {}
  * </p>
  * @param bool $use_keys [optional] <p>
  * Whether to use the iterator element keys as index.
+ * </p>
+ * <p>
+ * In PHP 5.5 and later, if a key is an array or
+ * object, a warning will be generated. <b>NULL</b> keys will be
+ * converted to an empty string, double keys will be
+ * truncated to their integer counterpart,
+ * resource keys will generate a warning and be converted to
+ * their resource ID, and boolean keys will be converted to
+ * integers.
  * </p>
  * @return array An array containing the elements of the <i>iterator</i>.
  */

@@ -1,6 +1,6 @@
 <?php
 
-// Start of Core v.5.4.6-1ubuntu1.1
+// Start of Core v.5.4.9-4ubuntu2.2
 
 class stdClass  {
 }
@@ -745,7 +745,7 @@ function class_exists ($class_name, $autoload = true) {}
 function interface_exists ($interface_name, $autoload = true) {}
 
 /**
- * (No version information available, might only be in SVN)<br/>
+ * (PHP 5 &gt;= 5.4.0)<br/>
  * Checks if the trait exists
  * @link http://php.net/manual/en/function.trait-exists.php
  * @param string $traitname <p>
@@ -846,7 +846,7 @@ function is_subclass_of ($object, $class_name, $allow_string = '&true;') {}
  * The class name
  * </p>
  * @param bool $allow_string [optional] <p>
- * If this parameter set to false, string class name as <i>object</i>
+ * If this parameter set to <b>FALSE</b>, string class name as <i>object</i>
  * is not allowed. This also prevents from calling autoloader if the class doesn't exist.
  * </p>
  * @return bool <b>TRUE</b> if the object is of this class or has this class as one of
@@ -900,7 +900,7 @@ function get_class_methods ($class_name) {}
  * @link http://php.net/manual/en/function.trigger-error.php
  * @param string $error_msg <p>
  * The designated error message for this error. It's limited to 1024
- * characters in length. Any additional characters beyond 1024 will be
+ * bytes in length. Any additional characters beyond 1024 bytes will be
  * truncated.
  * </p>
  * @param int $error_type [optional] <p>
@@ -926,15 +926,11 @@ function user_error ($message, $error_type) {}
  * Sets a user-defined error handler function
  * @link http://php.net/manual/en/function.set-error-handler.php
  * @param callable $error_handler <p>
- * The user function needs to accept two parameters: the error code, and a
- * string describing the error. Then there are three optional parameters
- * that may be supplied: the filename in which the error occurred, the
- * line number in which the error occurred, and the context in which the
- * error occurred (an array that points to the active symbol table at the
- * point the error occurred). The function can be shown as:
+ * A callback with the following signature.
+ * <b>NULL</b> may be passed instead, to reset this handler to its default state.
  * </p>
  * <p>
- * <b>handler</b>
+ * bool<b>handler</b>
  * <b>int<i>errno</i></b>
  * <b>string<i>errstr</i></b>
  * <b>string<i>errfile</i></b>
@@ -975,15 +971,17 @@ function restore_error_handler () {}
  * This function must be defined before calling
  * <b>set_exception_handler</b>. This handler function
  * needs to accept one parameter, which will be the exception object that
- * was thrown.
+ * was thrown. This is the handler signature:
  * </p>
  * <p>
- * <b>NULL</b> may be passed instead, to reset this handler to its
- * default state.
+ * void<b>handler</b>
+ * <b>Exception<i>$ex</i></b>
+ * </p>
+ * <p>
+ * <b>NULL</b> may be passed instead, to reset this handler to its default state.
  * </p>
  * @return callable the name of the previously defined exception handler, or <b>NULL</b> on error. If
- * no previous handler was defined, <b>NULL</b> is also returned. If <b>NULL</b> is passed,
- * resetting the handler to its default state, <b>TRUE</b> is returned.
+ * no previous handler was defined, <b>NULL</b> is also returned.
  */
 function set_exception_handler (callable $exception_handler) {}
 
@@ -1012,7 +1010,7 @@ function restore_exception_handler () {}
 function get_declared_classes () {}
 
 /**
- * (No version information available, might only be in SVN)<br/>
+ * (PHP 5 &gt;= 5.4.0)<br/>
  * Returns an array of all declared traits
  * @link http://php.net/manual/en/function.get-declared-traits.php
  * @return array an array with names of all declared traits in values.
@@ -1364,7 +1362,7 @@ define ('E_ERROR', 1);
 
 /**
  * Catchable fatal error. It indicates that a probably dangerous error
- * occured, but did not leave the Engine in an unstable state. If the error
+ * occurred, but did not leave the Engine in an unstable state. If the error
  * is not caught by a user defined handle (see also
  * <b>set_error_handler</b>), the application aborts as it
  * was an <b>E_ERROR</b>.
@@ -1484,12 +1482,12 @@ define ('FALSE', false);
 define ('NULL', null);
 define ('ZEND_THREAD_SAFE', false);
 define ('ZEND_DEBUG_BUILD', false);
-define ('PHP_VERSION', "5.4.6-1ubuntu1.1");
+define ('PHP_VERSION', "5.4.9-4ubuntu2.2");
 define ('PHP_MAJOR_VERSION', 5);
 define ('PHP_MINOR_VERSION', 4);
-define ('PHP_RELEASE_VERSION', 6);
-define ('PHP_EXTRA_VERSION', "-1ubuntu1.1");
-define ('PHP_VERSION_ID', 50406);
+define ('PHP_RELEASE_VERSION', 9);
+define ('PHP_EXTRA_VERSION', "-4ubuntu2.2");
+define ('PHP_VERSION_ID', 50409);
 define ('PHP_ZTS', 0);
 define ('PHP_DEBUG', 0);
 define ('PHP_OS', "Linux");
@@ -1608,5 +1606,5 @@ define ('STDIN', "Resource id #1");
 define ('STDOUT', "Resource id #2");
 define ('STDERR', "Resource id #3");
 
-// End of Core v.5.4.6-1ubuntu1.1
+// End of Core v.5.4.9-4ubuntu2.2
 ?>

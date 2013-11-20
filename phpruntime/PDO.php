@@ -310,13 +310,14 @@ class PDO  {
 
 	/**
 	 * As <b>PDO::FETCH_INTO</b> but object is provided as a serialized string.
-	 * Available since PHP 5.1.0.
+	 * Available since PHP 5.1.0. Since PHP 5.3.0 the class constructor is never called if this
+	 * flag is set.
 	 * @link http://php.net/manual/en/pdo.constants.php
 	 */
 	const FETCH_SERIALIZE = 524288;
 
 	/**
-	 * Available since PHP 5.2.0
+	 * Call the constructor before setting properties. Available since PHP 5.2.0.
 	 * @link http://php.net/manual/en/pdo.constants.php
 	 */
 	const FETCH_PROPS_LATE = 1048576;
@@ -688,6 +689,16 @@ class PDO  {
 	 * @link http://php.net/manual/en/pdo-mysql.constants.php
 	 */
 	const MYSQL_ATTR_IGNORE_SPACE = 1009;
+
+	/**
+	 * <p>
+	 * The file path to the SSL key.
+	 * </p>
+	 * <p>
+	 * This exists as of PHP 5.3.7.
+	 * </p>
+	 * @link http://php.net/manual/en/pdo-mysql.constants.php
+	 */
 	const MYSQL_ATTR_SSL_KEY = 1010;
 
 	/**
@@ -723,7 +734,23 @@ class PDO  {
 	 * @link http://php.net/manual/en/pdo-mysql.constants.php
 	 */
 	const MYSQL_ATTR_SSL_CAPATH = 1013;
+
+	/**
+	 * <p>
+	 * A list of one or more permissible ciphers to use for SSL encryption, in a format
+	 * understood by OpenSSL. For example: DHE-RSA-AES256-SHA:AES128-SHA
+	 * </p>
+	 * <p>
+	 * This exists as of PHP 5.3.7.
+	 * </p>
+	 * @link http://php.net/manual/en/pdo-mysql.constants.php
+	 */
 	const MYSQL_ATTR_SSL_CIPHER = 1014;
+	const ODBC_ATTR_USE_CURSOR_LIBRARY = 1000;
+	const ODBC_ATTR_ASSUME_UTF8 = 1001;
+	const ODBC_SQL_USE_IF_NEEDED = 0;
+	const ODBC_SQL_USE_DRIVER = 2;
+	const ODBC_SQL_USE_ODBC = 1;
 	const PGSQL_ATTR_DISABLE_NATIVE_PREPARED_STATEMENT = 1000;
 	const PGSQL_TRANSACTION_IDLE = 0;
 	const PGSQL_TRANSACTION_ACTIVE = 1;
@@ -1119,7 +1146,8 @@ class PDOStatement implements Traversable {
 	 * Name of the PHP variable to which the column will be bound.
 	 * </p>
 	 * @param int $type [optional] <p>
-	 * Data type of the parameter, specified by the PDO::PARAM_* constants.
+	 * Data type of the parameter, specified by the PDO::PARAM_*
+	 * constants.
 	 * </p>
 	 * @param int $maxlen [optional] <p>
 	 * A hint for pre-allocation.
@@ -1219,7 +1247,8 @@ class PDOStatement implements Traversable {
 	 * @return array <b>PDOStatement::fetchAll</b> returns an array containing
 	 * all of the remaining rows in the result set. The array represents each
 	 * row as either an array of column values or an object with properties
-	 * corresponding to each column name.
+	 * corresponding to each column name. An empty array is returned if there
+	 * are zero results to fetch, or <b>FALSE</b> on failure.
 	 * </p>
 	 * <p>
 	 * Using this method to fetch large result sets will result in a heavy
@@ -1365,7 +1394,8 @@ class PDOStatement implements Traversable {
 	 * <tr valign="top">
 	 * <td>pdo_type</td>
 	 * <td>The type of this column as represented by the
-	 * PDO::PARAM_* constants.</td>
+	 * PDO::PARAM_*
+	 * constants.</td>
 	 * </tr>
 	 * </table>
 	 * <p>
@@ -1381,7 +1411,7 @@ class PDOStatement implements Traversable {
 	 * @param int $mode <p>
 	 * The fetch mode must be one of the PDO::FETCH_* constants.
 	 * </p>
-	 * @return bool 1 on success or <b>FALSE</b> on failure.
+	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
 	public function setFetchMode ($mode) {}
 
@@ -1405,7 +1435,7 @@ class PDOStatement implements Traversable {
 	 * (PHP 5 &gt;= 5.1.0, PECL pdo &gt;= 0.9.0)<br/>
 	 * Dump an SQL prepared command
 	 * @link http://php.net/manual/en/pdostatement.debugdumpparams.php
-	 * @return bool No value is returned.
+	 * @return void No value is returned.
 	 */
 	public function debugDumpParams () {}
 

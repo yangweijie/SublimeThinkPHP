@@ -340,7 +340,7 @@ function socket_close ($socket) {}
  * @param int $length [optional] <p>
  * The optional parameter <i>length</i> can specify an
  * alternate length of bytes written to the socket. If this length is
- * greater then the buffer length, it is silently truncated to the length
+ * greater than the buffer length, it is silently truncated to the length
  * of the buffer.
  * </p>
  * @return int the number of bytes successfully written to the socket or <b>FALSE</b> on failure.
@@ -1236,7 +1236,7 @@ function socket_last_error ($socket = null) {}
 function socket_clear_error ($socket = null) {}
 
 /**
- * (PHP 4 &gt;= 5.4.0)<br/>
+ * (PHP 5 &gt;= 5.4.0)<br/>
  * Import a stream
  * @link http://php.net/manual/en/function.socket-import-stream.php
  * @param resource $stream <p>

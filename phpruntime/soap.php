@@ -121,7 +121,14 @@ class SoapClient  {
 	 * <p>
 	 * The keep_alive option is a boolean value defining whether
 	 * to send the Connection: Keep-Alive header or
-	 * Connection: close .
+	 * Connection: close.
+	 * </p>
+	 * <p>
+	 * The ssl_method option is one of
+	 * <b>SOAP_SSL_METHOD_TLS</b>,
+	 * <b>SOAP_SSL_METHOD_SSLv2</b>,
+	 * <b>SOAP_SSL_METHOD_SSLv3</b> or
+	 * <b>SOAP_SSL_METHOD_SSLv23</b>.
 	 * </p>
 	 */
 	public function SoapClient ($wsdl, array $options = null) {}
@@ -174,7 +181,7 @@ class SoapClient  {
 	 * an associative array of named output parameters.
 	 * </p>
 	 * <p>
-	 * On error, if the SoapClient object was constructed with the trace
+	 * On error, if the SoapClient object was constructed with the exceptions
 	 * option set to <b>FALSE</b>, a SoapFault object will be returned.
 	 */
 	public function __soapCall ($function_name, array $arguments, array $options = null, $input_headers = null, array &$output_headers = null) {}

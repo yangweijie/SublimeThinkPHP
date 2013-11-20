@@ -560,16 +560,17 @@ function openssl_digest ($data, $method, $raw_output = false) {}
  * @param string $password <p>
  * The password.
  * </p>
- * @param bool $raw_output [optional] <p>
- * Setting to <b>TRUE</b> will return as raw output data, otherwise the return
- * value is base64 encoded.
+ * @param int $options [optional] <p>
+ * <i>options</i> can be one of
+ * <b>OPENSSL_RAW_DATA</b>,
+ * <b>OPENSSL_ZERO_PADDING</b>.
  * </p>
  * @param string $iv [optional] <p>
  * A non-NULL Initialization Vector.
  * </p>
  * @return string the encrypted string on success or <b>FALSE</b> on failure.
  */
-function openssl_encrypt ($data, $method, $password, $raw_output = false, $iv = "") {}
+function openssl_encrypt ($data, $method, $password, $options = 0, $iv = "") {}
 
 /**
  * (PHP 5 &gt;= 5.3.0)<br/>
@@ -584,17 +585,17 @@ function openssl_encrypt ($data, $method, $password, $raw_output = false, $iv = 
  * @param string $password <p>
  * The password.
  * </p>
- * @param bool $raw_input [optional] <p>
- * Setting to <b>TRUE</b> will take a raw encoded string,
- * otherwise a base64 string is assumed for the
- * <i>data</i> parameter.
+ * @param int $options [optional] <p>
+ * <i>options</i> can be one of
+ * <b>OPENSSL_RAW_DATA</b>,
+ * <b>OPENSSL_ZERO_PADDING</b>.
  * </p>
  * @param string $iv [optional] <p>
  * A non-NULL Initialization Vector.
  * </p>
  * @return string The decrypted string on success or <b>FALSE</b> on failure.
  */
-function openssl_decrypt ($data, $method, $password, $raw_input = false, $iv = "") {}
+function openssl_decrypt ($data, $method, $password, $options = 0, $iv = "") {}
 
 /**
  * (PHP 5 &gt;= PHP 5.3.3)<br/>
@@ -883,7 +884,7 @@ function openssl_get_md_methods ($aliases = false) {}
 function openssl_get_cipher_methods ($aliases = false) {}
 
 /**
- * (No version information available, might only be in SVN)<br/>
+ * (PHP 5 &gt;= 5.3.11)<br/>
  * Computes shared secret for public value of remote DH key and local DH key
  * @link http://php.net/manual/en/function.openssl-dh-compute-key.php
  * @param string $pub_key <p>
@@ -941,6 +942,11 @@ define ('OPENSSL_ALGO_SHA1', 1);
 define ('OPENSSL_ALGO_MD5', 2);
 define ('OPENSSL_ALGO_MD4', 3);
 define ('OPENSSL_ALGO_DSS1', 5);
+define ('OPENSSL_ALGO_SHA224', 6);
+define ('OPENSSL_ALGO_SHA256', 7);
+define ('OPENSSL_ALGO_SHA384', 8);
+define ('OPENSSL_ALGO_SHA512', 9);
+define ('OPENSSL_ALGO_RMD160', 10);
 
 /**
  * When signing a message, use cleartext signing with the MIME
@@ -1038,6 +1044,11 @@ define ('OPENSSL_CIPHER_AES_256_CBC', 7);
 define ('OPENSSL_KEYTYPE_RSA', 0);
 define ('OPENSSL_KEYTYPE_DSA', 1);
 define ('OPENSSL_KEYTYPE_DH', 2);
+
+/**
+ * This constant is only available when PHP is compiled with OpenSSL 0.9.8+.
+ * @link http://php.net/manual/en/openssl.constants.php
+ */
 define ('OPENSSL_KEYTYPE_EC', 3);
 define ('OPENSSL_RAW_DATA', 1);
 define ('OPENSSL_ZERO_PADDING', 2);

@@ -1,6 +1,6 @@
 <?php
 
-// Start of oci8 v.1.4.9
+// Start of oci8 v.1.4.10
 
 class OCI_Lob  {
 
@@ -592,13 +592,6 @@ function oci_field_type_raw ($statement, $field) {}
  * is the default.</td>
  * </tr>
  * <tr valign="top">
- * <td><b>OCI_DEFAULT</b></td>
- * <td>Obsolete as of PHP 5.3.2 (PECL OCI8 1.4) but still
- * available for backward compatibility. Use the
- * equivalent <b>OCI_NO_AUTO_COMMIT</b> in new
- * code.</td>
- * </tr>
- * <tr valign="top">
  * <td><b>OCI_DESCRIBE_ONLY</b></td>
  * <td>Make query meta data available to functions
  * like <b>oci_field_name</b> but do not
@@ -610,13 +603,13 @@ function oci_field_type_raw ($statement, $field) {}
  * <td><b>OCI_NO_AUTO_COMMIT</b></td>
  * <td>Do not automatically commit changes. Prior to PHP
  * 5.3.2 (PECL OCI8 1.4)
- * use <b>OCI_DEFAULT</b> which is an alias
- * for <b>OCI_NO_AUTO_COMMIT</b>.</td>
+ * use <b>OCI_DEFAULT</b> which is equivalent
+ * to <b>OCI_NO_AUTO_COMMIT</b>.</td>
  * </tr>
  * </table>
  * </p>
  * <p>
- * Using <b>OCI_NO_AUTO_COMMIT</b> mode starts a
+ * Using <b>OCI_NO_AUTO_COMMIT</b> mode starts or continues a
  * transaction. Transactions are automatically rolled back when
  * the connection is closed, or when the script ends. Explicitly
  * call <b>oci_commit</b> to commit a transaction,
@@ -696,7 +689,7 @@ function oci_fetch ($statement) {}
  * uppercase attribute names. Case-sensitive column names will have
  * attribute names using the exact column case.
  * Use <b>var_dump</b> on the result object to verify
- * the appropriate case to use for each query.
+ * the appropriate case for attribute access.
  * </p>
  * <p>
  * Attribute values will be <b>NULL</b> for any NULL
@@ -1116,7 +1109,7 @@ function oci_close ($connection) {}
  * To use the Easy Connect naming method, PHP must be linked with Oracle
  * 10g or greater Client libraries. The Easy Connect string for Oracle
  * 10g is of the form:
- * [//]host_name[:port][/service_name]. With Oracle
+ * [//]host_name[:port][/service_name]. From Oracle
  * 11g, the syntax is:
  * [//]host_name[:port][/service_name][:server_type][/instance_name].
  * Service names can be found by running the Oracle
@@ -1143,7 +1136,7 @@ function oci_close ($connection) {}
  * the <b>NLS_LANG</b> environment variable.
  * </p>
  * Passing this parameter can
- * reduce connection time.
+ * reduce the time taken to connect.
  * </p>
  * @param int $session_mode [optional] This
  * parameter is available since version PHP 5 (PECL OCI8 1.1) and accepts the
@@ -1201,7 +1194,7 @@ function oci_connect ($username, $password, $connection_string = null, $characte
  * To use the Easy Connect naming method, PHP must be linked with Oracle
  * 10g or greater Client libraries. The Easy Connect string for Oracle
  * 10g is of the form:
- * [//]host_name[:port][/service_name]. With Oracle
+ * [//]host_name[:port][/service_name]. From Oracle
  * 11g, the syntax is:
  * [//]host_name[:port][/service_name][:server_type][/instance_name].
  * Service names can be found by running the Oracle
@@ -1228,7 +1221,7 @@ function oci_connect ($username, $password, $connection_string = null, $characte
  * the <b>NLS_LANG</b> environment variable.
  * </p>
  * Passing this parameter can
- * reduce connection time.
+ * reduce the time taken to connect.
  * </p>
  * @param int $session_mode [optional] This
  * parameter is available since version PHP 5 (PECL OCI8 1.1) and accepts the
@@ -1286,7 +1279,7 @@ function oci_new_connect ($username, $password, $connection_string = null, $char
  * To use the Easy Connect naming method, PHP must be linked with Oracle
  * 10g or greater Client libraries. The Easy Connect string for Oracle
  * 10g is of the form:
- * [//]host_name[:port][/service_name]. With Oracle
+ * [//]host_name[:port][/service_name]. From Oracle
  * 11g, the syntax is:
  * [//]host_name[:port][/service_name][:server_type][/instance_name].
  * Service names can be found by running the Oracle
@@ -1313,7 +1306,7 @@ function oci_new_connect ($username, $password, $connection_string = null, $char
  * the <b>NLS_LANG</b> environment variable.
  * </p>
  * Passing this parameter can
- * reduce connection time.
+ * reduce the time taken to connect.
  * </p>
  * @param int $session_mode [optional] This
  * parameter is available since version PHP 5 (PECL OCI8 1.1) and accepts the
@@ -1403,9 +1396,13 @@ function oci_pconnect ($username, $password, $connection_string = null, $charact
 function oci_error ($resource = null) {}
 
 /**
- * @param $lob_descriptor
+ * (PHP 5, PECL OCI8 &gt;= 1.1.0)<br/>
+ * Frees a descriptor
+ * @link http://php.net/manual/en/function.oci-free-descriptor.php
+ * @param resource $descriptor
+ * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
  */
-function oci_free_descriptor ($lob_descriptor) {}
+function oci_free_descriptor ($descriptor) {}
 
 /**
  * (PHP 5, PECL OCI8 &gt;= 1.1.0)<br/>
@@ -1934,12 +1931,7 @@ function ocicolltrim ($collection, $number) {}
 
 
 /**
- * Statement execution mode
- * for <b>oci_execute</b>. The transaction is
- * not automatically committed when using this mode. From PHP
- * 5.3.2 (PECL OCI8 1.4) onwards,
- * <b>OCI_NO_AUTO_COMMIT</b> is preferred instead
- * of <b>OCI_DEFAULT</b>.
+ * See <b>OCI_NO_AUTO_COMMIT</b>.
  * @link http://php.net/manual/en/oci8.constants.php
  */
 define ('OCI_DEFAULT', 0);
@@ -1989,10 +1981,10 @@ define ('OCI_COMMIT_ON_SUCCESS', 32);
 
 /**
  * Statement execution mode
- * for <b>oci_execute</b>. The statement is not
- * committed automatically when using this mode. For
+ * for <b>oci_execute</b>. The transaction is not
+ * automatically committed when using this mode. For
  * readability in new code, use this value instead of the
- * obsolete <b>OCI_DEFAULT</b> constant.
+ * older, equivalent <b>OCI_DEFAULT</b> constant.
  * Introduced in PHP 5.3.2 (PECL OCI8 1.4).
  * @link http://php.net/manual/en/oci8.constants.php
  */
@@ -2361,5 +2353,5 @@ define ('OCI_TEMP_CLOB', 2);
  */
 define ('OCI_TEMP_BLOB', 1);
 
-// End of oci8 v.1.4.9
+// End of oci8 v.1.4.10
 ?>

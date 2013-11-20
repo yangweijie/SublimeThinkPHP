@@ -9,7 +9,7 @@
  * @param string $str <p>
  * The string being converted.
  * </p>
- * @param int $mode [optional] <p>
+ * @param int $mode <p>
  * The mode of the conversion. It can be one of
  * <b>MB_CASE_UPPER</b>,
  * <b>MB_CASE_LOWER</b>, or
@@ -21,7 +21,7 @@
  * @return string A case folded version of <i>string</i> converted in the
  * way specified by <i>mode</i>.
  */
-function mb_convert_case ($str, $mode = 'MB_CASE_UPPER', $encoding = 'mb_internal_encoding()') {}
+function mb_convert_case ($str, $mode, $encoding = 'mb_internal_encoding()') {}
 
 /**
  * (PHP 4 &gt;= 4.3.0, PHP 5)<br/>
@@ -85,9 +85,11 @@ function mb_language ($language = null) {}
  * used for the HTTP input character encoding conversion, HTTP output
  * character encoding conversion, and the default character encoding
  * for string functions defined by the mbstring module.
+ * You should notice that the internal encoding is totally different from the one for multibyte regex.
  * </p>
  * @return mixed If <i>encoding</i> is set, then
  * Returns <b>TRUE</b> on success or <b>FALSE</b> on failure.
+ * In this case, the character encoding for multibyte regex is NOT changed.
  * If <i>encoding</i> is omitted, then
  * the current character encoding name is returned.
  */
@@ -841,12 +843,13 @@ function mb_convert_variables ($to_encoding, $from_encoding, &$vars, &$_ = null)
  * <i>convmap</i> is array specifies code area to
  * convert.
  * </p>
- * @param string $encoding The <i>encoding</i>
+ * @param string $encoding [optional] The <i>encoding</i>
  * parameter is the character encoding. If it is omitted, the internal character
  * encoding value will be used.</p>
+ * @param bool $is_hex [optional]
  * @return string The converted string.
  */
-function mb_encode_numericentity ($str, array $convmap, $encoding) {}
+function mb_encode_numericentity ($str, array $convmap, $encoding = 'mb_internal_encoding()', $is_hex = null) {}
 
 /**
  * (PHP 4 &gt;= 4.0.6, PHP 5)<br/>
@@ -859,12 +862,12 @@ function mb_encode_numericentity ($str, array $convmap, $encoding) {}
  * <i>convmap</i> is an array that specifies
  * the code area to convert.
  * </p>
- * @param string $encoding The <i>encoding</i>
+ * @param string $encoding [optional] The <i>encoding</i>
  * parameter is the character encoding. If it is omitted, the internal character
  * encoding value will be used.</p>
  * @return string The converted string.
  */
-function mb_decode_numericentity ($str, array $convmap, $encoding) {}
+function mb_decode_numericentity ($str, array $convmap, $encoding = 'mb_internal_encoding()') {}
 
 /**
  * (PHP 4 &gt;= 4.0.6, PHP 5)<br/>
@@ -934,7 +937,7 @@ function mb_check_encoding ($var = null, $encoding = 'mb_internal_encoding()') {
 
 /**
  * (PHP 4 &gt;= 4.2.0, PHP 5)<br/>
- * Returns current encoding for multibyte regex as string
+ * Set/Get character encoding for multibyte regex
  * @link http://php.net/manual/en/function.mb-regex-encoding.php
  * @param string $encoding [optional] The <i>encoding</i>
  * parameter is the character encoding. If it is omitted, the internal character
@@ -1034,7 +1037,7 @@ function mb_regex_encoding ($encoding = null) {}
  * @return string The previous options. If <i>options</i> is omitted,
  * it returns the string that describes the current options.
  */
-function mb_regex_set_options ($options = "msr") {}
+function mb_regex_set_options ($options = null) {}
 
 /**
  * (PHP 4 &gt;= 4.2.0, PHP 5)<br/>
@@ -1120,7 +1123,7 @@ function mb_ereg_replace ($pattern, $replacement, $string, $option = "msr") {}
 function mb_eregi_replace ($pattern, $replace, $string, $option = "msri") {}
 
 /**
- * (No version information available, might only be in SVN)<br/>
+ * (PHP 5 &gt;= 5.4.1)<br/>
  * Perform a regular expresssion seach and replace with multibyte support using a callback
  * @link http://php.net/manual/en/function.mb-ereg-replace-callback.php
  * @param string $pattern <p>

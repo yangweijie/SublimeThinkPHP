@@ -1,6 +1,6 @@
 <?php
 
-// Start of Reflection v.$Id: bcdcdaeea3aba34a8083bb62c6eda69ff3c3eab5 $
+// Start of Reflection v.$Id: 53b2389d638795fa66862d453ff1abfd89e0aa13 $
 
 /**
  * The ReflectionException class.
@@ -228,7 +228,7 @@ class ReflectionFunctionAbstract implements Reflector {
 	public function isUserDefined () {}
 
 	/**
-	 * (No version information available, might only be in SVN)<br/>
+	 * (PHP &gt;= 5.4.0)<br/>
 	 * Returns this pointer bound to closure
 	 * @link http://php.net/manual/en/reflectionfunctionabstract.getclosurethis.php
 	 * @return object $this pointer.
@@ -236,6 +236,12 @@ class ReflectionFunctionAbstract implements Reflector {
 	 */
 	public function getClosureThis () {}
 
+	/**
+	 * (PHP &gt;= 5.4.0)<br/>
+	 * Returns the scope associated to the closure
+	 * @link http://php.net/manual/en/reflectionfunctionabstract.getclosurescopeclass.php
+	 * @return ReflectionClass the class on success or <b>NULL</b> on failure.
+	 */
 	public function getClosureScopeClass () {}
 
 	/**
@@ -430,7 +436,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract implements Reflector
 	public function invokeArgs (array $args) {}
 
 	/**
-	 * (No version information available, might only be in SVN)<br/>
+	 * (PHP &gt;= 5.4.0)<br/>
 	 * Returns a dynamically created closure for the function
 	 * @link http://php.net/manual/en/reflectionfunction.getclosure.php
 	 * @return Closure <b>Closure</b>.
@@ -487,7 +493,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract implements Reflector
 	public function isUserDefined () {}
 
 	/**
-	 * (No version information available, might only be in SVN)<br/>
+	 * (PHP &gt;= 5.4.0)<br/>
 	 * Returns this pointer bound to closure
 	 * @link http://php.net/manual/en/reflectionfunctionabstract.getclosurethis.php
 	 * @return object $this pointer.
@@ -495,6 +501,12 @@ class ReflectionFunction extends ReflectionFunctionAbstract implements Reflector
 	 */
 	public function getClosureThis () {}
 
+	/**
+	 * (PHP &gt;= 5.4.0)<br/>
+	 * Returns the scope associated to the closure
+	 * @link http://php.net/manual/en/reflectionfunctionabstract.getclosurescopeclass.php
+	 * @return ReflectionClass the class on success or <b>NULL</b> on failure.
+	 */
 	public function getClosureScopeClass () {}
 
 	/**
@@ -724,6 +736,13 @@ class ReflectionParameter implements Reflector {
 	 */
 	public function isArray () {}
 
+	/**
+	 * (PHP 5 &gt;= 5.4.0)<br/>
+	 * Returns whether parameter MUST be callable
+	 * @link http://php.net/manual/en/reflectionparameter.iscallable.php
+	 * @return bool <b>TRUE</b> if the parameter is callable, <b>FALSE</b> if it is
+	 * not or <b>NULL</b> on failure.
+	 */
 	public function isCallable () {}
 
 	/**
@@ -766,8 +785,21 @@ class ReflectionParameter implements Reflector {
 	 */
 	public function getDefaultValue () {}
 
+	/**
+	 * (PHP 5 &gt;= 5.4.6)<br/>
+	 * Returns whether the default value of this parameter is constant
+	 * @link http://php.net/manual/en/reflectionparameter.isdefaultvalueconstant.php
+	 * @return bool <b>TRUE</b> if the default value is constant, <b>FALSE</b> if it is not or
+	 * <b>NULL</b> on failure.
+	 */
 	public function isDefaultValueConstant () {}
 
+	/**
+	 * (PHP 5 &gt;= 5.4.6)<br/>
+	 * Returns the default value's constant name if default value is constant or null
+	 * @link http://php.net/manual/en/reflectionparameter.getdefaultvalueconstantname.php
+	 * @return string string on success or <b>NULL</b> on failure.
+	 */
 	public function getDefaultValueConstantName () {}
 
 }
@@ -1025,7 +1057,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract implements Reflector {
 	public function isUserDefined () {}
 
 	/**
-	 * (No version information available, might only be in SVN)<br/>
+	 * (PHP &gt;= 5.4.0)<br/>
 	 * Returns this pointer bound to closure
 	 * @link http://php.net/manual/en/reflectionfunctionabstract.getclosurethis.php
 	 * @return object $this pointer.
@@ -1033,6 +1065,12 @@ class ReflectionMethod extends ReflectionFunctionAbstract implements Reflector {
 	 */
 	public function getClosureThis () {}
 
+	/**
+	 * (PHP &gt;= 5.4.0)<br/>
+	 * Returns the scope associated to the closure
+	 * @link http://php.net/manual/en/reflectionfunctionabstract.getclosurescopeclass.php
+	 * @return ReflectionClass the class on success or <b>NULL</b> on failure.
+	 */
 	public function getClosureScopeClass () {}
 
 	/**
@@ -1309,7 +1347,7 @@ class ReflectionClass implements Reflector {
 	 * (PHP 5)<br/>
 	 * Gets an array of methods
 	 * @link http://php.net/manual/en/reflectionclass.getmethods.php
-	 * @param string $filter [optional] <p>
+	 * @param int $filter [optional] <p>
 	 * Filter the results to include only methods with certain attributes. Defaults
 	 * to no filtering.
 	 * </p>
@@ -1557,9 +1595,11 @@ class ReflectionClass implements Reflector {
 	 * @param string $name <p>
 	 * The name of the static property for which to return a value.
 	 * </p>
+	 * @param mixed $def_value [optional] <p>
+	 * </p>
 	 * @return mixed The value of the static property.
 	 */
-	public function getStaticPropertyValue ($name) {}
+	public function getStaticPropertyValue ($name, &$def_value = null) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.1.0)<br/>
@@ -1808,7 +1848,7 @@ class ReflectionObject extends ReflectionClass implements Reflector {
 	 * (PHP 5)<br/>
 	 * Gets an array of methods
 	 * @link http://php.net/manual/en/reflectionclass.getmethods.php
-	 * @param string $filter [optional] <p>
+	 * @param int $filter [optional] <p>
 	 * Filter the results to include only methods with certain attributes. Defaults
 	 * to no filtering.
 	 * </p>
@@ -2056,9 +2096,11 @@ class ReflectionObject extends ReflectionClass implements Reflector {
 	 * @param string $name <p>
 	 * The name of the static property for which to return a value.
 	 * </p>
+	 * @param mixed $def_value [optional] <p>
+	 * </p>
 	 * @return mixed The value of the static property.
 	 */
-	public function getStaticPropertyValue ($name) {}
+	public function getStaticPropertyValue ($name, &$def_value = null) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.1.0)<br/>
@@ -2562,5 +2604,5 @@ class ReflectionZendExtension implements Reflector {
 	public function getCopyright () {}
 
 }
-// End of Reflection v.$Id: bcdcdaeea3aba34a8083bb62c6eda69ff3c3eab5 $
+// End of Reflection v.$Id: 53b2389d638795fa66862d453ff1abfd89e0aa13 $
 ?>

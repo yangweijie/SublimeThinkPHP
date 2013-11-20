@@ -1,6 +1,6 @@
 <?php
 
-// Start of memcache v.3.0.6
+// Start of memcache v.3.0.7
 
 class MemcachePool  {
 
@@ -277,5 +277,5 @@ function memcache_flush () {}
 define ('MEMCACHE_COMPRESSED', 2);
 define ('MEMCACHE_HAVE_SESSION', 1);
 
-// End of memcache v.3.0.6
+// End of memcache v.3.0.7
 ?>

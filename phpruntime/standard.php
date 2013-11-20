@@ -1,6 +1,6 @@
 <?php
 
-// Start of standard v.5.4.6-1ubuntu1.1
+// Start of standard v.5.4.9-4ubuntu2.2
 
 class __PHP_Incomplete_Class  {
 }
@@ -1116,7 +1116,7 @@ function phpversion ($extension = null) {}
 function phpcredits ($flag = 'CREDITS_ALL') {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 4, PHP 5 &lt; 5.5)<br/>
  * Gets the logo guid
  * @link http://php.net/manual/en/function.php-logo-guid.php
  * @return string PHPE9568F34-D428-11d2-A769-00AA001ACF42.
@@ -1128,7 +1128,7 @@ function php_real_logo_guid () {}
 function php_egg_logo_guid () {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 4, PHP 5 &lt; 5.5)<br/>
  * Gets the Zend guid
  * @link http://php.net/manual/en/function.zend-logo-guid.php
  * @return string PHPE9568F35-D428-11d2-A769-00AA001ACF42.
@@ -1371,7 +1371,7 @@ function strtolower ($str) {}
  * the beginning of the string. Unlike <b>strrpos</b> and
  * <b>strripos</b>, the offset cannot be negative.
  * </p>
- * @return int the position of where the needle exists relative to the beginning of
+ * @return mixed the position of where the needle exists relative to the beginning of
  * the <i>haystack</i> string (independent of offset).
  * Also note that string positions start at 0, and not 1.
  * </p>
@@ -1578,6 +1578,12 @@ function dirname ($path) {}
  * returned:
  * dirname, basename,
  * extension (if any), and filename.
+ * </p>
+ * <p>
+ * If the <i>path</i> has more than one extension,
+ * <b>PATHINFO_EXTENSION</b> returns only the last one and
+ * <b>PATHINFO_FILENAME</b> only strips the last one.
+ * (see first example below).
  * </p>
  * <p>
  * If the <i>path</i> does not have an extension, no
@@ -1992,7 +1998,9 @@ function ucwords ($str) {}
  * <p>
  * If <i>replace_pairs</i> contains a key which
  * is an empty string (""),
- * <b>FALSE</b> will be returned.
+ * <b>FALSE</b> will be returned. If the <i>str</i> is not a scalar
+ * then it is not typecasted into a string, instead a warning is raised and
+ * <b>NULL</b> is returned.
  */
 function strtr ($str, $from, $to) {}
 
@@ -2205,7 +2213,7 @@ function chunk_split ($body, $chunklen = 76, $end = "\r\n") {}
  * </p>
  * @return string The trimmed string.
  */
-function trim ($str, $charlist = null) {}
+function trim ($str, $charlist = " \t\n\r\0\x0B") {}
 
 /**
  * (PHP 4, PHP 5)<br/>
@@ -2327,9 +2335,7 @@ function explode ($delimiter, $string, $limit = null) {}
  * Join array elements with a string
  * @link http://php.net/manual/en/function.implode.php
  * @param string $glue <p>
- * Defaults to an empty string. This is not the preferred usage of
- * <b>implode</b> as <i>glue</i> would be
- * the second parameter and thus, the bad prototype would be used.
+ * Defaults to an empty string.
  * </p>
  * @param array $pieces <p>
  * The array of strings to implode.
@@ -4601,7 +4607,7 @@ function get_magic_quotes_runtime () {}
 
 /**
  * (PHP 4, PHP 5)<br/>
- * Send an error message somewhere
+ * Send an error message to the defined error handling routines
  * @link http://php.net/manual/en/function.error-log.php
  * @param string $message <p>
  * The error message that should be logged.
@@ -4887,7 +4893,7 @@ function var_dump ($expression, $_ = null) {}
  * </p>
  * @param bool $return [optional] <p>
  * If used and set to <b>TRUE</b>, <b>var_export</b> will return
- * the variable representation instead of outputing it.
+ * the variable representation instead of outputting it.
  * </p>
  * @return mixed the variable representation when the <i>return</i>
  * parameter is used and evaluates to <b>TRUE</b>. Otherwise, this function will
@@ -4902,9 +4908,10 @@ function var_export ($expression, $return = false) {}
  * @param mixed $variable <p>
  * The variable being evaluated.
  * </p>
+ * @param mixed $_ [optional]
  * @return void No value is returned.
  */
-function debug_zval_dump ($variable) {}
+function debug_zval_dump ($variable, $_ = null) {}
 
 /**
  * (PHP 4, PHP 5)<br/>
@@ -5288,12 +5295,6 @@ function setrawcookie ($name, $value = null, $expire = 0, $path = null, $domain 
  * </code>
  * </p>
  * <p>
- * For FastCGI you must use the following for a 404 response:
- * <code>
- * header("Status: 404 Not Found");
- * </code>
- * </p>
- * <p>
  * The second special case is the "Location:" header. Not only does
  * it send this header back to the browser, but it also returns a
  * REDIRECT (302) status code to the browser
@@ -5644,6 +5645,10 @@ function getmxrr ($hostname, array &$mxhosts, array &$weight = null) {}
  * Passed by reference and, if given, will be populated with any
  * Additional Records.
  * </p>
+ * @param bool $raw [optional] <p>
+ * In case of raw mode, we query only the requestd type instead of looping
+ * type by type before going with the additional info stuff.
+ * </p>
  * @return array This function returns an array of associative arrays,
  * or <b>FALSE</b> on failure. Each associative array contains
  * at minimum the following keys:
@@ -5805,7 +5810,7 @@ function getmxrr ($hostname, array &$mxhosts, array &$weight = null) {}
  * </tr>
  * </table>
  */
-function dns_get_record ($hostname, $type = 'DNS_ANY', array &$authns = null, array &$addtl = null) {}
+function dns_get_record ($hostname, $type = 'DNS_ANY', array &$authns = null, array &$addtl = null, &$raw = false) {}
 
 /**
  * (PHP 4, PHP 5)<br/>
@@ -6787,7 +6792,7 @@ function file ($filename, $flags = 0, $context = null) {}
  * Name of the file to read.
  * </p>
  * @param bool $use_include_path [optional] <p>
- * As of PHP 5 the <b>FILE_USE_INCLUDE_PATH</b> can be used
+ * As of PHP 5 the <b>FILE_USE_INCLUDE_PATH</b> constant can be used
  * to trigger include path
  * search.
  * </p>
@@ -7017,7 +7022,7 @@ function stream_context_get_params ($stream_or_context) {}
  * Sets an option for a stream/wrapper/context
  * @link http://php.net/manual/en/function.stream-context-set-option.php
  * @param resource $stream_or_context <p>
- * The stream or context resource to apply the options too.
+ * The stream or context resource to apply the options to.
  * </p>
  * @param string $wrapper
  * @param string $option
@@ -7553,7 +7558,7 @@ function fputcsv ($handle, array $fields, $delimiter = ',', $enclosure = '"') {}
  * <i>operation</i> is one of the following:
  * <b>LOCK_SH</b> to acquire a shared lock (reader).
  * @param int $wouldblock [optional] <p>
- * The optional third argument is set to <b>TRUE</b> if the lock would block
+ * The optional third argument is set to 1 if the lock would block
  * (EWOULDBLOCK errno condition). (not supported on Windows)
  * </p>
  * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
@@ -8162,6 +8167,10 @@ function pfsockopen ($hostname, $port = -1, &$errno = null, &$errstr = null, $ti
  * <tr valign="top">
  * <td>X</td>
  * <td>Back up one byte</td>
+ * </tr>
+ * <tr valign="top">
+ * <td>Z</td>
+ * <td>NUL-padded string (new in PHP 5.5)</td>
  * </tr>
  * <tr valign="top">
  * <td>@</td>
@@ -8965,8 +8974,8 @@ function realpath_cache_get () {}
  * Message to be sent.
  * </p>
  * <p>
- * Each line should be separated with a LF (\n). Lines should not be larger
- * than 70 characters.
+ * Each line should be separated with a CRLF (\r\n). Lines should not be
+ * larger than 70 characters.
  * </p>
  * <p>
  * (Windows only) When PHP is talking to a SMTP server directly, if a full
@@ -9266,39 +9275,14 @@ function metaphone ($str, $phonemes = 0) {}
  * return a new output buffer as a result, which will be sent to the
  * browser. If the <i>output_callback</i> is not a
  * callable function, this function will return <b>FALSE</b>.
+ * This is the callback signature:
  * </p>
  * <p>
- * If the callback function has two parameters, the second parameter is
- * filled with a bit-field consisting of
- * <b>PHP_OUTPUT_HANDLER_*</b> constants.
- * </p>
- * <p>
- * If <i>output_callback</i> returns <b>FALSE</b> original
- * input is sent to the browser.
- * </p>
- * <p>
- * The <i>output_callback</i> parameter may be bypassed
- * by passing a <b>NULL</b> value.
- * </p>
- * <p>
- * <b>ob_end_clean</b>, <b>ob_end_flush</b>,
- * <b>ob_clean</b>, <b>ob_flush</b> and
- * <b>ob_start</b> may not be called from a callback
- * function. If you call them from callback function, the behavior is
- * undefined. If you would like to delete the contents of a buffer,
- * return "" (a null string) from callback function.
- * You can't even call functions using the output buffering functions like
- * print_r($expression, true) or
- * highlight_file($filename, true) from a callback
- * function.
- * </p>
- * <p>
- * In PHP 4.0.4, <b>ob_gzhandler</b> was introduced to
- * facilitate sending gz-encoded data to web browsers that support
- * compressed web pages. <b>ob_gzhandler</b> determines
- * what type of content encoding the browser will accept and will return
- * its output accordingly.
- * </p>
+ * bool<b>handler</b>
+ * <b>string<i>buffer</i></b>
+ * <b>int<i>phase</i></b>
+ * <i>buffer</i>
+ * Contents of the output buffer.
  * @param int $chunk_size [optional] <p>
  * If the optional parameter <i>chunk_size</i> is passed, the
  * buffer will be flushed after any output call which causes the buffer's
@@ -9770,7 +9754,7 @@ function array_walk_recursive (array &$input, callable $funcname, $userdata = nu
  * count higher than may be expected.
  * </p>
  * @return int the number of elements in <i>var</i>.
- * If <i>var</i> is not an array or an object with
+ * If <i>var</i> is not an array or not an object with
  * implemented <b>Countable</b> interface,
  * 1 will be returned.
  * There is one exception, if <i>var</i> is <b>NULL</b>,
@@ -10075,12 +10059,10 @@ function range ($start, $end, $step = 1) {}
  * @param mixed $arg [optional] <p>
  * Optionally another array, or sort options for the
  * previous array argument:
- * <b>SORT_ASC</b>,
- * <b>SORT_DESC</b>,
- * <b>SORT_REGULAR</b>,
- * <b>SORT_NUMERIC</b>,
- * <b>SORT_STRING</b>.
  * </p>
+ * <p>
+ * Sorting type flags:
+ * <b>SORT_ASC</b> - sort items ascendingly.
  * @param mixed $arg [optional]
  * @param mixed $_ [optional] <p>
  * Additional <i>arg</i>'s.
@@ -10405,7 +10387,7 @@ function array_flip (array $trans) {}
 
 /**
  * (PHP 4 &gt;= 4.2.0, PHP 5)<br/>
- * Changes all keys in an array
+ * Changes the case of all keys in an array
  * @link http://php.net/manual/en/function.array-change-key-case.php
  * @param array $input <p>
  * The array to work on
@@ -10910,6 +10892,9 @@ function pos (&$arg) {}
 function sizeof ($var, $mode) {}
 
 /**
+ * (PHP 4 &gt;= 4.0.6, PHP 5)<br/>
+ * Alias of <b>array_key_exists</b>
+ * @link http://php.net/manual/en/function.key-exists.php
  * @param $key
  * @param $search
  */
@@ -12402,5 +12387,5 @@ define ('DNS_ANY', 268435456);
  */
 define ('DNS_ALL', 251713587);
 
-// End of standard v.5.4.6-1ubuntu1.1
+// End of standard v.5.4.9-4ubuntu2.2
 ?>

@@ -130,10 +130,14 @@ class SimpleXMLElement implements Traversable {
 	 * If specified, returns all namespaces declared in parent and child nodes.
 	 * Otherwise, returns only namespaces declared in root node.
 	 * </p>
+	 * @param bool $from_root [optional] <p>
+	 * Allows you to recursively check namespaces under a child node instead of
+	 * from the root of the XML doc.
+	 * </p>
 	 * @return array The getDocNamespaces method returns an array
 	 * of namespace names with their associated URIs.
 	 */
-	public function getDocNamespaces ($recursive = false) {}
+	public function getDocNamespaces ($recursive = false, $from_root = true) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.1.3)<br/>
@@ -376,10 +380,14 @@ class SimpleXMLIterator extends SimpleXMLElement implements Traversable, Recursi
 	 * If specified, returns all namespaces declared in parent and child nodes.
 	 * Otherwise, returns only namespaces declared in root node.
 	 * </p>
+	 * @param bool $from_root [optional] <p>
+	 * Allows you to recursively check namespaces under a child node instead of
+	 * from the root of the XML doc.
+	 * </p>
 	 * @return array The getDocNamespaces method returns an array
 	 * of namespace names with their associated URIs.
 	 */
-	public function getDocNamespaces ($recursive = false) {}
+	public function getDocNamespaces ($recursive = false, $from_root = true) {}
 
 	/**
 	 * (PHP 5 &gt;= 5.1.3)<br/>

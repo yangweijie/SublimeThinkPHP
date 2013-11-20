@@ -3,7 +3,7 @@
 // Start of interbase v.
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Open a connection to a database
  * @link http://php.net/manual/en/function.ibase-connect.php
  * @param string $database [optional] <p>
@@ -44,7 +44,7 @@
 function ibase_connect ($database = null, $username = null, $password = null, $charset = null, $buffers = null, $dialect = null, $role = null, $sync = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Open a persistent connection to an InterBase database
  * @link http://php.net/manual/en/function.ibase-pconnect.php
  * @param string $database [optional] <p>
@@ -86,7 +86,7 @@ function ibase_connect ($database = null, $username = null, $password = null, $c
 function ibase_pconnect ($database = null, $username = null, $password = null, $charset = null, $buffers = null, $dialect = null, $role = null, $sync = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Close a connection to an InterBase database
  * @link http://php.net/manual/en/function.ibase-close.php
  * @param resource $connection_id [optional] <p>
@@ -111,7 +111,7 @@ function ibase_close ($connection_id = null) {}
 function ibase_drop_db ($connection = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Execute a query on an InterBase database
  * @link http://php.net/manual/en/function.ibase-query.php
  * @param resource $link_identifier [optional] <p>
@@ -136,7 +136,7 @@ function ibase_drop_db ($connection = null) {}
 function ibase_query ($link_identifier = null, $query, $bind_args = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Fetch a row from an InterBase database
  * @link http://php.net/manual/en/function.ibase-fetch-row.php
  * @param resource $result_identifier <p>
@@ -157,7 +157,7 @@ function ibase_query ($link_identifier = null, $query, $bind_args = null) {}
 function ibase_fetch_row ($result_identifier, $fetch_flag = 0) {}
 
 /**
- * (PHP 4 &gt;= 4.3.0, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Fetch a result row from a query as an associative array
  * @link http://php.net/manual/en/function.ibase-fetch-assoc.php
  * @param resource $result <p>
@@ -178,7 +178,7 @@ function ibase_fetch_row ($result_identifier, $fetch_flag = 0) {}
 function ibase_fetch_assoc ($result, $fetch_flag = 0) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Get an object from a InterBase database
  * @link http://php.net/manual/en/function.ibase-fetch-object.php
  * @param resource $result_id <p>
@@ -199,7 +199,7 @@ function ibase_fetch_assoc ($result, $fetch_flag = 0) {}
 function ibase_fetch_object ($result_id, $fetch_flag = 0) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Free a result set
  * @link http://php.net/manual/en/function.ibase-free-result.php
  * @param resource $result_identifier <p>
@@ -225,7 +225,7 @@ function ibase_free_result ($result_identifier) {}
 function ibase_name_result ($result, $name) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Prepare a query for later binding of parameter placeholders and execution
  * @link http://php.net/manual/en/function.ibase-prepare.php
  * @param string $query <p>
@@ -236,7 +236,7 @@ function ibase_name_result ($result, $name) {}
 function ibase_prepare ($query) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Execute a previously prepared query
  * @link http://php.net/manual/en/function.ibase-execute.php
  * @param resource $query <p>
@@ -250,7 +250,7 @@ function ibase_prepare ($query) {}
  * no results, returns <b>TRUE</b>.
  * </p>
  * <p>
- * In PHP 5.0.0 and up, this function returns the number of rows affected by
+ * This function returns the number of rows affected by
  * the query (if > 0 and applicable to the statement type). A query that
  * succeeded, but did not affect any rows (e.g. an UPDATE of a non-existent
  * record) will return <b>TRUE</b>.
@@ -258,7 +258,7 @@ function ibase_prepare ($query) {}
 function ibase_execute ($query, $bind_arg = null, $_ = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Free memory allocated by a prepared query
  * @link http://php.net/manual/en/function.ibase-free-query.php
  * @param resource $query <p>
@@ -280,7 +280,7 @@ function ibase_free_query ($query) {}
 function ibase_gen_id ($generator, $increment = 1, $link_identifier = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Get the number of fields in a result set
  * @link http://php.net/manual/en/function.ibase-num-fields.php
  * @param resource $result_id <p>
@@ -314,7 +314,7 @@ function ibase_num_params ($query) {}
 function ibase_affected_rows ($link_identifier = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Get information about a field
  * @link http://php.net/manual/en/function.ibase-field-info.php
  * @param resource $result <p>
@@ -346,7 +346,7 @@ function ibase_field_info ($result, $field_number) {}
 function ibase_param_info ($query, $param_number) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Begin a transaction
  * @link http://php.net/manual/en/function.ibase-trans.php
  * @param int $trans_args [optional] <p>
@@ -370,7 +370,7 @@ function ibase_param_info ($query, $param_number) {}
 function ibase_trans ($trans_args = null, $link_identifier = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Commit a transaction
  * @link http://php.net/manual/en/function.ibase-commit.php
  * @param resource $link_or_trans_identifier [optional] <p>
@@ -385,7 +385,7 @@ function ibase_trans ($trans_args = null, $link_identifier = null) {}
 function ibase_commit ($link_or_trans_identifier = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Roll back a transaction
  * @link http://php.net/manual/en/function.ibase-rollback.php
  * @param resource $link_or_trans_identifier [optional] <p>
@@ -434,7 +434,7 @@ function ibase_commit_ret ($link_or_trans_identifier = null) {}
 function ibase_rollback_ret ($link_or_trans_identifier = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Return blob length and other useful info
  * @link http://php.net/manual/en/function.ibase-blob-info.php
  * @param resource $link_identifier <p>
@@ -451,7 +451,7 @@ function ibase_rollback_ret ($link_or_trans_identifier = null) {}
 function ibase_blob_info ($link_identifier, $blob_id) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Create a new blob for adding data
  * @link http://php.net/manual/en/function.ibase-blob-create.php
  * @param resource $link_identifier [optional] <p>
@@ -464,7 +464,7 @@ function ibase_blob_info ($link_identifier, $blob_id) {}
 function ibase_blob_create ($link_identifier = null) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Add data into a newly created blob
  * @link http://php.net/manual/en/function.ibase-blob-add.php
  * @param resource $blob_handle <p>
@@ -478,7 +478,7 @@ function ibase_blob_create ($link_identifier = null) {}
 function ibase_blob_add ($blob_handle, $data) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Cancel creating blob
  * @link http://php.net/manual/en/function.ibase-blob-cancel.php
  * @param resource $blob_handle <p>
@@ -489,7 +489,7 @@ function ibase_blob_add ($blob_handle, $data) {}
 function ibase_blob_cancel ($blob_handle) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Close blob
  * @link http://php.net/manual/en/function.ibase-blob-close.php
  * @param resource $blob_handle <p>
@@ -504,7 +504,7 @@ function ibase_blob_cancel ($blob_handle) {}
 function ibase_blob_close ($blob_handle) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Open blob for retrieving data parts
  * @link http://php.net/manual/en/function.ibase-blob-open.php
  * @param resource $link_identifier <p>
@@ -520,7 +520,7 @@ function ibase_blob_close ($blob_handle) {}
 function ibase_blob_open ($link_identifier, $blob_id) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Get len bytes data from open blob
  * @link http://php.net/manual/en/function.ibase-blob-get.php
  * @param resource $blob_handle <p>
@@ -535,7 +535,7 @@ function ibase_blob_open ($link_identifier, $blob_id) {}
 function ibase_blob_get ($blob_handle, $len) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Output blob contents to browser
  * @link http://php.net/manual/en/function.ibase-blob-echo.php
  * @param string $blob_id
@@ -544,7 +544,7 @@ function ibase_blob_get ($blob_handle, $len) {}
 function ibase_blob_echo ($blob_id) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Create blob, copy file in it, and close it
  * @link http://php.net/manual/en/function.ibase-blob-import.php
  * @param resource $link_identifier <p>
@@ -559,7 +559,7 @@ function ibase_blob_echo ($blob_id) {}
 function ibase_blob_import ($link_identifier, $file_handle) {}
 
 /**
- * (PHP 4, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Return error messages
  * @link http://php.net/manual/en/function.ibase-errmsg.php
  * @return string the error message as a string, or <b>FALSE</b> if no error occurred.
@@ -575,7 +575,7 @@ function ibase_errmsg () {}
 function ibase_errcode () {}
 
 /**
- * (PHP 4 &gt;= 4.2.0, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Add a user to a security database
  * @link http://php.net/manual/en/function.ibase-add-user.php
  * @param resource $service_handle
@@ -589,7 +589,7 @@ function ibase_errcode () {}
 function ibase_add_user ($service_handle, $user_name, $password, $first_name = null, $middle_name = null, $last_name = null) {}
 
 /**
- * (PHP 4 &gt;= 4.2.0, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Modify a user to a security database
  * @link http://php.net/manual/en/function.ibase-modify-user.php
  * @param resource $service_handle
@@ -603,7 +603,7 @@ function ibase_add_user ($service_handle, $user_name, $password, $first_name = n
 function ibase_modify_user ($service_handle, $user_name, $password, $first_name = null, $middle_name = null, $last_name = null) {}
 
 /**
- * (PHP 4 &gt;= 4.2.0, PHP 5)<br/>
+ * (PHP 5)<br/>
  * Delete a user from a security database
  * @link http://php.net/manual/en/function.ibase-delete-user.php
  * @param resource $service_handle

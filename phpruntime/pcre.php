@@ -149,8 +149,8 @@ function preg_match_all ($pattern, $subject, array &$matches = null, $flags = 'P
  * </p>
  * <p>
  * Several PCRE modifiers
- * are also available, including 'e' (PREG_REPLACE_EVAL), which
- * is specific to this function.
+ * are also available, including the deprecated 'e'
+ * (PREG_REPLACE_EVAL), which is specific to this function.
  * </p>
  * @param mixed $replacement <p>
  * The string or an array with strings to replace. If this parameter is a
@@ -191,7 +191,7 @@ function preg_match_all ($pattern, $subject, array &$matches = null, $flags = 'P
  * as a literal.
  * </p>
  * <p>
- * When using the e modifier, this function escapes
+ * When using the deprecated e modifier, this function escapes
  * some characters (namely ', ",
  * \ and NULL) in the strings that replace the
  * backreferences. This is done to ensure that no syntax errors arise
@@ -239,7 +239,11 @@ function preg_replace ($pattern, $replacement, $subject, $limit = -1, &$count = 
  * @param callable $callback <p>
  * A callback that will be called and passed an array of matched elements
  * in the <i>subject</i> string. The callback should
- * return the replacement string.
+ * return the replacement string. This is the callback signature:
+ * </p>
+ * <p>
+ * string<b>handler</b>
+ * <b>array<i>matches</i></b>
  * </p>
  * <p>
  * You'll often need the <i>callback</i> function
@@ -255,7 +259,7 @@ function preg_replace ($pattern, $replacement, $subject, $limit = -1, &$count = 
  * </p>
  * <p>
  * <b>preg_replace_callback</b> and
- * <b>create_function</b>
+ * anonymous function
  * <code>
  * /* a unix-style command line filter to convert uppercase
  * * letters at the beginning of paragraphs to lowercase * /
@@ -264,12 +268,9 @@ function preg_replace ($pattern, $replacement, $subject, $limit = -1, &$count = 
  * $line = fgets($fp);
  * $line = preg_replace_callback(
  * '|<p>\s*\w|',
- * create_function(
- * // single quotes are essential here,
- * // or alternative escape all $ as \$
- * '$matches',
- * 'return strtolower($matches[0]);'
- * ),
+ * function ($matches) {
+ * return strtolower($matches[0]);
+ * },
  * $line
  * );
  * echo $line;
@@ -359,7 +360,7 @@ function preg_split ($pattern, $subject, $limit = -1, $flags = 0) {}
  * that is required by the PCRE functions. The / is the most commonly
  * used delimiter.
  * </p>
- * @return string the quoted string.
+ * @return string the quoted (escaped) string.
  */
 function preg_quote ($str, $delimiter = null) {}
 
@@ -493,7 +494,7 @@ define ('PREG_BAD_UTF8_OFFSET_ERROR', 5);
  * PCRE version and release date (e.g. "7.0 18-Dec-2006").
  * @link http://php.net/manual/en/pcre.constants.php
  */
-define ('PCRE_VERSION', "8.30 2012-02-04");
+define ('PCRE_VERSION', "8.31 2012-07-06");
 
 // End of pcre v.
 ?>

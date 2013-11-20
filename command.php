@@ -57,34 +57,6 @@ function show_colums($argv){
     mysql_close();
 }
 
-function find_php_defination($argv){
-    $word = $argv[0];
-    $path = realpath(dirname(__FILE__));
-    $path .= DIRECTORY_SEPARATOR.'phpruntime'.DIRECTORY_SEPARATOR;
-    chdir($path);
-    $list = glob('*.php');
-    $to_search = "function {$word} (";
-    foreach ($list as $key => $value) {
-        $content = file_get_contents($path.$value);
-        $pos_search = strpos($content, $to_search);
-        if($pos_search !== false){
-            $comment = get_comment($pos_search, $content);
-            if($comment){
-                success('found it!', $comment);
-                break;
-            }
-        }
-    }
-    error('didn\'t find it');
-}
-
-function get_comment($pos,$content){
-    $content_length = strlen($content);
-    $end_pos = strripos($content, '*/', $pos - $content_length);
-    $start_pos = strripos($content, '/**', $end_pos - $content_length);
-    return substr($content, $start_pos, $end_pos - $start_pos + 2);
-}
-
 function query($argv = ''){
     error_reporting(7);
     $table_queryer_file = __DIR__.DIRECTORY_SEPARATOR.'ThinkPHP-Queryer';
@@ -109,6 +81,8 @@ function query($argv = ''){
             'header'=>$header? $header : array(),
             'rows'=>$rows
         );
+    // file_put_contents('./', data);
+    file_put_contents('./debug.php',(var_export($in,1)));
     if($rows){
         $table = new table($in);
         $output = $table->render(0);

@@ -141,7 +141,8 @@ class Phar extends RecursiveDirectoryIterator implements RecursiveIterator, Seek
 	 * Construct a Phar archive object
 	 * @link http://php.net/manual/en/phar.construct.php
 	 * @param string $fname <p>
-	 * Path to an existing Phar archive or to-be-created archive
+	 * Path to an existing Phar archive or to-be-created archive. The file name's
+	 * extension must contain .phar.
 	 * </p>
 	 * @param int $flags [optional] <p>
 	 * Flags to pass to parent class <b>RecursiveDirectoryIterator</b>.
@@ -630,9 +631,11 @@ class Phar extends RecursiveDirectoryIterator implements RecursiveIterator, Seek
 	 * A string or an open stream handle to use as the executable stub for this
 	 * phar archive.
 	 * </p>
+	 * @param int $len [optional] <p>
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
-	public function setStub ($stub) {}
+	public function setStub ($stub, $len = -1) {}
 
 	/**
 	 * (PHP &gt;= 5.3.0, PECL phar &gt;= 1.0.0)<br/>
@@ -1668,9 +1671,11 @@ class PharData extends RecursiveDirectoryIterator implements RecursiveIterator, 
 	 * A string or an open stream handle to use as the executable stub for this
 	 * phar archive. This parameter is ignored.
 	 * </p>
+	 * @param int $len [optional] <p>
+	 * </p>
 	 * @return bool <b>TRUE</b> on success or <b>FALSE</b> on failure.
 	 */
-	public function setStub ($stub) {}
+	public function setStub ($stub, $len = -1) {}
 
 	public function startBuffering () {}
 

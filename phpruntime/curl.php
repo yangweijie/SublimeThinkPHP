@@ -266,6 +266,7 @@ function curl_version ($age = 'CURLVERSION_NOW') {}
  * <b>TRUE</b> to be completely silent with regards to
  * the cURL functions.
  * </td>
+ * Removed in cURL 7.15.5 (You can use CURLOPT_RETURNTRANSFER instead)
  * </td>
  * </tr>
  * <tr valign="top">
@@ -601,6 +602,7 @@ function curl_version ($age = 'CURLVERSION_NOW') {}
  * provided. In production environments the value of this option
  * should be kept at 2 (default value).
  * </td>
+ * Support for value 1 removed in cURL 7.28.1
  * </td>
  * </tr>
  * <tr valign="top">
@@ -824,6 +826,8 @@ function curl_version ($age = 'CURLVERSION_NOW') {}
  * multipart/form-data.
  * As of PHP 5.2.0, <i>value</i> must be an array if
  * files are passed to this option with the @ prefix.
+ * As of PHP 5.5.0, the @ prefix is deprecated and
+ * files can be sent using <b>CURLFile</b>.
  * </td>
  * </td>
  * </tr>
@@ -1057,45 +1061,57 @@ function curl_version ($age = 'CURLVERSION_NOW') {}
  * </tr>
  * </p>
  * <p>
- * <i>value</i> should be a string that is the name of a valid
- * callback function for the following values of the
- * <i>option</i> parameter:
+ * <i>value</i> should be the name of a valid function or a Closure
+ * for the following values of the <i>option</i> parameter:
  * <tr valign="top">
  * <td>Option</td>
  * <td>Set <i>value</i> to</td>
  * </tr>
  * <tr valign="top">
  * <b>CURLOPT_HEADERFUNCTION</b></td>
- * The name of a callback function where the callback function takes
- * two parameters. The first is the cURL resource, the second is a
+ * A callback accepting two parameters.
+ * The first is the cURL resource, the second is a
  * string with the header data to be written. The header data must
- * be written when using this callback function. Return the number of
+ * be written when by this callback. Return the number of
  * bytes written.
  * </td>
  * </tr>
  * <tr valign="top">
  * <b>CURLOPT_PASSWDFUNCTION</b></td>
- * The name of a callback function where the callback function takes
- * three parameters. The first is the cURL resource, the second is a
+ * A callback accepting three parameters.
+ * The first is the cURL resource, the second is a
  * string containing a password prompt, and the third is the maximum
  * password length. Return the string containing the password.
  * </td>
  * </tr>
  * <tr valign="top">
  * <b>CURLOPT_PROGRESSFUNCTION</b></td>
- * The name of a callback function where the callback function takes
- * three parameters. The first is the cURL resource, the second is a
- * file-descriptor resource, and the third is length. Return the
- * string containing the data.
+ * <p>
+ * A callback accepting five parameters.
+ * The first is the cURL resource, the second is the total number of
+ * bytes expected to be downloaded in this transfer, the third is
+ * the number of bytes downloaded so far, the fourth is the total
+ * number of bytes expected to be uploaded in this transfer, and the
+ * fifth is the number of bytes uploaded so far.
+ * </p>
+ * <p>
+ * The callback is only called when the <b>CURLOPT_NOPROGRESS</b>
+ * option is set to <b>FALSE</b>.
+ * </p>
+ * <p>
+ * Return a non-zero value to abort the transfer. In which case, the
+ * transfer will set a <b>CURLE_ABORTED_BY_CALLBACK</b>
+ * error.
+ * </p>
  * </td>
  * </tr>
  * <tr valign="top">
  * <b>CURLOPT_READFUNCTION</b></td>
- * The name of a callback function where the callback function takes
- * three parameters. The first is the cURL resource, the second is a
+ * A callback accepting three parameters.
+ * The first is the cURL resource, the second is a
  * stream resource provided to cURL through the option
  * <b>CURLOPT_INFILE</b>, and the third is the maximum
- * amount of data to be read. The callback function must return a string
+ * amount of data to be read. The callback must return a string
  * with a length equal or smaller than the amount of data requested,
  * typically by reading it from the passed stream resource. It should
  * return an empty string to signal EOF.
@@ -1103,11 +1119,24 @@ function curl_version ($age = 'CURLVERSION_NOW') {}
  * </tr>
  * <tr valign="top">
  * <b>CURLOPT_WRITEFUNCTION</b></td>
- * The name of a callback function where the callback function takes
- * two parameters. The first is the cURL resource, and the second is a
- * string with the data to be written. The data must be saved by using
- * this callback function. It must return the exact number of bytes written
+ * A callback accepting two parameters.
+ * The first is the cURL resource, and the second is a
+ * string with the data to be written. The data must be saved by
+ * this callback. It must return the exact number of bytes written
  * or the transfer will be aborted with an error.
+ * </td>
+ * </tr>
+ * </p>
+ * <p>
+ * Other values:
+ * <tr valign="top">
+ * <td>Option</td>
+ * <td>Set <i>value</i> to</td>
+ * </tr>
+ * <tr valign="top">
+ * <b>CURLOPT_SHARE</b></td>
+ * A result of <b>curl_share_init</b>. Makes the cURL
+ * handle to use the data from the shared handle.
  * </td>
  * </tr>
  * </p>
@@ -1513,6 +1542,10 @@ define ('CURLINFO_HEADER_OUT', 2);
 define ('CURLINFO_PRIVATE', 1048597);
 define ('CURLINFO_CERTINFO', 4194338);
 define ('CURLINFO_REDIRECT_URL', 1048607);
+define ('CURLINFO_PRIMARY_IP', 1048608);
+define ('CURLINFO_PRIMARY_PORT', 2097192);
+define ('CURLINFO_LOCAL_IP', 1048617);
+define ('CURLINFO_LOCAL_PORT', 2097194);
 define ('CURL_VERSION_IPV6', 1);
 define ('CURL_VERSION_KERBEROS4', 2);
 define ('CURL_VERSION_SSL', 4);

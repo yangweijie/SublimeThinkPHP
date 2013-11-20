@@ -108,13 +108,16 @@ function filter_var ($variable, $filter = 'FILTER_DEFAULT', $options = null) {}
  * This parameter can be also an integer holding a filter constant. Then all values in the
  * input array are filtered by this filter.
  * </p>
+ * @param bool $add_empty [optional] <p>
+ * Add missing keys as <b>NULL</b> to the return value.
+ * </p>
  * @return mixed An array containing the values of the requested variables on success, or <b>FALSE</b>
  * on failure. An array value will be <b>FALSE</b> if the filter fails, or <b>NULL</b> if
  * the variable is not set. Or if the flag <b>FILTER_NULL_ON_FAILURE</b>
  * is used, it returns <b>FALSE</b> if the variable is not set and <b>NULL</b> if the filter
  * fails.
  */
-function filter_input_array ($type, $definition = null) {}
+function filter_input_array ($type, $definition = null, $add_empty = true) {}
 
 /**
  * (PHP 5 &gt;= 5.2.0)<br/>
@@ -138,11 +141,14 @@ function filter_input_array ($type, $definition = null) {}
  * This parameter can be also an integer holding a filter constant. Then all values in the
  * input array are filtered by this filter.
  * </p>
+ * @param bool $add_empty [optional] <p>
+ * Add missing keys as <b>NULL</b> to the return value.
+ * </p>
  * @return mixed An array containing the values of the requested variables on success, or <b>FALSE</b>
  * on failure. An array value will be <b>FALSE</b> if the filter fails, or <b>NULL</b> if
  * the variable is not set.
  */
-function filter_var_array (array $data, $definition = null) {}
+function filter_var_array (array $data, $definition = null, $add_empty = true) {}
 
 /**
  * (PHP 5 &gt;= 5.2.0)<br/>

@@ -415,7 +415,7 @@ define ('ICONV_IMPL', "glibc");
  * string
  * @link http://php.net/manual/en/iconv.constants.php
  */
-define ('ICONV_VERSION', 2.15);
+define ('ICONV_VERSION', 2.17);
 
 /**
  * integer
