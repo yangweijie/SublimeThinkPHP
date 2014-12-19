@@ -1,4 +1,3 @@
 [
-	{ "button": "button1", "modifiers": ["shift"], "command": "goto_definition" },
 	{ "button": "button1", "modifiers": ["alt"], "command": "goto_php_document" }
 ]
