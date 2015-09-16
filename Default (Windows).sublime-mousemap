@@ -1,4 +1,4 @@
 [
-	{ "button": "button1", "modifiers": ["shift"], "command": "goto_definition" },
+	{ "button": "button1", "count": 1, "modifiers": ["ctrl"], "press_command": "drag_select", "command": "goto_php_document" }
 	{ "button": "button1", "modifiers": ["alt"], "command": "goto_php_document" }
 ]
