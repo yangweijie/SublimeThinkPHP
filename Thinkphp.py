@@ -166,26 +166,6 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
             fs_writer(query_table, tpl)
             self.view.window().open_file(query_table)
 
-
-class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        region = self.view.sel()[0]
-        if region.begin() != region.end():
-            function = self.view.substr(region)
-            command_text = 'php "' + packages_path + os.sep + 'command.php" "find_php_defination" "' + function + '"'
-            cloums = os.popen(command_text)
-            data = json.loads(cloums.read())
-            if data['status'] == 0:
-                sublime.status_message(data['info'])
-            else:
-                self.window = self.view.window()
-                show_outpanel(self, 'php function docmentor', data['data'])
-        else:
-            sublime.status_message('must be a word')
-    def choose(self, flag):
-        if flag != -1:
-            sublime.set_clipboard(self.item[flag])
-
 class view_thinkphp_api_manual(ThinkphpCommand, sublime_plugin.TextCommand):
     """see the ThinkPHP api online"""
     def run(self, arg):
