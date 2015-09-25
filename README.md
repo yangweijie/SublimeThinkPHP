@@ -15,9 +15,7 @@ Snippet提示
 
 ![视频: 用Sublime text2的Thinkphp插件 像zencoding)一样快速开发TP](http://v.youku.com/v_show/id_XNTA1NjE2MTM2.html)
 查看函数说明文档
-![查看函数说明文档](http://www.thinkphp.cn/Uploads/speech/2013-08-04/51fe0aa40ca40.png "查看函数说明文档 Sublime text3效果")
-
-![查看函数说明文档](http://www.thinkphp.cn/Uploads/speech/2013-08-04/51fe0bdca306c.png "查看函数说明文档 Sublime text2效果")
+已经重新写了一个PhpNinJaManual 插件，请移步插件首页查看 <https://github.com/yangweijie/SublimePHPNinJaManual>
 mysql编辑器内简单查询
 ![效果图](http://www.thinkphp.cn/Uploads/speech/2013-08-04/51fe0a85ecca9.png "效果图")
 1.在tools->ThinkPHP->ThinkPHP choose database来添加数据库和选择当前数据库

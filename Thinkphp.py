@@ -163,65 +163,6 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
             fs_writer(query_table, tpl)
             self.view.window().open_file(query_table)
 
-
-class goto_php_document(ThinkphpCommand, sublime_plugin.TextCommand):
-    def run(self, edit):
-        region = self.view.sel()[0]
-        if region.begin() != region.end():
-            function = self.view.substr(region)
-            thread = find_comment(function,self.view)
-            thread.start()
-            ThreadProgress(thread, 'Is excuting', 'query completed')
-        else:
-            sublime.status_message('must be a word')
-
-class find_comment(threading.Thread):
-    def __init__(self,word, view):
-        self.word = word
-        self.view = view
-        threading.Thread.__init__(self)
-
-    def run(self):
-        path = packages_path + os.sep + 'phpruntime' + os.sep
-        os.chdir(path)
-        list = glob.glob('*.php')
-        to_search = "function {0} (".format(self.word)
-        data = {"status":0}
-        content = ''
-        if self.view.settings().has('php_docsets'):
-            content = self.view.settings().get('php_docsets')
-        elif content == '':
-            for filename in list:
-                content += open(path+filename).read(100000000)
-            self.view.settings().set('php_docsets', content)
-        pos_search = content.rfind(to_search)
-        if pos_search != -1:
-            comment = self.get_comment(pos_search, content)
-            if comment != '':
-                data = {"status":1, 'info': 'found it', 'data':comment}
-        if data['status'] != 1:
-            data = {"status":0, 'info': 'didn\'t find it', 'data':''}
-        if data['status'] == 0:
-            sublime.status_message(data['info'])
-        else:
-            content = data['data']
-            content = content[4:]
-            content = content[:-4]
-            content = content.replace('*', '')
-            re_h = re.compile('</?\w+[^>]*>')
-            content = re_h.sub('',content)
-            self.item = fun_def_item = content.split('\n')
-            self.view.show_popup_menu(fun_def_item, self.choose)
-
-    def get_comment(self, pos, content):
-        content = content[:pos]
-        start_pos = content.rfind('/**')
-        return content[start_pos:pos-2]
-
-    def choose(self, flag):
-        if flag != -1:
-            sublime.set_clipboard(self.item[flag])
-
 class view_thinkphp_api_manual(ThinkphpCommand, sublime_plugin.TextCommand):
     """see the ThinkPHP api online"""
     def run(self, arg):
