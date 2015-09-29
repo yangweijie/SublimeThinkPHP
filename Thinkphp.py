@@ -3,7 +3,7 @@ import sublime, sublime_plugin
 import os, json, threading, codecs, re, subprocess, webbrowser, glob
 from subprocess import PIPE
 
-packages_path = sublime.packages_path() + os.sep + 'Thinkphp'
+packages_path = os.path.split(os.path.realpath(__file__))[0]
 query_window = packages_path + os.sep + 'ThinkPHP-CLI.html'
 query_table = packages_path + os.sep + 'ThinkPHP-Queryer'
 seperator = '\n###################################################\n\n'
