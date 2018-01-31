@@ -44,15 +44,15 @@ abstract class Command extends \think\console\Command
     protected function getDbConfig()
     {
         $config = Db::connect()->getConfig();
-        if('sqlite' == $config['type']){
+        if ('sqlite' == $config['type']) {
             $dbConfig = [
-                'adapter' => $config['type'],
-                'name'=>str_ireplace('sqlite:', '', $config['dsn']),
-                'charset' => $config['charset'],
+                'adapter'      => $config['type'],
+                'name'         => str_ireplace('sqlite:', '', $config['dsn']),
+                'charset'      => $config['charset'],
                 'table_prefix' => $config['prefix'],
             ];
 
-        }else{
+        } else {
             if (0 == $config['deploy']) {
                 $dbConfig = [
                     'adapter'      => $config['type'],
