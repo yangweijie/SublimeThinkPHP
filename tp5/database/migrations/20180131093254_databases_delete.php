@@ -1,9 +1,16 @@
 <?php
 
-use $useClassName;
+use think\migration\db\Column;
+use think\migration\Migrator;
 
-class $className extends $baseClassName
+class DatabasesDelete extends Migrator
 {
+
+    public function up()
+    {
+        var_dump('in up');
+    }
+
     /**
      * Change Method.
      *
@@ -25,24 +32,10 @@ class $className extends $baseClassName
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
-    {
-
-    }
-
-    /**
-     * Migrate Up.
-     */
-    public function up()
-    {
-
-    }
-
-    /**
-     * Migrate Down.
-     */
     public function down()
     {
-
+        var_dump('in down');
+        // create the table
+        $this->dropTable('databases');
     }
 }
