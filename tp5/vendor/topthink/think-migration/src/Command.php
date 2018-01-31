@@ -44,33 +44,41 @@ abstract class Command extends \think\console\Command
     protected function getDbConfig()
     {
         $config = Db::connect()->getConfig();
-
-        if (0 == $config['deploy']) {
+        if('sqlite' == $config['type']){
             $dbConfig = [
-                'adapter'      => $config['type'],
-                'host'         => $config['hostname'],
-                'name'         => $config['database'],
-                'user'         => $config['username'],
-                'pass'         => $config['password'],
-                'port'         => $config['hostport'],
-                'charset'      => $config['charset'],
+                'adapter' => $config['type'],
+                'name'=>str_ireplace('sqlite:', '', $config['dsn']),
+                'charset' => $config['charset'],
                 'table_prefix' => $config['prefix'],
             ];
-        } else {
-            $dbConfig = [
-                'adapter'      => explode(',', $config['type'])[0],
-                'host'         => explode(',', $config['hostname'])[0],
-                'name'         => explode(',', $config['database'])[0],
-                'user'         => explode(',', $config['username'])[0],
-                'pass'         => explode(',', $config['password'])[0],
-                'port'         => explode(',', $config['hostport'])[0],
-                'charset'      => explode(',', $config['charset'])[0],
-                'table_prefix' => explode(',', $config['prefix'])[0],
-            ];
+
+        }else{
+            if (0 == $config['deploy']) {
+                $dbConfig = [
+                    'adapter'      => $config['type'],
+                    'host'         => $config['hostname'],
+                    'name'         => $config['database'],
+                    'user'         => $config['username'],
+                    'pass'         => $config['password'],
+                    'port'         => $config['hostport'],
+                    'charset'      => $config['charset'],
+                    'table_prefix' => $config['prefix'],
+                ];
+            } else {
+                $dbConfig = [
+                    'adapter'      => explode(',', $config['type'])[0],
+                    'host'         => explode(',', $config['hostname'])[0],
+                    'name'         => explode(',', $config['database'])[0],
+                    'user'         => explode(',', $config['username'])[0],
+                    'pass'         => explode(',', $config['password'])[0],
+                    'port'         => explode(',', $config['hostport'])[0],
+                    'charset'      => explode(',', $config['charset'])[0],
+                    'table_prefix' => explode(',', $config['prefix'])[0],
+                ];
+            }
         }
 
         $dbConfig['default_migration_table'] = $this->getConfig('table', $dbConfig['table_prefix'] . 'migrations');
-
         return $dbConfig;
     }
 
