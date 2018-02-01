@@ -122,6 +122,7 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
         database = []
         global command_bin
         command_text = 'php "' + command_bin + " index/database/get_all_databases"
+        print(command_text)
         cloums = os.popen(command_text)
         data = json.loads(cloums.read())
         if(data['status'] == 0):
