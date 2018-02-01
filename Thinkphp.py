@@ -7,6 +7,7 @@ packages_path = os.path.split(os.path.realpath(__file__))[0]
 query_window = packages_path + os.sep + 'ThinkPHP-CLI.html'
 query_table = packages_path + os.sep + 'ThinkPHP-Queryer'
 seperator = '\n###################################################\n\n'
+command_bin = packages_path + os.sep + 'tp5' + os.sep + 'public' + os.sep + 'index.php';
 settings = sublime.load_settings('Thinkphp.sublime-settings')
 
 def fs_reader(path):
@@ -119,11 +120,18 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
 
     def list_database(self):
         database = []
-        db_list = settings.get('database')
-        for i in db_list:
-            database.insert(int(i), db_list[i]['list_title'])
-        self.database = database
-        self.view.window().show_quick_panel(database, self.choose_database)
+        global command_bin
+        command_text = 'php "' + command_bin + " index/database/get_all_databases"
+        cloums = os.popen(command_text)
+        data = json.loads(cloums.read())
+        if(data['status'] == 0):
+            sublime.error_message(data['info'])
+        else:
+            db_list = data['data']
+            for i in db_list:
+                database.insert(int(i), db_list[i]['list_title'])
+            self.database = database
+            self.view.window().show_quick_panel(database, self.choose_database)
 
     def choose_database(self, arg):
         if arg == -1:
@@ -131,7 +139,7 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
         else:
             db_num = len(settings.get('database'))
             if arg == 0:
-                setting_file = packages_path + os.sep + 'Thinkphp.sublime-settings'
+                new_database_file = packages_path + os.sep + 'Thinkphp.sublime-settings'
                 new_key = '%d' % db_num
                 tpl = '"' + new_key + '":' + """{
             "list_title":"test",
@@ -143,11 +151,17 @@ class query_database(ThinkphpCommand, sublime_plugin.TextCommand):
         }
 """
                 sublime.set_clipboard(tpl)
-                self.view.window().open_file(setting_file)
+                self.view.window().open_file(new_database_file)
             else:
-                fs_writer(packages_path + os.sep + 'current_database', str(arg))
-                if self.cmd == 'show_cloum':
-                    self.show_cloum()
+                global command_bin
+                command_text = 'php "' + command_bin + " index/database/set_current/id/" + arg
+                cloums = os.popen(command_text)
+                data = json.loads(cloums.read())
+                if(data['status'] == 0):
+                    sublime.error_message(data['info'])
+                else:
+                    if self.cmd == 'show_cloum':
+                        self.show_cloum()
 
     def show_query_database(self):
         window = sublime.active_window()
@@ -192,7 +206,7 @@ class queryWithPhp(threading.Thread):
         cloums = os.popen(self.command_text)
         data = cloums.read()
         if data is None:
-            data = 'no results!'
+            data = 'No results!'
         show_outpanel(self, 'ThinkPHP-Queryer', data)
 
 class ThreadProgress():
