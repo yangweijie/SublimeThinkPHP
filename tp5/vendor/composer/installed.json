@@ -1,21 +1,21 @@
 [
     {
         "name": "topthink/framework",
-        "version": "v5.1.4",
-        "version_normalized": "5.1.4.0",
+        "version": "v5.0.15",
+        "version_normalized": "5.0.15.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/framework.git",
-            "reference": "57026de4c60ee300896124f32554de8ebb3cc921"
+            "reference": "7c1375791fe8772e33282ee8611ea465dc215fca"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/top-think/framework/57026de4c60ee300896124f32554de8ebb3cc921.zip",
-            "reference": "57026de4c60ee300896124f32554de8ebb3cc921",
+            "url": "https://files.phpcomposer.com/files/top-think/framework/7c1375791fe8772e33282ee8611ea465dc215fca.zip",
+            "reference": "7c1375791fe8772e33282ee8611ea465dc215fca",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.6.0",
+            "php": ">=5.4.0",
             "topthink/think-installer": "~1.0"
         },
         "require-dev": {
@@ -23,13 +23,17 @@
             "mikey179/vfsstream": "~1.6",
             "phpdocumentor/reflection-docblock": "^2.0",
             "phploc/phploc": "2.*",
-            "phpunit/phpunit": "^5.0|^6.0",
-            "sebastian/phpcpd": "2.*",
-            "squizlabs/php_codesniffer": "2.*"
+            "phpunit/phpunit": "4.8.*",
+            "sebastian/phpcpd": "2.*"
         },
-        "time": "2018-01-19T08:06:41+00:00",
+        "time": "2018-01-31T08:40:10+00:00",
         "type": "think-framework",
         "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "think\\": "library/think"
+            }
+        },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "Apache-2.0"
@@ -38,10 +42,6 @@
             {
                 "name": "liu21st",
                 "email": "liu21st@gmail.com"
-            },
-            {
-                "name": "yunwuxin",
-                "email": "448901948@qq.com"
             }
         ],
         "description": "the new thinkphp framework",
@@ -83,47 +83,6 @@
             "psr-4": {
                 "think\\composer\\": "src"
             }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "yunwuxin",
-                "email": "448901948@qq.com"
-            }
-        ]
-    },
-    {
-        "name": "topthink/think-migration",
-        "version": "v2.0.3",
-        "version_normalized": "2.0.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/top-think/think-migration.git",
-            "reference": "70c89850ca29c2eab988c7c3475d1d5331901bb8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/top-think/think-migration/70c89850ca29c2eab988c7c3475d1d5331901bb8.zip",
-            "reference": "70c89850ca29c2eab988c7c3475d1d5331901bb8",
-            "shasum": ""
-        },
-        "require": {
-            "topthink/framework": "5.1.*"
-        },
-        "time": "2017-12-31T16:32:22+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Phinx\\": "phinx/src/Phinx",
-                "think\\migration\\": "src"
-            },
-            "files": [
-                "src/config.php"
-            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
