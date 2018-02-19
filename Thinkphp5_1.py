@@ -12,9 +12,9 @@ def plugin_loaded():
 		print('Installed %s!' % events.install(package_name))
 		global command_bin
 		command_text = 'php "' + command_bin + '" index/index/build_completion'
-        print(command_text)
-        cloums = os.popen(command_text)
-        print(cloums.read())
+		print(command_text)
+		cloums = os.popen(command_text)
+		print(cloums.read())
 	elif events.post_upgrade(package_name):
 		print('Upgraded to %s!' % events.post_upgrade(package_name))
 
