@@ -29,6 +29,9 @@ class Index
 		foreach ($all_class as $class) {
 			$rf = new \ReflectionClass($class);
 			if(false == $rf->isInternal()){
+				if('app\index\controller\Index' == $class){
+					continue;
+				}
 				$ret[] = $class;
 			}
 		}
