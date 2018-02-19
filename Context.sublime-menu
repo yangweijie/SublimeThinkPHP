@@ -1,3 +1,0 @@
-[
-    { "command": "query_database", "caption": "show_cloums" ,"args": {"cmd" :"show_cloum"}}
-]
