@@ -1,7 +1,7 @@
 import sys
 import os
 
-package_name = 'Thinkphp5.1'
+package_name = 'SublimeThinkPHP'
 packages_path = os.path.split(os.path.realpath(__file__))[0]
 command_bin = packages_path + os.sep + 'tp5' + os.sep + 'public' + os.sep + 'index.php';
 
