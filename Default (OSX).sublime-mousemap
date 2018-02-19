@@ -1,3 +1,0 @@
-[
-	{ "button": "button2", "count": 1, "modifiers": ["alt"], "press_command": "drag_select", "command": "goto_php_document" }
-]
