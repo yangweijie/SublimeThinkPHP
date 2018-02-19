@@ -103,8 +103,6 @@ class Url
         if (!empty($rule) && $match = $this->getRuleUrl($rule, $vars)) {
             // 匹配路由命名标识
             $url = $match[0];
-            // 替换可选分隔符
-            $url = preg_replace(['/(\W)\?$/', '/(\W)\?/'], ['', '\1'], $url);
 
             if (!empty($match[1])) {
                 $host = $this->app['config']->get('app_host') ?: $this->app['request']->host();
@@ -225,21 +223,25 @@ class Url
             $url = substr($url, 1);
         } else {
             // 解析到 模块/控制器/操作
-            $module = $request->module();
-            $module = $module ? $module . '/' : '';
-
-            $controller = Loader::parseName($request->controller());
+            $module     = $request->module();
+            $module     = $module ? $module . '/' : '';
+            $controller = $request->controller();
 
             if ('' == $url) {
-                // 空字符串输出当前的 模块/控制器/操作
-                $url = $module . $controller . '/' . $request->action();
+                $action = $request->action();
             } else {
                 $path       = explode('/', $url);
-                $action     = $this->app['config']->get('url_convert') ? strtolower(array_pop($path)) : array_pop($path);
-                $controller = empty($path) ? $controller : ($this->app['config']->get('url_convert') ? Loader::parseName(array_pop($path)) : array_pop($path));
+                $action     = array_pop($path);
+                $controller = empty($path) ? $controller : array_pop($path);
                 $module     = empty($path) ? $module : array_pop($path) . '/';
-                $url        = $module . $controller . '/' . $action;
             }
+
+            if ($this->app['config']->get('url_convert')) {
+                $action     = strtolower($action);
+                $controller = Loader::parseName($controller);
+            }
+
+            $url = $module . $controller . '/' . $action;
         }
 
         return $url;
@@ -318,7 +320,7 @@ class Url
         foreach ($rule as $item) {
             list($url, $pattern, $domain, $suffix) = $item;
             if (empty($pattern)) {
-                return [$url, $domain, $suffix];
+                return [rtrim($url, '$'), $domain, $suffix];
             }
 
             $type = $this->app['config']->get('url_common_param');

@@ -40,6 +40,12 @@ class Request
     protected $domain;
 
     /**
+     * 子域名
+     * @var string
+     */
+    protected $subDomain;
+
+    /**
      * 泛域名
      * @var string
      */
@@ -398,8 +404,33 @@ class Request
     }
 
     /**
+     * 获取当前子域名
+     * @access public
+     * @return string|$this
+     */
+    public function subDomain()
+    {
+        if (is_null($this->subDomain)) {
+            // 获取当前主域名
+            $rootDomain = $this->config->get('app.url_domain_root');
+
+            if ($rootDomain) {
+                // 配置域名根 例如 thinkphp.cn 163.com.cn 如果是国家级域名 com.cn net.cn 之类的域名需要配置
+                $domain = explode('.', rtrim(stristr($this->host(), $rootDomain, true), '.'));
+            } else {
+                $domain = explode('.', $this->host(), -2);
+            }
+
+            $this->subDomain = implode('.', $domain);
+        }
+
+        return $this->subDomain;
+    }
+
+    /**
      * 设置或获取当前泛域名的值
      * @access public
+     * @param  string $domain 域名
      * @return string|$this
      */
     public function panDomain($domain = null)
@@ -546,6 +577,8 @@ class Request
             } elseif ($this->isCli()) {
                 // CLI模式下 index.php module/controller/action/params/...
                 $_SERVER['PATH_INFO'] = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : '';
+            } elseif ('cli-server' == PHP_SAPI) {
+                $_SERVER['PATH_INFO'] = strpos($_SERVER['REQUEST_URI'], '?') ? strstr($_SERVER['REQUEST_URI'], '?', true) : $_SERVER['REQUEST_URI'];
             }
 
             // 分析PATHINFO信息
@@ -1775,14 +1808,15 @@ class Request
                 return;
             }
 
+            foreach ($except as $rule) {
+                if (0 === stripos($this->url(), $rule)) {
+                    return;
+                }
+            }
+
             if ($key instanceof \Closure) {
                 $key = call_user_func_array($key, [$this]);
             } elseif (true === $key) {
-                foreach ($except as $rule) {
-                    if (0 === stripos($this->url(), $rule)) {
-                        return;
-                    }
-                }
                 // 自动缓存功能
                 $key = '__URL__';
             } elseif (strpos($key, '|')) {
@@ -1791,7 +1825,7 @@ class Request
 
             // 特殊规则替换
             if (false !== strpos($key, '__')) {
-                $key = str_replace(['__MODULE__', '__CONTROLLER__', '__ACTION__', '__URL__', ''], [$this->module, $this->controller, $this->action, md5($this->url(true))], $key);
+                $key = str_replace(['__MODULE__', '__CONTROLLER__', '__ACTION__', '__URL__'], [$this->module, $this->controller, $this->action, md5($this->url(true))], $key);
             }
 
             if (false !== strpos($key, ':')) {

@@ -40,6 +40,9 @@ class RuleGroup extends Rule
     // 自动路由
     protected $auto;
 
+    // 完整名称
+    protected $fullName;
+
     /**
      * 架构函数
      * @access public
@@ -58,6 +61,22 @@ class RuleGroup extends Rule
         $this->name    = trim($name, '/');
         $this->option  = $option;
         $this->pattern = $pattern;
+
+        $this->setFullName();
+    }
+
+    /**
+     * 设置分组的路由规则
+     * @access public
+     * @return $this
+     */
+    protected function setFullName()
+    {
+        if ($this->parent && $this->parent->getFullName()) {
+            $this->fullName = $this->parent->getFullName() . ($this->name ? '/' . $this->name : '');
+        } else {
+            $this->fullName = $this->name;
+        }
     }
 
     /**
@@ -93,13 +112,14 @@ class RuleGroup extends Rule
             return false;
         }
 
-        if ($this->name && !($this instanceof Domain)) {
+        if ($this->fullName) {
             // 分组URL匹配检查
-            $pos = strpos(str_replace('<', ':', $this->name), ':');
+            $pos = strpos(str_replace('<', ':', $this->fullName), ':');
+
             if (false !== $pos) {
-                $str = substr($this->name, 0, $pos);
+                $str = substr($this->fullName, 0, $pos);
             } else {
-                $str = $this->name;
+                $str = $this->fullName;
             }
 
             if (0 !== stripos(str_replace('|', '/', $url), $str)) {
@@ -117,13 +137,10 @@ class RuleGroup extends Rule
 
             $this->router->setGroup($this);
 
-            if ($this->rule instanceof \Closure) {
-                Container::getInstance()->invokeFunction($this->rule);
-            } else {
-                $this->router->rules($this->rule);
-            }
+            $this->router->parseGroupRule($this, $this->rule);
 
             $this->router->setGroup($group);
+
             $this->rule = null;
         }
 
@@ -150,6 +167,10 @@ class RuleGroup extends Rule
 
         if (isset($this->option['complete_match'])) {
             $completeMatch = $this->option['complete_match'];
+        }
+
+        if (!empty($this->option['append'])) {
+            $request->route($this->option['append']);
         }
 
         if (isset($rules[$url])) {
@@ -185,6 +206,30 @@ class RuleGroup extends Rule
     }
 
     /**
+     * 设置自动路由
+     * @access public
+     * @param  RuleItem     $rule   路由规则
+     * @return $this
+     */
+    public function setAutoRule(RuleItem $rule)
+    {
+        $this->auto = $rule;
+        return $this;
+    }
+
+    /**
+     * 设置为MISS路由
+     * @access public
+     * @param  RuleItem     $rule   路由规则
+     * @return $this
+     */
+    public function setMissRule(RuleItem $rule)
+    {
+        $this->miss = $rule;
+        return $this;
+    }
+
+    /**
      * 添加分组下的路由规则或者子分组
      * @access public
      * @param  Rule     $rule   路由规则
@@ -193,26 +238,12 @@ class RuleGroup extends Rule
      */
     public function addRule($rule, $method = '*')
     {
-        $name = $rule->getName();
-
-        if ($this->name && $rule instanceof RuleGroup && !($this instanceof Domain)) {
-            $rule->name($this->name . '/' . $name);
-        }
-
         if (strpos($method, '|')) {
             $rule->method($method);
             $method = '*';
         }
 
         $this->rules[$method][] = $rule;
-
-        if ($rule instanceof RuleItem) {
-            if ($rule->isMiss()) {
-                $this->miss = $rule;
-            } elseif ($rule->isAuto()) {
-                $this->auto = $rule;
-            }
-        }
 
         return $this;
     }
@@ -233,6 +264,16 @@ class RuleGroup extends Rule
     }
 
     /**
+     * 获取完整分组Name
+     * @access public
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
+    }
+
+    /**
      * 获取分组的路由规则
      * @access public
      * @param  string     $method
@@ -246,4 +287,5 @@ class RuleGroup extends Rule
             return isset($this->rules[strtolower($method)]) ? $this->rules[strtolower($method)] : [];
         }
     }
+
 }

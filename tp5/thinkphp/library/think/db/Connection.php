@@ -841,7 +841,7 @@ abstract class Connection
                 $result = isset($resultSet[0]) ? $resultSet[0] : null;
             }
 
-            if (isset($cache) && false !== $result) {
+            if (isset($cache) && $result) {
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
             }
@@ -1286,6 +1286,21 @@ abstract class Connection
         }
 
         return false !== $result ? $result : $default;
+    }
+
+    /**
+     * 得到某个字段的值
+     * @access public
+     * @param  Query     $query     查询对象
+     * @param  string    $aggregate 聚合方法
+     * @param  string    $field     字段名
+     * @return mixed
+     */
+    public function aggregate(Query $query, $aggregate, $field)
+    {
+        $field = $aggregate . '(' . $this->builder->parseKey($query, $field) . ') AS tp_' . strtolower($aggregate);
+
+        return $this->value($query, $field, 0);
     }
 
     /**

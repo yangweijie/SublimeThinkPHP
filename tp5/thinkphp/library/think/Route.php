@@ -232,37 +232,33 @@ class Route
     public function domain($name, $rule = '', $option = [], $pattern = [])
     {
         // 支持多个域名使用相同路由规则
-        $domain = is_array($name) ? array_shift($name) : $name;
+        $domainName = is_array($name) ? array_shift($name) : $name;
 
-        if ('*' != $domain && !strpos($domain, '.')) {
-            $domain .= '.' . $this->getRootDomain();
+        if ('*' != $domainName && !strpos($domainName, '.')) {
+            $domainName .= '.' . $this->getRootDomain();
         }
 
         $route = $this->config->get('url_lazy_route') ? $rule : null;
 
-        $this->domains[$domain] = new Domain($this, $domain, $route, $option, $pattern);
+        $domain = new Domain($this, $domainName, $route, $option, $pattern);
 
         if (is_null($route)) {
             // 获取原始分组
             $originGroup = $this->group;
             // 设置当前域名
-            $this->domain = $domain;
-            $this->group  = $this->createTopGroup($this->domains[$domain]);
+            $this->domain = $domainName;
+            $this->group  = $this->createTopGroup($domain);
 
-            // 执行域名路由
-            if ($rule instanceof \Closure) {
-                Container::getInstance()->invokeFunction($rule);
-            } elseif (is_array($rule)) {
-                $this->rules($rule);
-            } elseif ($rule) {
-                $this->bind($rule);
-            }
+            // 解析域名路由规则
+            $this->parseGroupRule($domain, $rule);
 
             // 还原默认域名
             $this->domain = $this->host;
             // 还原默认分组
             $this->group = $originGroup;
         }
+
+        $this->domains[$domainName] = $domain;
 
         if (is_array($name) && !empty($name)) {
             $root = $this->getRootDomain();
@@ -271,12 +267,38 @@ class Route
                     $item .= '.' . $root;
                 }
 
-                $this->domains[$item] = $domain;
+                $this->domains[$item] = $domainName;
             }
         }
 
         // 返回域名对象
-        return $this->domains[$domain];
+        return $domain;
+    }
+
+    /**
+     * 解析分组和域名的路由规则及绑定
+     * @access public
+     * @param  RuleGroup    $group 分组路由对象
+     * @param  mixed        $rule 路由规则
+     * @return void
+     */
+    public function parseGroupRule($group, $rule)
+    {
+        if ($rule instanceof \Closure) {
+            Container::getInstance()->invokeFunction($rule);
+        } elseif ($rule instanceof Response) {
+            $group->setRule($rule);
+        } elseif (is_array($rule)) {
+            $this->rules($rule);
+        } elseif ($rule) {
+            if (false !== strpos($rule, '?')) {
+                list($rule, $query) = explode('?', $rule);
+                parse_str($query, $vars);
+                $group->append($vars);
+            }
+
+            $this->bind($rule);
+        }
     }
 
     /**
@@ -314,7 +336,7 @@ class Route
             $domain = $this->domain;
         }
 
-        $subDomain = implode('.', $this->getSubDomain());
+        $subDomain = $this->request->subDomain();
 
         if (strpos($subDomain, '.')) {
             $name = '*' . strstr($subDomain, '.');
@@ -463,12 +485,13 @@ class Route
         $ruleItem = new RuleItem($this, $this->group, $rule, $route, $method, $option, $pattern);
 
         if (isset($name)) {
-            // 当前分组名
-            $group = $this->group->getName();
+            // 上级完整分组名
+            $group = $this->group->getFullName();
 
             if ($group) {
                 $rule = $group . '/' . $rule;
             }
+
             // 设置路由标识 用于URL快速生成
             $this->setRuleName($rule, $name, $option);
         }
@@ -485,13 +508,13 @@ class Route
 
     /**
      * 设置路由标识 用于URL反解生成
-     * @access protected
+     * @access public
      * @param  string    $rule      路由规则
      * @param  string    $name      路由标识
      * @param  array     $option    路由参数
      * @return void
      */
-    protected function setRuleName($rule, $name, $option = [])
+    public function setRuleName($rule, $name, $option = [])
     {
         $vars = $this->parseVar($rule);
 
@@ -578,13 +601,8 @@ class Route
 
             $this->group = $group;
 
-            if ($route instanceof \Closure) {
-                Container::getInstance()->invokeFunction($route);
-            } elseif ($route instanceof Response) {
-                $group->setRule($route);
-            } else {
-                $this->rules($route);
-            }
+            // 解析分组路由规则
+            $this->parseGroupRule($group, $route);
 
             $this->group = $parent;
         }
@@ -859,7 +877,7 @@ class Route
      */
     public function miss($route, $method = '*', $option = [])
     {
-        return $this->rule('__miss__', $route, $method, $option);
+        return $this->rule('', $route, $method, $option)->isMiss();
     }
 
     /**
@@ -870,7 +888,7 @@ class Route
      */
     public function auto($route)
     {
-        return $this->rule('__auto__', $route);
+        return $this->rule('', $route)->isAuto();
     }
 
     /**
@@ -909,26 +927,6 @@ class Route
     }
 
     /**
-     * 获取当前子域名
-     * @access protected
-     * @return array
-     */
-    protected function getSubDomain()
-    {
-        // 获取当前主域名
-        $rootDomain = $this->config->get('app.url_domain_root');
-
-        if ($rootDomain) {
-            // 配置域名根 例如 thinkphp.cn 163.com.cn 如果是国家级域名 com.cn net.cn 之类的域名需要配置
-            $domain = explode('.', rtrim(stristr($this->host, $rootDomain, true), '.'));
-        } else {
-            $domain = explode('.', $this->host, -2);
-        }
-
-        return $domain;
-    }
-
-    /**
      * 检测域名的路由规则
      * @access protected
      * @param  string    $host 当前主机地址
@@ -937,14 +935,13 @@ class Route
     protected function checkDomain()
     {
         // 获取当前子域名
-        $domain = $this->getSubDomain();
+        $subDomain = $this->request->subDomain();
 
         $item = false;
 
-        if (!empty($domain) && count($this->domains) > 1) {
-            // 当前子域名
-            $subDomain = implode('.', $domain);
-            $domain2   = array_pop($domain);
+        if ($subDomain && count($this->domains) > 1) {
+            $domain  = explode('.', $subDomain);
+            $domain2 = array_pop($domain);
 
             if ($domain) {
                 // 存在三级域名

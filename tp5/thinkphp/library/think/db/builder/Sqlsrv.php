@@ -72,12 +72,12 @@ class Sqlsrv extends Builder
 
     /**
      * 字段和表名处理
-     * @access protected
-     * @param  Query     $query        查询对象
-     * @param  string    $key
+     * @access public
+     * @param  Query     $query     查询对象
+     * @param  string    $key       字段名
      * @return string
      */
-    protected function parseKey(Query $query, $key)
+    public function parseKey(Query $query, $key)
     {
         $key = trim($key);
 
@@ -88,6 +88,7 @@ class Sqlsrv extends Builder
 
             if ('__TABLE__' == $table) {
                 $table = $query->getOptions('table');
+                $table = is_array($table) ? array_shift($table) : $table;
             }
 
             if (isset($alias[$table])) {

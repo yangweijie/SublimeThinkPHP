@@ -772,10 +772,11 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * @param  mixed     $data  主键值或者查询条件（闭包）
      * @param  mixed     $with  关联预查询
      * @param  bool      $cache 是否缓存
+     * @param  bool      $failException 是否抛出异常
      * @return static|null
      * @throws exception\DbException
      */
-    public static function get($data, $with = [], $cache = false)
+    public static function get($data, $with = [], $cache = false, $failException = false)
     {
         if (is_null($data)) {
             return;
@@ -788,7 +789,21 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
 
         $query = static::parseQuery($data, $with, $cache);
 
-        return $query->find($data);
+        return $query->failException($failException)->find($data);
+    }
+
+    /**
+     * 查找单条记录 如果不存在直接抛出异常
+     * @access public
+     * @param  mixed     $data  主键值或者查询条件（闭包）
+     * @param  mixed     $with  关联预查询
+     * @param  bool      $cache 是否缓存
+     * @return static|null
+     * @throws exception\DbException
+     */
+    public static function getOrFail($data, $with = [], $cache = false)
+    {
+        return self::get($data, $with, $cache, true);
     }
 
     /**
@@ -822,7 +837,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     protected static function parseQuery(&$data, $with, $cache)
     {
-        $result = self::with($with, true === $cache ? true : false)->cache($cache);
+        $result = self::with($with)->cache($cache);
 
         if (is_array($data) && key($data) !== 0) {
             $result = $result->where($data);

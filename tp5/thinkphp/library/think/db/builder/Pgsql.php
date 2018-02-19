@@ -48,18 +48,18 @@ class Pgsql extends Builder
 
     /**
      * 字段和表名处理
-     * @access protected
-     * @param  Query     $query        查询对象
-     * @param  string    $key
+     * @access public
+     * @param  Query     $query     查询对象
+     * @param  string    $key       字段名
      * @return string
      */
-    protected function parseKey(Query $query, $key)
+    public function parseKey(Query $query, $key)
     {
         $key = trim($key);
 
-        if (strpos($key, '$.') && false === strpos($key, '(')) {
+        if (strpos($key, '->') && false === strpos($key, '(')) {
             // JSON字段支持
-            list($field, $name) = explode('$.', $key);
+            list($field, $name) = explode('->', $key);
             $key                = $field . '->>\'' . $name . '\'';
         } elseif (strpos($key, '.')) {
             list($table, $key) = explode('.', $key, 2);
@@ -68,6 +68,7 @@ class Pgsql extends Builder
 
             if ('__TABLE__' == $table) {
                 $table = $query->getOptions('table');
+                $table = is_array($table) ? array_shift($table) : $table;
             }
 
             if (isset($alias[$table])) {

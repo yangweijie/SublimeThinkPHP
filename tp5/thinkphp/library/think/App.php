@@ -20,7 +20,7 @@ use think\route\Dispatch;
  */
 class App implements \ArrayAccess
 {
-    const VERSION = '5.1.4';
+    const VERSION = '5.1.5';
 
     /**
      * 当前模块路径
@@ -438,7 +438,7 @@ class App implements \ArrayAccess
         $files = scandir($this->routePath);
         foreach ($files as $file) {
             if (strpos($file, '.php')) {
-                $filename = $this->routePath . DIRECTORY_SEPARATOR . $file;
+                $filename = $this->routePath . $file;
                 // 导入路由配置
                 $rules = include $filename;
                 if (is_array($rules)) {
